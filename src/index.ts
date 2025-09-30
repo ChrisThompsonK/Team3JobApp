@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import express from 'express';
 import type { Request, Response } from 'express';
+import express from 'express';
 
 const app = express();
 const PORT = process.env['PORT'] || 3000;
@@ -12,18 +12,18 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.get('/', (_req: Request, res: Response) => {
-  res.json({ 
+  res.json({
     message: 'Hello World! 🌍',
     service: 'Team 3 Job Application Frontend',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
 app.get('/health', (_req: Request, res: Response) => {
-  res.json({ 
+  res.json({
     status: 'healthy',
     uptime: process.uptime(),
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -34,7 +34,7 @@ const greeting = (name: string): string => {
 const startServer = async (): Promise<void> => {
   try {
     console.log('🚀 Team 3 Job App Frontend is starting...');
-    
+
     app.listen(PORT, () => {
       console.log(`✅ Server running on http://localhost:${PORT}`);
       console.log(`📊 Health check available at http://localhost:${PORT}/health`);
