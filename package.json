@@ -13,7 +13,11 @@
     "format": "biome format --write .",
     "lint": "biome lint --write .",
     "check": "biome check --write .",
-    "ci": "biome ci ."
+    "ci": "biome ci .",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [
     "typescript",
@@ -27,8 +31,11 @@
     "@biomejs/biome": "2.2.4",
     "@types/express": "^5.0.3",
     "@types/node": "^20.11.17",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
     "tsx": "^4.7.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=18.0.0"
