@@ -1,3 +1,5 @@
+[![Code Quality](https://github.com/ChrisThompsonK/team3-job-app-frontend/actions/workflows/code-quality.yml/badge.svg)](https://github.com/ChrisThompsonK/team3-job-app-frontend/actions/workflows/code-quality.yml)
+
 # Team 3 Job Application Frontend
 
 A TypeScript/Node.js backend service for the Team 3 job application system.
