@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { config } from '../config/index.js';
 import { DemoController, HealthController, HomeController } from '../controllers/index.js';
+import { jobRoleController } from '../controllers/job-role-controller.js';
 
 const router = Router();
 
@@ -15,6 +16,21 @@ router.get('/daisyui-test', HomeController.daisyuiTest);
  */
 router.get('/health', HealthController.index);
 router.get('/api/health', HealthController.api);
+
+/**
+ * Job Role Routes
+ */
+router.get('/jobs', jobRoleController.getAllJobRoles.bind(jobRoleController));
+router.get('/jobs/:id', jobRoleController.getJobRoleById.bind(jobRoleController));
+router.get(
+  '/jobs/capability/:capability',
+  jobRoleController.getJobRolesByCapability.bind(jobRoleController)
+);
+router.get(
+  '/jobs/location/:location',
+  jobRoleController.getJobRolesByLocation.bind(jobRoleController)
+);
+router.get('/jobs/band/:band', jobRoleController.getJobRolesByBand.bind(jobRoleController));
 
 /**
  * Demo Routes - Error Handling Examples
