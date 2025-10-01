@@ -4,7 +4,7 @@ node_modules/
 # Build outputs
 dist/
 build/
-public/css/output.css
+public/css/
 
 # Template files and documentation
 **/*.njk
@@ -14,8 +14,7 @@ public/css/output.css
 .env.*
 **/CODEOWNERS
 
-# CSS input file (contains Tailwind directives)
-src/styles/input.css
+# CSS input file is now checked but configured to allow Tailwind directives
 
 # Logs
 *.log
