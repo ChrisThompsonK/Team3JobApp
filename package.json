@@ -46,7 +46,6 @@
     "@vitest/ui": "^3.2.4",
     "autoprefixer": "^10.4.21",
     "chokidar": "^3.6.0",
-    "daisyui": "^5.1.26",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "tailwindcss": "^4.1.13",
@@ -58,6 +57,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "daisyui": "^5.1.26",
     "express": "^5.1.0",
     "nunjucks": "^3.2.4",
     "uuid": "^13.0.0"
