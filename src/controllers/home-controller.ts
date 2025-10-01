@@ -1,0 +1,26 @@
+import type { Request, Response } from 'express';
+import { AppService } from '../services/app-service.js';
+
+/**
+ * Home Controller
+ * Handles presentation logic for home-related routes
+ */
+export const HomeController = {
+  /**
+   * Render the home page
+   */
+  index(req: Request, res: Response): void {
+    try {
+      const userName = typeof req.query['user'] === 'string' ? req.query['user'] : 'Developer';
+      const appInfo = AppService.getAppInfo(userName);
+
+      res.render('index', appInfo);
+    } catch (error) {
+      console.error('Error in HomeController.index:', error);
+      res.status(500).render('error', {
+        message: 'Internal Server Error',
+        error: process.env['NODE_ENV'] === 'development' ? error : {},
+      });
+    }
+  },
+} as const;
