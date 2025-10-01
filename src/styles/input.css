@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* biome-ignore lint/suspicious/noUnknownAtRules: Tailwind CSS v4 syntax */
+@plugin "daisyui";
 
 /* 
 @theme {

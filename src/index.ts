@@ -67,9 +67,7 @@ const startServer = async (): Promise<void> => {
   }
 };
 
-// Only run server if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  await startServer();
-}
+// Start the server
+await startServer();
 
 export { app, greeting, startServer };

@@ -4,7 +4,9 @@ node_modules/
 # Build outputs
 dist/
 build/
-public/css/*.css
+
+# Generated CSS files (Tailwind output)
+public/css/output.css
 
 # Logs
 *.log
