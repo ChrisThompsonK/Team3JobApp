@@ -1,0 +1,27 @@
+{% extends "layout.njk" %}
+
+{% block title %}Welcome - Team 3 Job Application Frontend{% endblock %}
+
+{% block content %}
+    <h1>{{ message }} 🌍</h1>
+    
+    <div class="info-card">
+        <h3>Service Information</h3>
+        <p><strong>Service:</strong> {{ service }}</p>
+        <p><strong>Environment:</strong> {{ environment }}</p>
+        <p class="timestamp"><strong>Server Time:</strong> {{ timestamp }}</p>
+    </div>
+
+    <div class="info-card">
+        <h3>Welcome Message</h3>
+        <p>{{ greeting }}</p>
+    </div>
+
+    <div class="info-card">
+        <h3>Quick Links</h3>
+        <ul>
+            <li><a href="/health">Health Check</a></li>
+            <li><a href="/">Home</a></li>
+        </ul>
+    </div>
+{% endblock %}
