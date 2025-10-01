@@ -26,27 +26,4 @@ describe('MockJobRoleService', () => {
     const jobRole = await service.getJobRoleById('999');
     expect(jobRole).toBeNull();
   });
-
-  it('should filter job roles by capability', async () => {
-    const engineeringRoles = await service.getJobRolesByCapability('Engineering');
-    expect(engineeringRoles).toHaveLength(4);
-    expect(engineeringRoles.every((role) => role.capability === 'Engineering')).toBe(true);
-  });
-
-  it('should filter job roles by band', async () => {
-    const associateRoles = await service.getJobRolesByBand('Associate');
-    expect(associateRoles).toHaveLength(4);
-    expect(associateRoles.every((role) => role.band === 'Associate')).toBe(true);
-  });
-
-  it('should filter job roles by location', async () => {
-    const belfastRoles = await service.getJobRolesByLocation('Belfast');
-    expect(belfastRoles).toHaveLength(2);
-    expect(belfastRoles.every((role) => role.location === 'Belfast')).toBe(true);
-  });
-
-  it('should handle case-insensitive filtering', async () => {
-    const engineeringRoles = await service.getJobRolesByCapability('ENGINEERING');
-    expect(engineeringRoles).toHaveLength(4);
-  });
 });

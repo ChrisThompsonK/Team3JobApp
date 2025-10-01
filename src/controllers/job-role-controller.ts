@@ -5,19 +5,13 @@ export class JobRoleController {
   async getAllJobRoles(_req: Request, res: Response): Promise<void> {
     try {
       const jobRoles = await jobRoleService.getAllJobRoles();
-
       res.render('job-roles/list', {
         title: 'Available Job Roles',
         jobRoles,
-        totalCount: jobRoles.length,
       });
     } catch (error) {
       console.error('Error fetching job roles:', error);
-      res.status(500).render('error', {
-        title: 'Error',
-        message: 'Failed to load job roles',
-        error: process.env['NODE_ENV'] === 'development' ? error : {},
-      });
+      res.status(500).send('Error loading job roles');
     }
   }
 
@@ -26,36 +20,26 @@ export class JobRoleController {
       const { id } = req.params;
 
       if (!id) {
-        res.status(400).render('error', {
-          title: 'Bad Request',
-          message: 'Job role ID is required',
-        });
+        res.status(400).send('Job role ID is required');
         return;
       }
 
       const jobRole = await jobRoleService.getJobRoleById(id);
 
       if (!jobRole) {
-        res.status(404).render('error', {
-          title: 'Job Role Not Found',
-          message: `Job role with ID ${id} not found`,
-        });
+        res.status(404).send(`Job role with ID ${id} not found`);
         return;
       }
 
       res.render('job-roles/detail', {
-        title: `${jobRole.name} - Job Role Details`,
+        title: jobRole.name,
         jobRole,
       });
     } catch (error) {
       console.error('Error fetching job role:', error);
-      res.status(500).render('error', {
-        title: 'Error',
-        message: 'Failed to load job role details',
-        error: process.env['NODE_ENV'] === 'development' ? error : {},
-      });
+      res.status(500).send('Error loading job role details');
     }
   }
 }
-// Export singleton instance
+
 export const jobRoleController = new JobRoleController();

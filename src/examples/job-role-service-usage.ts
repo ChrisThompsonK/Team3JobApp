@@ -31,39 +31,3 @@ export async function getJobRoleByIdExample(id: string) {
     return null;
   }
 }
-
-// Example: Filter by capability
-export async function getEngineeringRolesExample() {
-  try {
-    const engineeringRoles = await jobRoleService.getJobRolesByCapability('Engineering');
-    console.log('Engineering Roles:', engineeringRoles);
-    return engineeringRoles;
-  } catch (error) {
-    console.error('Error fetching engineering roles:', error);
-    return [];
-  }
-}
-
-// Example: Filter by location
-export async function getBelfastRolesExample() {
-  try {
-    const belfastRoles = await jobRoleService.getJobRolesByLocation('Belfast');
-    console.log('Belfast Roles:', belfastRoles);
-    return belfastRoles;
-  } catch (error) {
-    console.error('Error fetching Belfast roles:', error);
-    return [];
-  }
-}
-
-// Example: Filter by band
-export async function getSeniorRolesExample() {
-  try {
-    const seniorRoles = await jobRoleService.getJobRolesByBand('Senior Associate');
-    console.log('Senior Associate Roles:', seniorRoles);
-    return seniorRoles;
-  } catch (error) {
-    console.error('Error fetching senior roles:', error);
-    return [];
-  }
-}

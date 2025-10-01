@@ -3,9 +3,6 @@ import type { JobRole } from '../models/job-roles.js';
 export interface JobRoleService {
   getAllJobRoles(): Promise<JobRole[]>;
   getJobRoleById(id: string): Promise<JobRole | null>;
-  getJobRolesByCapability(capability: string): Promise<JobRole[]>;
-  getJobRolesByBand(band: string): Promise<JobRole[]>;
-  getJobRolesByLocation(location: string): Promise<JobRole[]>;
 }
 
 export class MockJobRoleService implements JobRoleService {
@@ -103,28 +100,6 @@ export class MockJobRoleService implements JobRoleService {
     await this.delay(50);
     const jobRole = this.sampleJobRoles.find((role) => role.id === id);
     return jobRole || null;
-  }
-
-  async getJobRolesByCapability(capability: string): Promise<JobRole[]> {
-    // Simulate API delay
-    await this.delay(75);
-    return this.sampleJobRoles.filter(
-      (role) => role.capability.toLowerCase() === capability.toLowerCase()
-    );
-  }
-
-  async getJobRolesByBand(band: string): Promise<JobRole[]> {
-    // Simulate API delay
-    await this.delay(75);
-    return this.sampleJobRoles.filter((role) => role.band.toLowerCase() === band.toLowerCase());
-  }
-
-  async getJobRolesByLocation(location: string): Promise<JobRole[]> {
-    // Simulate API delay
-    await this.delay(75);
-    return this.sampleJobRoles.filter(
-      (role) => role.location.toLowerCase() === location.toLowerCase()
-    );
   }
 
   private delay(ms: number): Promise<void> {
