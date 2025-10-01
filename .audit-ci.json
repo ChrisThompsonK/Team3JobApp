@@ -1,0 +1,17 @@
+{
+  "moderate": {
+    "ignore": [],
+    "allowlist": []
+  },
+  "high": {
+    "ignore": [],
+    "allowlist": []
+  },
+  "critical": {
+    "ignore": [],
+    "allowlist": []
+  },
+  "report-type": "summary",
+  "pass-enoaudit": true,
+  "show-found": true
+}

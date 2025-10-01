@@ -17,7 +17,7 @@ build/
 .env.production.local
 
 # IDE and editor files
-.vscode/
+# .vscode/ - keeping VS Code settings for team consistency
 .idea/
 *.swp
 *.swo

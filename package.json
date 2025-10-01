@@ -14,9 +14,14 @@
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
     "format": "biome format --write .",
+    "format:check": "biome format --check .",
     "lint": "biome lint --write .",
+    "lint:check": "biome lint --check .",
     "check": "biome check --write .",
+    "check:ci": "biome check --no-errors-on-unmatched .",
     "ci": "biome ci .",
+    "lint:fix": "biome check --write --unsafe .",
+    "prepare": "husky",
     "test": "vitest",
     "test:run": "vitest run",
     "test:ui": "vitest --ui",
@@ -37,6 +42,8 @@
     "@types/node": "^20.11.17",
     "@types/nunjucks": "^3.2.6",
     "@types/uuid": "^10.0.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
     "autoprefixer": "^10.4.21",
@@ -54,5 +61,14 @@
     "express": "^5.1.0",
     "nunjucks": "^3.2.4",
     "uuid": "^13.0.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": [
+      "biome check --write --no-errors-on-unmatched",
+      "biome format --write"
+    ],
+    "*.{json,md}": [
+      "biome format --write"
+    ]
   }
 }

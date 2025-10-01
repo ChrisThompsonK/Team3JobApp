@@ -1,0 +1,16 @@
+# Run code quality checks before commit
+echo "🔍 Running pre-commit checks..."
+
+# Run Biome checks
+echo "📋 Checking code formatting and linting..."
+npm run check:ci
+
+# Run type checking
+echo "🔧 Running TypeScript type check..."
+npm run type-check
+
+# Run tests
+echo "🧪 Running tests..."
+npm run test:run
+
+echo "✅ Pre-commit checks passed!"
