@@ -32,7 +32,6 @@
   "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
-    "@biomejs/cli-linux-x64": "2.2.4",
     "@tailwindcss/cli": "^4.1.13",
     "@types/express": "^5.0.3",
     "@types/node": "^20.11.17",
