@@ -68,7 +68,8 @@ const startServer = async (): Promise<void> => {
 };
 
 // Only run server if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+// This works with both node and tsx
+if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith('src/index.ts')) {
   await startServer();
 }
 
