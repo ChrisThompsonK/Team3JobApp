@@ -48,6 +48,10 @@ app.get('/health', (_req: Request, res: Response) => {
   });
 });
 
+app.get('/daisyui-test', (_req: Request, res: Response) => {
+  res.render('daisyui-test');
+});
+
 const greeting = (name: string): string => {
   return `Hello, ${name}! Welcome to the Team 3 Job Application Frontend.`;
 };
