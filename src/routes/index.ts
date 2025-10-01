@@ -8,6 +8,7 @@ const router = Router();
  * Home Routes
  */
 router.get('/', HomeController.index);
+router.get('/daisyui-test', HomeController.daisyuiTest);
 
 /**
  * Health Routes

@@ -23,4 +23,19 @@ export const HomeController = {
       });
     }
   },
+
+  /**
+   * Render the DaisyUI component test page
+   */
+  daisyuiTest(_req: Request, res: Response): void {
+    try {
+      res.render('daisyui-test');
+    } catch (error) {
+      console.error('Error in HomeController.daisyuiTest:', error);
+      res.status(500).render('error', {
+        message: 'Internal Server Error',
+        error: process.env['NODE_ENV'] === 'development' ? error : {},
+      });
+    }
+  },
 } as const;
