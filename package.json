@@ -7,6 +7,9 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
+    "build:css": "tailwindcss -i src/styles/input.css -o public/css/output.css",
+    "build:css:watch": "tailwindcss -i src/styles/input.css -o public/css/output.css --watch",
+    "build:css:prod": "tailwindcss -i src/styles/input.css -o public/css/output.css --minify",
     "start": "node dist/index.js",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
@@ -29,12 +32,14 @@
   "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
+    "@tailwindcss/cli": "^4.1.13",
     "@types/express": "^5.0.3",
     "@types/node": "^20.11.17",
     "@types/nunjucks": "^3.2.6",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
     "chokidar": "^3.6.0",
+    "tailwindcss": "^4.1.13",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
     "vitest": "^3.2.4"
