@@ -4,7 +4,18 @@ node_modules/
 # Build outputs
 dist/
 build/
-public/css/*.css
+public/css/output.css
+
+# Template files and documentation
+**/*.njk
+**/*.md
+**/*.yml
+**/*.yaml
+.env.*
+**/CODEOWNERS
+
+# CSS input file (contains Tailwind directives)
+src/styles/input.css
 
 # Logs
 *.log
