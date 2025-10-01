@@ -14,7 +14,7 @@
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
     "format": "biome format --write .",
-    "format:check": "biome format --check .",
+    "format:check": "biome check .",
     "lint": "biome lint --write .",
     "lint:check": "biome lint --check .",
     "check": "biome check --write .",
