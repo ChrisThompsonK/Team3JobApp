@@ -1,0 +1,28 @@
+{% extends "layout.njk" %}
+
+{% block title %}Error - Team 3 Job Application Frontend{% endblock %}
+
+{% block content %}
+    <h1>Oops! Something went wrong 🚨</h1>
+    
+    <div class="info-card">
+        <h3>Error Details</h3>
+        <p><strong>Message:</strong> {{ message }}</p>
+        {% if error and error.stack %}
+        <details>
+            <summary>Technical Details (Development Mode)</summary>
+            <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto;">{{ error.stack }}</pre>
+        </details>
+        {% endif %}
+    </div>
+
+    <div class="info-card">
+        <h3>What can you do?</h3>
+        <ul>
+            <li><a href="/">← Go back to Home</a></li>
+            <li><a href="/health">Check system health</a></li>
+            <li>Try refreshing the page</li>
+            <li>Contact support if the problem persists</li>
+        </ul>
+    </div>
+{% endblock %}
