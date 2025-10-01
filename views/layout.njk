@@ -1,14 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="corporate">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Team 3 Job Application Frontend{% endblock %}</title>
     <link rel="stylesheet" href="/css/output.css">
 </head>
-<body class="font-sans leading-relaxed m-0 p-5 bg-gray-100">
-    <div class="max-w-3xl mx-auto bg-white p-10 rounded-lg shadow-lg">
-        {% block content %}{% endblock %}
+<body class="min-h-screen bg-base-200">
+    <div class="container mx-auto max-w-4xl p-4">
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
     </div>
 </body>
 </html>
