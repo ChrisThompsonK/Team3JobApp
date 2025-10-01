@@ -2,7 +2,44 @@
 
 # Team 3 Job Application Frontend
 
-A TypeScript/Node.js backend service for the Team 3 job application system.
+A TypeScript/Node.js web application built with a clean 3-tier architecture and Nunjucks templating.
+
+## 🏗️ Architecture
+
+This project follows a **3-tier architecture** pattern for clean separation of concerns:
+
+### 📊 **Presentation Layer** (`/src/controllers`, `/src/routes`, `/views`)
+- **Controllers**: Handle HTTP requests/responses and presentation logic
+- **Routes**: Define URL routing and middleware
+- **Views**: Nunjucks templates for rendering HTML
+
+### 🔧 **Business Logic Layer** (`/src/services`)
+- **Services**: Contain application business rules and logic
+- Data validation, processing, and transformation
+- Orchestrate calls between presentation and data layers
+
+### 🗄️ **Data Access Layer** (`/src/repositories`, `/src/models`)
+- **Models**: Define data structures and interfaces
+- **Repositories**: Handle data access and storage operations
+- Database queries and external API calls (when implemented)
+
+### 📁 Project Structure
+
+```
+src/
+├── controllers/     # Presentation layer - HTTP request handlers
+├── services/        # Business logic layer - Application rules
+├── repositories/    # Data access layer - Data operations
+├── models/          # Data models and interfaces
+├── routes/          # Route definitions and middleware
+├── middleware/      # Custom Express middleware
+├── config/          # Application configuration
+├── app.ts           # Application factory and setup
+└── index.ts         # Application entry point
+
+views/               # Nunjucks templates
+public/              # Static assets (CSS, JS, images)
+```
 
 ## 🚀 Getting Started
 
@@ -36,6 +73,20 @@ The server will start on `http://localhost:3000` (or the port specified in the `
 - `npm run start` - Start the production server
 - `npm run clean` - Remove build artifacts
 - `npm run type-check` - Run TypeScript type checking
+
+## 🌐 API Endpoints
+
+- `GET /` - Home page (HTML)
+- `GET /health` - Health check page (HTML)
+- `GET /api/health` - Health check API (JSON)
+
+## 🎨 Template Engine
+
+This project uses **Nunjucks** as the template engine:
+- Auto-escaping enabled for security
+- Template inheritance with base layouts
+- Dynamic content rendering
+- Development mode auto-reloading
 
 ## 🔧 Code Quality & Formatting
 
