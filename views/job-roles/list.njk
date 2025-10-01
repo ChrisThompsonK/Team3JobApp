@@ -7,27 +7,7 @@
   <!-- Header -->
   <div class="mb-8">
     <h1 class="text-4xl font-bold text-primary mb-2">{{ title }}</h1>
-    {% if filterType and filterValue %}
-      <div class="breadcrumbs text-sm">
-        <ul>
-          <li><a href="/jobs" class="link link-primary">All Jobs</a></li>
-          <li class="text-base-content">{{ filterType | capitalize }}: {{ filterValue }}</li>
-        </ul>
-      </div>
-    {% endif %}
     <p class="text-base-content/70 mt-2">{{ totalCount }} job{{ 's' if totalCount !== 1 }} available</p>
-  </div>
-
-  <!-- Filter Pills -->
-  <div class="mb-6">
-    <div class="flex flex-wrap gap-2">
-      <a href="/jobs" class="btn btn-outline btn-sm {{ 'btn-active' if not filterType }}">All Jobs</a>
-      <a href="/jobs/capability/Engineering" class="btn btn-outline btn-sm {{ 'btn-active' if filterType === 'capability' and filterValue === 'Engineering' }}">Engineering</a>
-      <a href="/jobs/capability/Product" class="btn btn-outline btn-sm {{ 'btn-active' if filterType === 'capability' and filterValue === 'Product' }}">Product</a>
-      <a href="/jobs/capability/Design" class="btn btn-outline btn-sm {{ 'btn-active' if filterType === 'capability' and filterValue === 'Design' }}">Design</a>
-      <a href="/jobs/location/Belfast" class="btn btn-outline btn-sm {{ 'btn-active' if filterType === 'location' and filterValue === 'Belfast' }}">Belfast</a>
-      <a href="/jobs/location/London" class="btn btn-outline btn-sm {{ 'btn-active' if filterType === 'location' and filterValue === 'London' }}">London</a>
-    </div>
   </div>
 
   {% if jobRoles.length > 0 %}
@@ -83,15 +63,8 @@
       </div>
       <h3 class="text-xl font-semibold mb-2">No job roles found</h3>
       <p class="text-base-content/70 mb-4">
-        {% if filterType %}
-          No jobs match your current filter. Try browsing all jobs or selecting a different filter.
-        {% else %}
-          There are currently no job roles available.
-        {% endif %}
+        There are currently no job roles available.
       </p>
-      {% if filterType %}
-        <a href="/jobs" class="btn btn-primary">View All Jobs</a>
-      {% endif %}
     </div>
   {% endif %}
 

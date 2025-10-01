@@ -22,15 +22,6 @@ router.get('/api/health', HealthController.api);
  */
 router.get('/jobs', jobRoleController.getAllJobRoles.bind(jobRoleController));
 router.get('/jobs/:id', jobRoleController.getJobRoleById.bind(jobRoleController));
-router.get(
-  '/jobs/capability/:capability',
-  jobRoleController.getJobRolesByCapability.bind(jobRoleController)
-);
-router.get(
-  '/jobs/location/:location',
-  jobRoleController.getJobRolesByLocation.bind(jobRoleController)
-);
-router.get('/jobs/band/:band', jobRoleController.getJobRolesByBand.bind(jobRoleController));
 
 /**
  * Demo Routes - Error Handling Examples
