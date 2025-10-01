@@ -3,25 +3,25 @@
 {% block title %}Welcome - Team 3 Job Application Frontend{% endblock %}
 
 {% block content %}
-    <h1>{{ message }} 🌍</h1>
+    <h1 class="text-gray-800 border-b-4 border-blue-600 pb-2 mb-6">{{ message }} 🌍</h1>
     
-    <div class="info-card">
-        <h3>Service Information</h3>
-        <p><strong>Service:</strong> {{ service }}</p>
-        <p><strong>Environment:</strong> {{ environment }}</p>
-        <p class="timestamp"><strong>Server Time:</strong> {{ timestamp }}</p>
+    <div class="bg-gray-50 border-l-4 border-blue-600 p-4 my-5 rounded-r">
+        <h3 class="text-lg font-semibold mb-3 text-gray-800">Service Information</h3>
+        <p class="mb-2"><strong>Service:</strong> {{ service }}</p>
+        <p class="mb-2"><strong>Environment:</strong> {{ environment }}</p>
+        <p class="text-gray-600 text-sm"><strong>Server Time:</strong> {{ timestamp }}</p>
     </div>
 
-    <div class="info-card">
-        <h3>Welcome Message</h3>
+    <div class="bg-gray-50 border-l-4 border-blue-600 p-4 my-5 rounded-r">
+        <h3 class="text-lg font-semibold mb-3 text-gray-800">Welcome Message</h3>
         <p>{{ greeting }}</p>
     </div>
 
-    <div class="info-card">
-        <h3>Quick Links</h3>
-        <ul>
-            <li><a href="/health">Health Check</a></li>
-            <li><a href="/">Home</a></li>
+    <div class="bg-gray-50 border-l-4 border-blue-600 p-4 my-5 rounded-r">
+        <h3 class="text-lg font-semibold mb-3 text-gray-800">Quick Links</h3>
+        <ul class="list-disc list-inside space-y-1">
+            <li><a href="/health" class="text-blue-600 hover:text-blue-800 underline">Health Check</a></li>
+            <li><a href="/" class="text-blue-600 hover:text-blue-800 underline">Home</a></li>
         </ul>
     </div>
 {% endblock %}
