@@ -1,0 +1,19 @@
+{% extends "layout.njk" %}
+
+{% block title %}Health Check - Team 3 Job Application Frontend{% endblock %}
+
+{% block content %}
+    <h1>Health Check ✅</h1>
+    
+    <div class="info-card">
+        <h3>System Status</h3>
+        <p><strong>Status:</strong> <span style="color: green;">{{ status }}</span></p>
+        <p><strong>Uptime:</strong> {{ uptime }} seconds</p>
+        <p class="timestamp"><strong>Last Check:</strong> {{ timestamp }}</p>
+    </div>
+
+    <div class="info-card">
+        <h3>Navigation</h3>
+        <p><a href="/">← Back to Home</a></p>
+    </div>
+{% endblock %}
