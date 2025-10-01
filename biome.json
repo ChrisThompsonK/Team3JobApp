@@ -83,5 +83,13 @@
         "organizeImports": "on"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["public/**/*.css", "src/styles/**/*.css"],
+      "linter": {
+        "enabled": false
+      }
+    }
+  ]
 }
