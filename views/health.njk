@@ -3,17 +3,82 @@
 {% block title %}Health Check - Team 3 Job Application Frontend{% endblock %}
 
 {% block content %}
-    <h1 class="text-gray-800 border-b-4 border-green-500 pb-2 mb-6">Health Check ✅</h1>
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-success mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 inline mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Health Check
+        </h1>
+        <div class="divider"></div>
+    </div>
     
-    <div class="bg-green-50 border-l-4 border-green-500 p-4 my-5 rounded-r">
-        <h3 class="text-lg font-semibold mb-3 text-gray-800">System Status</h3>
-        <p class="mb-2"><strong>Status:</strong> <span class="text-green-600 font-semibold">{{ status }}</span></p>
-        <p class="mb-2"><strong>Uptime:</strong> {{ uptime }} seconds</p>
-        <p class="text-gray-600 text-sm"><strong>Last Check:</strong> {{ timestamp }}</p>
+    <!-- Success Alert -->
+    <div class="alert alert-success shadow-lg mb-6">
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+                <h3 class="font-bold">System Status: All Systems Operational!</h3>
+                <div class="text-xs">All services are running smoothly and responding correctly.</div>
+            </div>
+        </div>
     </div>
 
-    <div class="bg-gray-50 border-l-4 border-blue-600 p-4 my-5 rounded-r">
-        <h3 class="text-lg font-semibold mb-3 text-gray-800">Navigation</h3>
-        <p><a href="/" class="text-blue-600 hover:text-blue-800 underline">← Back to Home</a></p>
+    <!-- System Stats -->
+    <div class="stats stats-vertical lg:stats-horizontal shadow w-full mb-6">
+        <div class="stat">
+            <div class="stat-figure text-success">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <div class="stat-title">System Status</div>
+            <div class="stat-value text-success">{{ status }}</div>
+            <div class="stat-desc">All systems operational</div>
+        </div>
+        
+        <div class="stat">
+            <div class="stat-figure text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <div class="stat-title">System Uptime</div>
+            <div class="stat-value text-primary">{{ uptime }}</div>
+            <div class="stat-desc">seconds running</div>
+        </div>
+        
+        <div class="stat">
+            <div class="stat-figure text-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="8 7V3a4 4 0 118 0v4m-4 8a2 2 0 11-4 0m4 0a2 2 0 104 0m-4 0V9a2 2 0 118 0v6m-9-6h10" />
+                </svg>
+            </div>
+            <div class="stat-title">Last Check</div>
+            <div class="stat-value text-secondary text-lg">{{ timestamp }}</div>
+            <div class="stat-desc">Most recent health check</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="card bg-neutral text-neutral-content shadow-xl">
+        <div class="card-body text-center">
+            <h2 class="card-title justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="9 5l7 7-7 7" />
+                </svg>
+                Navigation
+            </h2>
+            <div class="card-actions justify-center">
+                <a href="/" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Back to Home
+                </a>
+            </div>
+        </div>
     </div>
 {% endblock %}
