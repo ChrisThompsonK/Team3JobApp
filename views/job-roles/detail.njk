@@ -1,22 +1,115 @@
 {% extends "layout.njk" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ jobRole.name }} - Job Details{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold mb-4">{{ jobRole.name }}</h1>
+<div class="container mx-auto px-4 py-8 max-w-6xl">
+  <!-- Page Title -->
+  <h1 class="text-9xl font-bold mb-12 text-center">Job Details</h1>
   
-  <div class="mb-6">
-    <p><strong>Job ID:</strong> {{ jobRole.id }}</p>
-    <p><strong>Location:</strong> {{ jobRole.location }}</p>
-    <p><strong>Capability:</strong> {{ jobRole.capability }}</p>
-    <p><strong>Band Level:</strong> {{ jobRole.band }}</p>
-    <p><strong>Closing Date:</strong> {{ jobRole.closingDate.toLocaleDateString() }}</p>
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <!-- Job Role Name -->
+      <h2 class="text-6xl font-bold mb-8 text-center">{{ jobRole.name }}</h2>
+      
+      <!-- Key Information Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+        <div class="space-y-8">
+          <div>
+            <h3 class="text-xl font-semibold text-primary mb-3">Location</h3>
+            <p class="text-xl">{{ jobRole.location }}</p>
+          </div>
+          
+          <div>
+            <h3 class="text-xl font-semibold text-primary mb-3">Capability</h3>
+            <p class="text-xl">{{ jobRole.capability }}</p>
+          </div>
+          
+          <div>
+            <h3 class="text-xl font-semibold text-primary mb-3">Band</h3>
+            <p class="text-xl">{{ jobRole.band }}</p>
+          </div>
+          
+          <div>
+            <h3 class="text-xl font-semibold text-primary mb-3">Number of Open Positions</h3>
+            <p class="text-xl">{{ jobRole.openPositions or 'Not specified' }}</p>
+          </div>
+        </div>
+        
+        <div class="space-y-8">
+          <div>
+            <h3 class="text-xl font-semibold text-primary mb-3">Closing Date</h3>
+            <p class="text-xl">{{ jobRole.closingDate.toLocaleDateString() if jobRole.closingDate else 'Not specified' }}</p>
+          </div>
+          
+          <div>
+            <h3 class="text-xl font-semibold text-primary mb-3">Status</h3>
+            <div class="badge badge-xl {% if jobRole.status == 'Open' %}badge-success{% elif jobRole.status == 'Closing Soon' %}badge-warning{% else %}badge-error{% endif %}">
+              {{ jobRole.status or 'Active' }}
+            </div>
+          </div>
+          
+          {% if jobRole.jobSpecUrl %}
+          <div>
+            <h3 class="text-xl font-semibold text-primary mb-3">Job Specification</h3>
+            <a href="{{ jobRole.jobSpecUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+              View Job Spec (SharePoint)
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- Description Section -->
+      {% if jobRole.description %}
+      <div class="mb-10">
+        <h3 class="text-3xl font-semibold text-primary mb-6">Job Description</h3>
+        <div class="bg-base-200 p-8 rounded-lg">
+          <div class="prose max-w-none">
+            <p class="text-xl leading-relaxed">{{ jobRole.description }}</p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      
+      <!-- Responsibilities Section -->
+      {% if jobRole.responsibilities %}
+      <div class="mb-10">
+        <h3 class="text-3xl font-semibold text-primary mb-6">Key Responsibilities</h3>
+        <div class="bg-base-200 p-8 rounded-lg">
+          <div class="prose max-w-none">
+            {% if jobRole.responsibilities is string %}
+              <p class="text-xl leading-relaxed">{{ jobRole.responsibilities }}</p>
+            {% else %}
+              <ul class="text-xl leading-relaxed space-y-3">
+                {% for responsibility in jobRole.responsibilities %}
+                  <li>{{ responsibility }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      
+      <!-- Action Buttons -->
+      <div class="flex justify-center mt-8">
+        {% if jobRole.status == 'Open' or jobRole.status == 'Closing Soon' or not jobRole.status %}
+        <a href="/jobs/{{ jobRole.id }}/apply" class="btn btn-primary">
+          Apply for This Position
+        </a>
+        {% else %}
+        <div class="btn btn-disabled">
+          Applications Closed
+        </div>
+        {% endif %}
+      </div>
+    </div>
   </div>
+</div>
 
-  <div class="mt-8">
-    <a href="/jobs" class="text-blue-600 underline">← Back to All Jobs</a> | 
-    <a href="/" class="text-blue-600 underline">Home</a>
-  </div>
+<!-- Back to Job List Button -->
+<div class="mt-8 text-center">
+  <a href="/jobs" class="btn btn-primary btn-sm text-base">← Back to Job List</a>
 </div>
 {% endblock %}

@@ -17,7 +17,7 @@
             <th class="w-1/6 text-left px-4 py-4 text-lg font-semibold">Location</th>
             <th class="w-1/6 text-left px-4 py-4 text-lg font-semibold">Capability</th>
             <th class="w-1/12 text-left px-4 py-4 text-lg font-semibold">Band</th>
-            <th class="w-32 text-left px-4 py-4 text-lg font-semibold">Action</th>
+            <th class="w-40 text-left px-4 py-4 text-lg font-semibold">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -30,9 +30,14 @@
               <td class="text-base-content/70 px-4 py-8 text-lg">{{ job.capability }}</td>
               <td class="text-base-content/70 px-4 py-8 text-lg">{{ job.band }}</td>
               <td class="px-4 py-8">
-                <a href="/jobs/{{ job.id }}" class="btn btn-primary btn-sm text-base">
-                  Apply
-                </a>
+                <div class="flex gap-2">
+                  <a href="/jobs/{{ job.id }}/details" class="btn btn-secondary btn-sm text-base">
+                    View Details
+                  </a>
+                  <a href="/jobs/{{ job.id }}/apply" class="btn btn-primary btn-sm text-base">
+                    Apply
+                  </a>
+                </div>
               </td>
             </tr>
           {% endfor %}
