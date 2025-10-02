@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import { HealthController, HomeController } from '../controllers/index.js';
-import { jobRoleController } from '../controllers/job-role-controller.js';
+import { JobRoleController } from '../controllers/job-role-controller.js';
+import { jobRoleService } from '../services/job-role-service.js';
 
 const router = Router();
 
+const jobRoleController = new JobRoleController(jobRoleService);
 /**
  * Home Routes
  */

@@ -1,10 +1,12 @@
 import type { Request, Response } from 'express';
-import { jobRoleService } from '../services/job-role-service.js';
+import type { JobRoleService } from '../services/job-role-service.js';
 
 export class JobRoleController {
+  constructor(private readonly jobRoleService: JobRoleService) {}
+
   async getAllJobRoles(_req: Request, res: Response): Promise<void> {
     try {
-      const jobRoles = await jobRoleService.getAllJobRoles();
+      const jobRoles = await this.jobRoleService.getAllJobRoles();
       res.render('job-roles/list', {
         title: 'Available Job Roles',
         jobRoles,
@@ -24,7 +26,7 @@ export class JobRoleController {
         return;
       }
 
-      const jobRole = await jobRoleService.getJobRoleById(id);
+      const jobRole = await this.jobRoleService.getJobRoleById(id);
 
       if (!jobRole) {
         res.status(404).send(`Job role with ID ${id} not found`);
@@ -41,5 +43,3 @@ export class JobRoleController {
     }
   }
 }
-
-export const jobRoleController = new JobRoleController();
