@@ -28,7 +28,10 @@ router.get("/api/health", HealthController.api);
  * Job Role Routes
  */
 router.get("/jobs", jobRoleController.getAllJobRoles.bind(jobRoleController));
-router.get("/jobs/:id", jobRoleController.getJobRoleById.bind(jobRoleController));
+router.get(
+	"/jobs/:id",
+	jobRoleController.getJobRoleById.bind(jobRoleController),
+);
 
 /**
  * Demo Routes (Development only)
