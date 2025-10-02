@@ -4,6 +4,8 @@
 
 A TypeScript/Node.js web application built with a clean 3-tier architecture and Nunjucks templating.
 
+> 🤖 **For AI Assistants**: Please read [`.copilot-instructions.md`](./.copilot-instructions.md) first to understand project context, architecture, and conventions before starting any task.
+
 ## 🏗️ Architecture
 
 This project follows a **3-tier architecture** pattern for clean separation of concerns:
@@ -39,6 +41,8 @@ src/
 
 views/               # Nunjucks templates
 public/              # Static assets (CSS, JS, images)
+.copilot-instructions.md  # AI assistant context and conventions
+.copilotignore           # Files for AI assistants to ignore
 ```
 
 ## 🚀 Getting Started
