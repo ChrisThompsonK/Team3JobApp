@@ -2,6 +2,7 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "recommended": false,
       "correctness": {
         "noUnusedVariables": "error",
         "noUndeclaredVariables": "error"
@@ -9,8 +10,14 @@
       "suspicious": {
         "noDebugger": "error"
       },
-      "complexity": {},
-      "style": {}
+      "complexity": {
+        "useLiteralKeys": "off"
+      },
+      "style": {},
+      "a11y": {},
+      "performance": {},
+      "security": {},
+      "nursery": {}
     }
   },
   "formatter": {
