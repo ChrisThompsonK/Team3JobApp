@@ -49,7 +49,7 @@ export const startServer = async (app: express.Application): Promise<void> => {
     const server = app.listen(config.server.port, () => {
       console.log(`✅ Server running on http://${config.server.host}:${config.server.port}`);
       console.log(
-        `📊 Health check available at http://${config.server.host}:${config.server.port}/health`
+        `📊 Health check available at http://${config.server.host}:${config.server.port}/health`,
       );
       console.log(`🏗️  Environment: ${config.env.nodeEnv}`);
     });

@@ -9,7 +9,7 @@ export const errorHandler = (
   error: Error | HttpError,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   // If response was already sent, delegate to default Express error handler
   if (res.headersSent) {
@@ -52,12 +52,12 @@ export const errorHandler = (
   if (statusCode >= 500) {
     console.error(
       `[${new Date().toISOString()}] [${requestId}] ERROR: ${statusCode} - ${message}`,
-      errorDetails
+      errorDetails,
     );
   } else {
     console.warn(
       `[${new Date().toISOString()}] [${requestId}] WARN: ${statusCode} - ${message}`,
-      errorDetails
+      errorDetails,
     );
   }
 

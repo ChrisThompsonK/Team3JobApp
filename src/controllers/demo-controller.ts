@@ -44,7 +44,7 @@ export const DemoController = {
    */
   serviceUnavailable(_req: Request, _res: Response, next: NextFunction): void {
     const error = createHttpError.serviceUnavailable(
-      'The service is temporarily down for maintenance'
+      'The service is temporarily down for maintenance',
     );
     next(error);
   },
