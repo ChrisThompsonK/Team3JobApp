@@ -17,9 +17,10 @@ export const HomeController = {
       res.render('index', appInfo);
     } catch (error) {
       console.error('Error in HomeController.index:', error);
+      const nodeEnv = process.env['NODE_ENV'];
       res.status(500).render('error', {
         message: 'Internal Server Error',
-        error: process.env['NODE_ENV'] === 'development' ? error : {},
+        error: nodeEnv === 'development' ? error : {},
       });
     }
   },
