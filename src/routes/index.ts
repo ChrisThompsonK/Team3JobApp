@@ -5,8 +5,12 @@ import {
 	HealthController,
 	HomeController,
 } from "../controllers/index.js";
+import { JobRoleController } from "../controllers/job-role-controller.js";
+import { jobRoleService } from "../services/job-role-service.js";
 
 const router = Router();
+
+const jobRoleController = new JobRoleController(jobRoleService);
 
 /**
  * Home Routes
@@ -21,8 +25,13 @@ router.get("/health", HealthController.index);
 router.get("/api/health", HealthController.api);
 
 /**
- * Demo Routes - Error Handling Examples
- * These routes are only available in development mode
+ * Job Role Routes
+ */
+router.get("/jobs", jobRoleController.getAllJobRoles.bind(jobRoleController));
+router.get("/jobs/:id", jobRoleController.getJobRoleById.bind(jobRoleController));
+
+/**
+ * Demo Routes (Development only)
  */
 if (config.env.isDevelopment || config.env.nodeEnv === "development") {
 	router.get("/demo/400", DemoController.badRequest);
