@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold mb-6">{{ title }}</h1>
+  <h1 class="text-5xl font-bold mb-8 text-center">{{ title }}</h1>
 
   {% if jobRoles.length > 0 %}
     <div class="overflow-x-auto shadow-lg rounded-lg">
@@ -13,8 +13,10 @@
         <thead class="bg-base-200">
           <tr>
             <th class="w-16 text-left px-4 py-4 text-lg font-semibold">ID</th>
-            <th class="w-2/5 text-left px-4 py-4 text-lg font-semibold">Job Name</th>
-            <th class="w-2/5 text-left px-4 py-4 text-lg font-semibold">Location</th>
+            <th class="w-1/4 text-left px-4 py-4 text-lg font-semibold">Job Name</th>
+            <th class="w-1/6 text-left px-4 py-4 text-lg font-semibold">Location</th>
+            <th class="w-1/6 text-left px-4 py-4 text-lg font-semibold">Capability</th>
+            <th class="w-1/12 text-left px-4 py-4 text-lg font-semibold">Band</th>
             <th class="w-32 text-left px-4 py-4 text-lg font-semibold">Action</th>
           </tr>
         </thead>
@@ -25,6 +27,8 @@
               <th class="font-medium px-4 py-7 text-lg">{{ job.id }}</th>
               <td class="font-medium px-4 py-7 text-lg">{{ job.name }}</td>
               <td class="text-base-content/70 px-4 py-8 text-lg">{{ job.location }}</td>
+              <td class="text-base-content/70 px-4 py-8 text-lg">{{ job.capability }}</td>
+              <td class="text-base-content/70 px-4 py-8 text-lg">{{ job.band }}</td>
               <td class="px-4 py-8">
                 <a href="/jobs/{{ job.id }}" class="btn btn-primary btn-sm text-base">
                   Apply
@@ -41,8 +45,8 @@
     </div>
   {% endif %}
 
-  <div class="mt-8">
-    <a href="/" class="btn btn-ghost btn-sm">← Back to Home</a>
+  <div class="h-32 flex items-end">
+    <a href="/" class="btn btn-primary btn-sm text-base">← Back to Home</a>
   </div>
 </div>
 {% endblock %}
