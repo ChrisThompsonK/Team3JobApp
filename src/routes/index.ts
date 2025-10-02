@@ -1,10 +1,6 @@
 import { Router } from "express";
 import { config } from "../config/index.js";
-import {
-	DemoController,
-	HealthController,
-	HomeController,
-} from "../controllers/index.js";
+import { DemoController, HealthController, HomeController } from "../controllers/index.js";
 import { JobRoleController } from "../controllers/job-role-controller.js";
 import { jobRoleService } from "../services/job-role-service.js";
 
@@ -28,10 +24,7 @@ router.get("/api/health", HealthController.api);
  * Job Role Routes
  */
 router.get("/jobs", jobRoleController.getAllJobRoles.bind(jobRoleController));
-router.get(
-	"/jobs/:id",
-	jobRoleController.getJobRoleById.bind(jobRoleController),
-);
+router.get("/jobs/:id", jobRoleController.getJobRoleById.bind(jobRoleController));
 
 /**
  * Demo Routes (Development only)

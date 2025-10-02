@@ -1,9 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import {
-	type ErrorResponse,
-	HttpError,
-	HttpStatusCode,
-} from "../models/errors.js";
+import { type ErrorResponse, HttpError, HttpStatusCode } from "../models/errors.js";
 
 /**
  * Generic error handling middleware
@@ -26,8 +22,7 @@ export const errorHandler = (
 	const isDevelopment = nodeEnv === "development";
 	const acceptHeader = req.get("Accept") || "";
 	const wantsJSON =
-		acceptHeader.includes("application/json") ||
-		req.originalUrl.startsWith("/api/");
+		acceptHeader.includes("application/json") || req.originalUrl.startsWith("/api/");
 
 	let statusCode: number;
 	let message: string;
@@ -110,29 +105,18 @@ export const errorHandler = (
  */
 function getErrorMessage(statusCode: number, originalMessage: string): string {
 	const errorMessages: Record<number, string> = {
-		[HttpStatusCode.BAD_REQUEST]:
-			"The request could not be understood by the server",
-		[HttpStatusCode.UNAUTHORIZED]:
-			"Authentication is required to access this resource",
-		[HttpStatusCode.FORBIDDEN]:
-			"You do not have permission to access this resource",
+		[HttpStatusCode.BAD_REQUEST]: "The request could not be understood by the server",
+		[HttpStatusCode.UNAUTHORIZED]: "Authentication is required to access this resource",
+		[HttpStatusCode.FORBIDDEN]: "You do not have permission to access this resource",
 		[HttpStatusCode.NOT_FOUND]: "The requested resource could not be found",
-		[HttpStatusCode.METHOD_NOT_ALLOWED]:
-			"The HTTP method is not allowed for this resource",
-		[HttpStatusCode.CONFLICT]:
-			"The request conflicts with the current state of the resource",
-		[HttpStatusCode.UNPROCESSABLE_ENTITY]:
-			"The request was well-formed but contains invalid data",
-		[HttpStatusCode.TOO_MANY_REQUESTS]:
-			"Too many requests - please try again later",
-		[HttpStatusCode.INTERNAL_SERVER_ERROR]:
-			"An unexpected error occurred on the server",
-		[HttpStatusCode.BAD_GATEWAY]:
-			"The server received an invalid response from an upstream server",
-		[HttpStatusCode.SERVICE_UNAVAILABLE]:
-			"The service is temporarily unavailable",
-		[HttpStatusCode.GATEWAY_TIMEOUT]:
-			"The server timed out waiting for a response",
+		[HttpStatusCode.METHOD_NOT_ALLOWED]: "The HTTP method is not allowed for this resource",
+		[HttpStatusCode.CONFLICT]: "The request conflicts with the current state of the resource",
+		[HttpStatusCode.UNPROCESSABLE_ENTITY]: "The request was well-formed but contains invalid data",
+		[HttpStatusCode.TOO_MANY_REQUESTS]: "Too many requests - please try again later",
+		[HttpStatusCode.INTERNAL_SERVER_ERROR]: "An unexpected error occurred on the server",
+		[HttpStatusCode.BAD_GATEWAY]: "The server received an invalid response from an upstream server",
+		[HttpStatusCode.SERVICE_UNAVAILABLE]: "The service is temporarily unavailable",
+		[HttpStatusCode.GATEWAY_TIMEOUT]: "The server timed out waiting for a response",
 	};
 
 	return errorMessages[statusCode] || originalMessage;

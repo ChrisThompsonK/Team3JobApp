@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+public/css/output.css
+
+# Config files we don't want to format
+package-lock.json
+.audit-ci.json
+
+# Temporary files
+tmp/
+temp/

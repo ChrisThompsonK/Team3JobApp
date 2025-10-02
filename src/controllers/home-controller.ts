@@ -11,8 +11,7 @@ export const HomeController = {
 	 */
 	index(req: Request, res: Response): void {
 		try {
-			const userName =
-				typeof req.query["user"] === "string" ? req.query["user"] : "Developer";
+			const userName = typeof req.query["user"] === "string" ? req.query["user"] : "Developer";
 			const appInfo = AppService.getAppInfo(userName);
 
 			res.render("index", appInfo);

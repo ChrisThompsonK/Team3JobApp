@@ -1,11 +1,7 @@
 import express from "express";
 import nunjucks from "nunjucks";
 import { config } from "./config/index.js";
-import {
-	errorHandler,
-	notFoundHandler,
-	requestLogger,
-} from "./middleware/index.js";
+import { errorHandler, notFoundHandler, requestLogger } from "./middleware/index.js";
 import routes from "./routes/index.js";
 
 /**
@@ -51,9 +47,7 @@ export const startServer = async (app: express.Application): Promise<void> => {
 		console.log(`🚀 ${config.app.name} is starting...`);
 
 		const server = app.listen(config.server.port, () => {
-			console.log(
-				`✅ Server running on http://${config.server.host}:${config.server.port}`,
-			);
+			console.log(`✅ Server running on http://${config.server.host}:${config.server.port}`);
 			console.log(
 				`📊 Health check available at http://${config.server.host}:${config.server.port}/health`,
 			);

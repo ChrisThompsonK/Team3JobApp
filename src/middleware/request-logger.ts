@@ -13,11 +13,7 @@ declare global {
 /**
  * Request logging middleware with request ID
  */
-export const requestLogger = (
-	req: Request,
-	res: Response,
-	next: NextFunction,
-): void => {
+export const requestLogger = (req: Request, res: Response, next: NextFunction): void => {
 	const timestamp = new Date().toISOString();
 	const method = req.method;
 	const url = req.url;

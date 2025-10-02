@@ -10,9 +10,7 @@ export const DemoController = {
 	 * Demonstrate 400 Bad Request error
 	 */
 	badRequest(_req: Request, _res: Response, next: NextFunction): void {
-		const error = createHttpError.badRequest(
-			"Invalid request parameters provided",
-		);
+		const error = createHttpError.badRequest("Invalid request parameters provided");
 		next(error);
 	},
 
@@ -20,9 +18,7 @@ export const DemoController = {
 	 * Demonstrate 401 Unauthorized error
 	 */
 	unauthorized(_req: Request, _res: Response, next: NextFunction): void {
-		const error = createHttpError.unauthorized(
-			"Authentication required to access this resource",
-		);
+		const error = createHttpError.unauthorized("Authentication required to access this resource");
 		next(error);
 	},
 
@@ -30,9 +26,7 @@ export const DemoController = {
 	 * Demonstrate 403 Forbidden error
 	 */
 	forbidden(_req: Request, _res: Response, next: NextFunction): void {
-		const error = createHttpError.forbidden(
-			"You do not have permission to access this resource",
-		);
+		const error = createHttpError.forbidden("You do not have permission to access this resource");
 		next(error);
 	},
 
