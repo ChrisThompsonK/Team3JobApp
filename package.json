@@ -13,6 +13,10 @@
     "start": "node dist/index.js",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
+    "format": "biome format --write .",
+    "lint": "biome lint --write .",
+    "check": "biome check --write .",
+    "ci": "biome ci .",
     "test": "vitest",
     "test:run": "vitest run",
     "test:ui": "vitest --ui",
@@ -27,6 +31,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@biomejs/biome": "2.2.4",
     "@tailwindcss/cli": "^4.1.13",
     "@types/express": "^5.0.3",
     "@types/node": "^20.11.17",
@@ -34,7 +39,9 @@
     "@types/uuid": "^10.0.0",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
+    "autoprefixer": "^10.4.21",
     "chokidar": "^3.6.0",
+    "daisyui": "^5.1.26",
     "tailwindcss": "^4.1.13",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
@@ -44,7 +51,6 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "daisyui": "^5.1.26",
     "express": "^5.1.0",
     "nunjucks": "^3.2.4",
     "uuid": "^13.0.0"
