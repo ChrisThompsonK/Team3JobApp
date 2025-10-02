@@ -57,7 +57,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "daisyui": "^5.1.26",
+    "daisyui": "^4.12.24",
     "express": "^5.1.0",
     "nunjucks": "^3.2.4",
     "uuid": "^13.0.0"
