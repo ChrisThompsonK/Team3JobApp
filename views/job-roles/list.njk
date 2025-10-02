@@ -8,16 +8,16 @@
 
   {% if jobRoles.length > 0 %}
     <div class="overflow-x-auto shadow-lg rounded-lg">
-      <table class="table w-full">
+      <table class="table w-full min-w-max">
         <!-- head -->
         <thead class="bg-base-200">
           <tr>
             <th class="w-16 text-left px-4 py-4 text-lg font-semibold">ID</th>
-            <th class="w-1/4 text-left px-4 py-4 text-lg font-semibold">Job Name</th>
-            <th class="w-1/6 text-left px-4 py-4 text-lg font-semibold">Location</th>
-            <th class="w-1/6 text-left px-4 py-4 text-lg font-semibold">Capability</th>
-            <th class="w-1/12 text-left px-4 py-4 text-lg font-semibold">Band</th>
-            <th class="w-40 text-left px-4 py-4 text-lg font-semibold">Actions</th>
+            <th class="text-left px-4 py-4 text-lg font-semibold">Job Name</th>
+            <th class="text-left px-4 py-4 text-lg font-semibold">Location</th>
+            <th class="text-left px-4 py-4 text-lg font-semibold">Capability</th>
+            <th class="w-20 text-left px-4 py-4 text-lg font-semibold">Band</th>
+            <th class="w-60 text-left px-4 py-4 text-lg font-semibold">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -28,13 +28,13 @@
               <td class="font-medium px-4 py-7 text-lg">{{ job.name }}</td>
               <td class="text-base-content/70 px-4 py-8 text-lg">{{ job.location }}</td>
               <td class="text-base-content/70 px-4 py-8 text-lg">{{ job.capability }}</td>
-              <td class="text-base-content/70 px-4 py-8 text-lg">{{ job.band }}</td>
-              <td class="px-4 py-8">
+              <td class="text-base-content/70 px-4 py-4 text-lg">{{ job.band }}</td>
+              <td class="px-4 py-4">
                 <div class="flex gap-2">
-                  <a href="/jobs/{{ job.id }}/details" class="btn btn-secondary btn-sm text-base">
+                  <a href="/jobs/{{ job.id }}/details" class="btn btn-secondary btn-sm text-base whitespace-nowrap">
                     View Details
                   </a>
-                  <a href="/jobs/{{ job.id }}/apply" class="btn btn-primary btn-sm text-base">
+                  <a href="/jobs/{{ job.id }}/apply" class="btn btn-primary btn-sm text-base whitespace-nowrap">
                     Apply
                   </a>
                 </div>
