@@ -6,13 +6,36 @@
     <title>{% block title %}Job Portal{% endblock %}</title>
     <link rel="stylesheet" href="/css/output.css">
 </head>
-<body class="min-h-screen bg-base-200">
-    <div class="container mx-auto max-w-4xl p-8">
-        <div class="card bg-base-100 shadow-xl">
-            <div class="card-body text-center">
-                {% block content %}{% endblock %}
+<body class="min-h-screen bg-base-200 flex flex-col">
+    <!-- Header -->
+    <header class="bg-primary text-primary-content shadow-lg">
+        <div class="container mx-auto max-w-4xl px-8 py-4">
+            <div class="text-center">
+                <h1 class="text-2xl font-bold">Job Portal</h1>
+                <p class="text-sm opacity-80">Your Gateway to Career Opportunities</p>
             </div>
         </div>
-    </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1">
+        <div class="container mx-auto max-w-4xl p-8">
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body text-center">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-neutral text-neutral-content">
+        <div class="container mx-auto max-w-4xl px-8 py-6">
+            <div class="text-center">
+                <p class="text-sm opacity-80">© 2025 Job Portal. Connecting talent with opportunity.</p>
+                <p class="text-xs opacity-60 mt-1">Building careers, one opportunity at a time.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
