@@ -95,6 +95,9 @@ jspm_packages/
 # TypeScript cache
 *.tsbuildinfo
 
+# Biome cache
+.biome/
+
 # Temporary folders
 tmp/
 temp/

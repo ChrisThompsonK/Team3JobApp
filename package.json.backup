@@ -6,25 +6,17 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "npm run clean && npm run type-check && npm run lint && tsc && npm run build:css:prod",
+    "build": "tsc",
     "build:css": "tailwindcss -i src/styles/input.css -o public/css/output.css",
     "build:css:watch": "tailwindcss -i src/styles/input.css -o public/css/output.css --watch",
     "build:css:prod": "tailwindcss -i src/styles/input.css -o public/css/output.css --minify",
     "start": "node dist/index.js",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
-    "lint": "npx biome check .",
-    "lint:fix": "npx biome check --write .",
-    "lint:unsafe": "npx biome check --write --unsafe .",
-    "format": "npx biome format --write .",
-    "format:check": "npx biome format .",
-    "check": "npm run type-check && npm run lint && npm run format:check",
-    "fix": "npm run lint:fix && npm run format",
     "test": "vitest",
     "test:run": "vitest run",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage",
-    "ci": "npm run check && npm run test:run"
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [
     "typescript",
@@ -35,7 +27,6 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@biomejs/biome": "2.2.4",
     "@tailwindcss/cli": "^4.1.13",
     "@types/express": "^5.0.3",
     "@types/node": "^20.11.17",
@@ -54,7 +45,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "daisyui": "^5.1.26",
+    "daisyui": "^4.12.24",
     "express": "^5.1.0",
     "nunjucks": "^3.2.4",
     "uuid": "^13.0.0"
