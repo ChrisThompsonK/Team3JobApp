@@ -3,6 +3,28 @@
 {% block title %}Home - Job Portal{% endblock %}
 
 {% block content %}
+    <style>
+        .placeholder-gray-600::placeholder {
+            color: #4b5563 !important;
+            opacity: 1;
+        }
+        .placeholder-gray-600::-webkit-input-placeholder {
+            color: #4b5563 !important;
+            opacity: 1;
+        }
+        .placeholder-gray-600::-moz-placeholder {
+            color: #4b5563 !important;
+            opacity: 1;
+        }
+        .placeholder-gray-600:-ms-input-placeholder {
+            color: #4b5563 !important;
+            opacity: 1;
+        }
+        .job-search-title {
+            font-size: 2rem !important;
+            line-height: 1.1;
+        }
+    </style>
     <!-- Main Title -->
     <div class="text-center mb-12">
         <h1 class="text-4xl font-bold text-primary mb-6">
@@ -15,28 +37,59 @@
 
 
 
-    <!-- Simple Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-        <div class="card bg-primary text-primary-content shadow-lg">
+    <!-- Job Search Card -->
+    <div class="flex justify-center">
+        <div class="card bg-primary text-primary-content shadow-lg max-w-md w-full">
             <div class="card-body text-center">
-                <h2 class="card-title justify-center mb-4">Job Search</h2>
-                <p>Browse through available job opportunities</p>
-                <div class="card-actions justify-center mt-4">
-                    <a href="/jobs" class="btn btn-primary-content">View Jobs</a>
+                <h2 class="job-search-title font-bold justify-center mb-6 tracking-wide">Job Search</h2>
+                <p class="mb-6">Browse through available job opportunities</p>
+                
+                <!-- Search Bar -->
+                <div class="form-control w-full mb-4">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            placeholder="Search for jobs..." 
+                            class="input input-bordered w-full text-base-content bg-base-100 placeholder-gray-600" 
+                            id="jobSearchInput"
+                        />
+                        <button 
+                            class="btn btn-primary-content" 
+                            onclick="searchJobs()"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="card bg-secondary text-secondary-content shadow-lg">
-            <div class="card-body text-center">
-                <h2 class="card-title justify-center mb-4">System Health</h2>
-                <p>Check the current status of our services</p>
                 <div class="card-actions justify-center mt-4">
-                    <a href="/health" class="btn btn-secondary-content">Check Status</a>
+                    <a href="/jobs" class="btn btn-primary-content btn-outline">View All Jobs</a>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function searchJobs() {
+            const searchTerm = document.getElementById('jobSearchInput').value.trim();
+            if (searchTerm) {
+                // Redirect to jobs page with search query
+                window.location.href = `/jobs?search=${encodeURIComponent(searchTerm)}`;
+            } else {
+                // If no search term, just go to jobs page
+                window.location.href = '/jobs';
+            }
+        }
+
+        // Allow Enter key to trigger search
+        document.getElementById('jobSearchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchJobs();
+            }
+        });
+    </script>
 
 
 {% endblock %}
