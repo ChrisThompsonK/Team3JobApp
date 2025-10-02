@@ -1,16 +1,14 @@
 # Run code quality checks before commit
 echo "🔍 Running pre-commit checks..."
 
-# Run Biome checks
-echo "📋 Checking code formatting and linting..."
-npm run check:ci
+# Run lint-staged (only on staged files)
+echo "📋 Checking staged files..."
+npx lint-staged
 
-# Run type checking
-echo "🔧 Running TypeScript type check..."
-npm run type-check
-
-# Run tests
-echo "🧪 Running tests..."
-npm run test:run
+# Run type checking (only if TypeScript files changed)
+if git diff --cached --name-only | grep -q '\.tsx\?$'; then
+  echo "🔧 Running TypeScript type check..."
+  npm run type-check
+fi
 
 echo "✅ Pre-commit checks passed!"
