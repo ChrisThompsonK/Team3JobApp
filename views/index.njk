@@ -20,7 +20,7 @@
 
 
     <!-- Job Search Card -->
-    <div class="flex justify-center">
+    <div class="flex justify-center mb-12">
         <div class="card bg-primary text-primary-content shadow-lg max-w-md w-full">
             <div class="card-body text-center">
                 <h2 class="job-search-title font-bold justify-center mb-6 tracking-wide">Job Search</h2>
@@ -43,7 +43,103 @@
         </div>
     </div>
 
+    <!-- Job Description Formality Analyzer -->
+    <div class="flex justify-center">
+        <div class="card bg-base-100 shadow-lg max-w-4xl w-full">
+            <div class="card-body">
+                <h2 class="card-title text-2xl font-bold text-center mb-6 text-primary">
+                    Job Description Formality Analyzer
+                </h2>
+                <p class="text-center text-base-content/70 mb-8">
+                    Analyze and improve the formality of your job descriptions
+                </p>
+
+                <!-- Job Description Input -->
+                <div class="form-control w-full mb-6">
+                    <label class="label">
+                        <span class="label-text font-semibold">Job Description Text</span>
+                    </label>
+                    <textarea 
+                        class="textarea textarea-bordered h-32 w-full" 
+                        placeholder="Paste your job description here..."
+                        id="jobDescriptionInput"
+                    ></textarea>
+                </div>
+
+                <!-- Formality Score Input -->
+                <div class="form-control w-full mb-6">
+                    <label class="label">
+                        <span class="label-text font-semibold">Desired Formality Level</span>
+                        <span class="label-text-alt" id="formalityValue">5</span>
+                    </label>
+                    <input 
+                        type="range" 
+                        min="1" 
+                        max="10" 
+                        value="5" 
+                        class="range range-primary" 
+                        id="formalitySlider"
+                    />
+                    <div class="w-full flex justify-between text-xs px-2">
+                        <span>Casual</span>
+                        <span>Neutral</span>
+                        <span>Very Formal</span>
+                    </div>
+                </div>
+
+                <!-- Analysis Button -->
+                <div class="card-actions justify-center mb-6">
+                    <button class="btn btn-primary" id="analyzeButton">
+                        Analyze Formality
+                    </button>
+                </div>
+
+                <!-- Results Section -->
+                <div id="analysisResults" class="hidden">
+                    <!-- Current Formality Score -->
+                    <div class="alert alert-info mb-4">
+                        <div>
+                            <h3 class="font-bold">Current Formality Score</h3>
+                            <p id="currentScore">Analyzing...</p>
+                        </div>
+                    </div>
+
+                    <!-- Informal Elements Detected -->
+                    <div class="mb-4">
+                        <h3 class="font-bold text-lg mb-2">Informal Elements Detected</h3>
+                        <div class="bg-base-200 p-4 rounded-lg">
+                            <ul id="informalElements" class="list-disc list-inside space-y-1">
+                                <!-- Populated by JavaScript -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Suggestions -->
+                    <div class="mb-4">
+                        <h3 class="font-bold text-lg mb-2">Suggestions for Improvement</h3>
+                        <div class="bg-base-200 p-4 rounded-lg">
+                            <ul id="suggestions" class="list-disc list-inside space-y-2">
+                                <!-- Populated by JavaScript -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Improved Version -->
+                    <div class="mb-4">
+                        <h3 class="font-bold text-lg mb-2">Suggested Improved Version</h3>
+                        <textarea 
+                            class="textarea textarea-bordered h-32 w-full bg-base-200" 
+                            id="improvedText"
+                            readonly
+                        ></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="/js/job-search.js"></script>
+    <script src="/js/formality-analyzer.js"></script>
 
 
 {% endblock %}
