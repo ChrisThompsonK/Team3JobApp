@@ -32,10 +32,10 @@
     </style>
     <!-- Main Title -->
     <div class="text-center mb-12">
-        <h1 class="text-4xl font-bold text-primary underlined-title mb-6">
+        <h1 class="text-4xl font-bold text-primary underlined-title mb-6 w-full max-w-6xl mx-auto px-8">
             Welcome to Job Portal
         </h1>
-        <p class="text-lg text-base-content/70 mb-8">
+        <p class="text-lg text-base-content/70 mb-8 w-full max-w-6xl mx-auto px-8">
             Find your perfect job opportunity
         </p>
     </div>
@@ -61,6 +61,16 @@
 
                 <div class="card-actions justify-center mt-4">
                     <a href="/jobs" class="btn btn-primary-content btn-outline">View All Jobs</a>
+                </div>
+                
+                <!-- Job Category Buttons -->
+                <div class="mt-6">
+                    <div class="grid grid-cols-2 gap-3 w-full">
+                        <a href="/jobs?category=engineering" class="btn btn-primary-content btn-outline btn-lg">Engineering</a>
+                        <a href="/jobs?category=managerial" class="btn btn-primary-content btn-outline btn-lg">Managerial</a>
+                        <a href="/jobs?category=senior" class="btn btn-primary-content btn-outline btn-lg">Senior</a>
+                        <a href="/jobs?category=security" class="btn btn-primary-content btn-outline btn-lg">Security</a>
+                    </div>
                 </div>
             </div>
         </div>
