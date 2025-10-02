@@ -23,5 +23,13 @@
       "quoteStyle": "single",
       "semicolons": "always"
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["public/css/output.css"],
+      "linter": {
+        "enabled": false
+      }
+    }
+  ]
 }

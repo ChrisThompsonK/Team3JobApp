@@ -18,7 +18,8 @@ export const errorHandler = (
   }
 
   const requestId = req.requestId || 'unknown';
-  const isDevelopment = process.env['NODE_ENV'] === 'development';
+  const nodeEnv = process.env['NODE_ENV'];
+  const isDevelopment = nodeEnv === 'development';
   const acceptHeader = req.get('Accept') || '';
   const wantsJSON =
     acceptHeader.includes('application/json') || req.originalUrl.startsWith('/api/');
