@@ -13,10 +13,6 @@
     "start": "node dist/index.js",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
-    "lint": "npx biome lint .",
-    "lint:fix": "npx biome lint --write .",
-    "format": "npx biome format --write .",
-    "format:check": "npx biome format .",
     "test": "vitest",
     "test:run": "vitest run",
     "test:ui": "vitest --ui",
@@ -31,7 +27,6 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@biomejs/biome": "2.2.4",
     "@tailwindcss/cli": "^4.1.13",
     "@types/express": "^5.0.3",
     "@types/node": "^20.11.17",

@@ -1,6 +1,0 @@
-# CODEOWNERS file for Team3 Job Application Frontend
-# This file defines who owns and can approve changes to this repository
-# For Engineering Academy apprentice training purposes
-
-# Global ownership - all files require approval from one of these users
-* @ChrisThompsonK @rkondratowicz
