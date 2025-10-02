@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Job Portal{% endblock %}</title>
     <link rel="stylesheet" href="/css/output.css">
+    {% block head %}{% endblock %}
 </head>
 <body class="min-h-screen bg-base-200">
     <div class="container mx-auto p-8">
@@ -13,6 +14,27 @@
                 {% block content %}{% endblock %}
             </div>
         </div>
-    </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1">
+        <div class="container mx-auto max-w-4xl p-8">
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body text-center">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-neutral text-neutral-content">
+        <div class="container mx-auto max-w-4xl px-8 py-6">
+            <div class="text-center">
+                <p class="text-sm opacity-80">© 2025 Job Portal. Connecting talent with opportunity.</p>
+                <p class="text-xs opacity-60 mt-1">Building careers, one opportunity at a time.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

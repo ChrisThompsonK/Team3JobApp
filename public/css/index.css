@@ -1,0 +1,32 @@
+/* Styles for the home page (index.njk) */
+
+/* Placeholder text color customization */
+.placeholder-gray-600::placeholder {
+  color: #4b5563 !important;
+  opacity: 1;
+}
+.placeholder-gray-600::-webkit-input-placeholder {
+  color: #4b5563 !important;
+  opacity: 1;
+}
+.placeholder-gray-600::-moz-placeholder {
+  color: #4b5563 !important;
+  opacity: 1;
+}
+.placeholder-gray-600:-ms-input-placeholder {
+  color: #4b5563 !important;
+  opacity: 1;
+}
+
+/* Job search title styling */
+.job-search-title {
+  font-size: 2rem !important;
+  line-height: 1.1;
+}
+
+/* Underlined title styling */
+.underlined-title {
+  text-decoration: underline !important;
+  text-decoration-color: hsl(var(--p)) !important;
+  text-underline-offset: 4px !important;
+}
