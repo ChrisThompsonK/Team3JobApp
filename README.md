@@ -88,96 +88,6 @@ npm run type-check
 
 ### 🎨 **CSS & Styling**
 ```bash
-# Build CSS from Tailwind (development)
-npm run build:css
-
-# Watch and rebuild CSS on changes
-npm run build:css:watch
-
-# Build minified CSS for production
-npm run build:css:prod
-```
-
-### 🧪 **Testing**
-```bash
-# Run tests in watch mode (interactive)
-npm run test
-
-# Run all tests once and exit
-npm run test:run
-
-# Open test UI in browser
-npm run test:ui
-
-# Run tests with coverage report
-npm run test:coverage
-```
-
-### 🔧 **Code Quality & Linting**
-```bash
-# Format code using Biome
-npm run format
-
-# Lint code and apply safe fixes
-npm run lint
-
-# Full check: format, lint, and organize imports
-npm run check
-
-# CI-optimized command (no auto-fixes)
-npm run ci
-```
-
-## 🏃‍♂️ **Quick Start Guide**
-
-### **For Development:**
-1. Install dependencies: `npm install`
-2. Start development server: `npm run dev`
-3. Visit `http://localhost:3000`
-
-### **For Production:**
-1. Install dependencies: `npm install`
-2. Build the project: `npm run build`
-3. Build production CSS: `npm run build:css:prod`
-4. Start the server: `npm run start`
-
-### **Before Committing:**
-```bash
-# Run all quality checks
-npm run check
-
-# Run tests
-npm run test:run
-
-# Verify everything builds
-npm run build
-```
-
-## 🌐 API Endpoints
-
-- `GET /` - Home page (HTML)
-- `GET /health` - Health check page (HTML)
-- `GET /api/health` - Health check API (JSON)
-
-## 🎨 Template Engine
-
-This project uses **Nunjucks** as the template engine:
-- Auto-escaping enabled for security
-- Template inheritance with base layouts
-- Dynamic content rendering
-- Development mode auto-reloading
-
-## �️ **Database & Migrations**
-
-*Note: Database migrations are not yet implemented in this frontend application. This section will be updated when backend database integration is added.*
-
-```bash
-# Future commands (to be implemented):
-# npm run migrate:up     - Run pending database migrations
-# npm run migrate:down   - Rollback last migration
-# npm run migrate:reset  - Reset database to initial state
-# npm run seed:run       - Run database seeders
-```
 
 ## �🔧 **Code Quality & Formatting**
 
@@ -229,7 +139,7 @@ For the best development experience:
 - **Other editors**: See [Biome editor integrations](https://biomejs.dev/guides/editors/first-party-extensions/)
 - **Format on save** is configured in `.vscode/settings.json`
 
-## � **Build & Deployment**
+## **Build & Deployment**
 
 ### **Development Build**
 ```bash
@@ -255,10 +165,6 @@ npm run build           # Build TypeScript with optimizations
 - `GET /` - Home page with job listings
 - `GET /health` - Health check page (HTML)
 - `GET /job-roles` - Job roles listing page
-
-### **API Endpoints** 
-- `GET /api/health` - Health check endpoint (JSON)
-- `GET /api/job-roles` - Job roles data (JSON)
 
 ### **Static Assets**
 - `GET /css/*` - Stylesheets
