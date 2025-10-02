@@ -12,7 +12,15 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "correctness": {
+        "noUnusedVariables": "error",
+        "noUndeclaredVariables": "error",
+        "noUnreachable": "error"
+      },
+      "suspicious": {
+        "noDebugger": "error",
+        "noExplicitAny": "warn"
+      },
       "complexity": {
         "useLiteralKeys": "off"
       }
