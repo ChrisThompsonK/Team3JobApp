@@ -2,35 +2,11 @@
 
 {% block title %}Home - Job Portal{% endblock %}
 
-{% block content %}
-    <style>
-        .placeholder-gray-600::placeholder {
-            color: #4b5563 !important;
-            opacity: 1;
-        }
-        .placeholder-gray-600::-webkit-input-placeholder {
-            color: #4b5563 !important;
-            opacity: 1;
-        }
-        .placeholder-gray-600::-moz-placeholder {
-            color: #4b5563 !important;
-            opacity: 1;
-        }
-        .placeholder-gray-600:-ms-input-placeholder {
-            color: #4b5563 !important;
-            opacity: 1;
-        }
-        .job-search-title {
-            font-size: 2rem !important;
-            line-height: 1.1;
-        }
-        .underlined-title {
-            text-decoration: underline !important;
-            text-decoration-color: hsl(var(--p)) !important;
-            text-underline-offset: 4px !important;
-        }
+{% block head %}
+<link rel="stylesheet" href="/css/index.css">
+{% endblock %}
 
-    </style>
+{% block content %}
     <!-- Main Title -->
     <div class="text-center mb-12">
         <h1 class="text-4xl font-bold text-primary underlined-title mb-6 w-full max-w-6xl mx-auto px-8">
@@ -67,25 +43,7 @@
         </div>
     </div>
 
-    <script>
-        function searchJobs() {
-            const searchTerm = document.getElementById('jobSearchInput').value.trim();
-            if (searchTerm) {
-                // Redirect to jobs page with search query
-                window.location.href = `/jobs?search=${encodeURIComponent(searchTerm)}`;
-            } else {
-                // If no search term, just go to jobs page
-                window.location.href = '/jobs';
-            }
-        }
-
-        // Allow Enter key to trigger search
-        document.getElementById('jobSearchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchJobs();
-            }
-        });
-    </script>
+    <script src="/js/job-search.js"></script>
 
 
 {% endblock %}
