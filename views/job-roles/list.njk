@@ -4,27 +4,48 @@
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold mb-4">{{ title }}</h1>
+  <h1 class="text-5xl font-bold mb-8 text-center">{{ title }}</h1>
 
   {% if jobRoles.length > 0 %}
-    <ul>
-      {% for job in jobRoles %}
-        <li class="mb-4 p-4 border border-gray-300">
-          <h2 class="text-lg font-semibold">{{ job.name }}</h2>
-          <p>Location: {{ job.location }}</p>
-          <p>Capability: {{ job.capability }}</p>
-          <p>Band: {{ job.band }}</p>
-          <p>Closing Date: {{ job.closingDate.toLocaleDateString() }}</p>
-          <a href="/jobs/{{ job.id }}" class="text-blue-600 underline">View Details</a>
-        </li>
-      {% endfor %}
-    </ul>
+    <div class="overflow-x-auto shadow-lg rounded-lg">
+      <table class="table w-full">
+        <!-- head -->
+        <thead class="bg-base-200">
+          <tr>
+            <th class="w-16 text-left px-4 py-4 text-lg font-semibold">ID</th>
+            <th class="w-1/4 text-left px-4 py-4 text-lg font-semibold">Job Name</th>
+            <th class="w-1/6 text-left px-4 py-4 text-lg font-semibold">Location</th>
+            <th class="w-1/6 text-left px-4 py-4 text-lg font-semibold">Capability</th>
+            <th class="w-1/12 text-left px-4 py-4 text-lg font-semibold">Band</th>
+            <th class="w-32 text-left px-4 py-4 text-lg font-semibold">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for job in jobRoles %}
+            <!-- row {{ loop.index }} -->
+            <tr class="hover:bg-base-100 border-b border-base-300">
+              <th class="font-medium px-4 py-7 text-lg">{{ job.id }}</th>
+              <td class="font-medium px-4 py-7 text-lg">{{ job.name }}</td>
+              <td class="text-base-content/70 px-4 py-8 text-lg">{{ job.location }}</td>
+              <td class="text-base-content/70 px-4 py-8 text-lg">{{ job.capability }}</td>
+              <td class="text-base-content/70 px-4 py-8 text-lg">{{ job.band }}</td>
+              <td class="px-4 py-8">
+                <a href="/jobs/{{ job.id }}" class="btn btn-primary btn-sm text-base">
+                  Apply
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   {% else %}
-    <p>No job roles found.</p>
+    <div class="alert alert-info">
+      <span>No job roles found.</span>
+    </div>
   {% endif %}
-
-  <div class="mt-8">
-    <a href="/" class="text-blue-600 underline">← Back to Home</a>
-  </div>
 </div>
+<div class="mt-8 text-center">
+    <a href="/" class="btn btn-primary btn-sm text-base">← Back to Home</a>
+  </div>
 {% endblock %}
