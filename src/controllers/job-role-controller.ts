@@ -108,7 +108,7 @@ export class JobRoleController {
         'Edinburgh',
         'Leeds',
         'Glasgow',
-        'Remote'
+        'Remote',
       ];
 
       const capabilityOptions = [
@@ -120,16 +120,10 @@ export class JobRoleController {
         'Delivery',
         'Cyber Security',
         'Quality Assurance',
-        'DevOps'
+        'DevOps',
       ];
 
-      const bandOptions = [
-        'Graduate',
-        'Associate',
-        'Senior Associate',
-        'Principal',
-        'Director'
-      ];
+      const bandOptions = ['Graduate', 'Associate', 'Senior Associate', 'Principal', 'Director'];
 
       res.render('job-roles/new', {
         title: 'Add New Job Role',
