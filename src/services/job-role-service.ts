@@ -244,7 +244,6 @@ export class MockJobRoleService implements JobRoleService {
   }
 
   async createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails> {
-
     // Generate a new ID
     const newId = (
       Math.max(...this.sampleJobRoles.map((role) => parseInt(role.id, 10)), 0) + 1
