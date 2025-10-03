@@ -1,7 +1,7 @@
 {
-  "name": "team3-job-app-frontend",
+  "name": "kainos-job-portal-frontend",
   "version": "1.0.0",
-  "description": "Team 3 Job Application Frontend",
+  "description": "Kainos Job Portal - Connecting talent with opportunity",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
@@ -23,12 +23,15 @@
     "test:coverage": "vitest run --coverage"
   },
   "keywords": [
+    "kainos",
+    "careers",
     "typescript",
     "node",
-    "job-application",
-    "frontend"
+    "job-portal",
+    "frontend",
+    "digital-transformation"
   ],
-  "author": "",
+  "author": "Kainos",
   "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
