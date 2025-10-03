@@ -20,9 +20,9 @@ router.get('/health', HealthController.index);
 /**
  * Job Role Routes
  */
-router.get('/jobs', jobRoleController.getAllJobRoles.bind(jobRoleController));
-router.get('/jobs/:id/details', jobRoleController.getJobRoleDetails.bind(jobRoleController));
-router.get('/jobs/:id/apply', jobRoleController.getJobRoleApplication.bind(jobRoleController));
-router.get('/jobs/:id', jobRoleController.getJobRoleById.bind(jobRoleController));
+router.get('/job-roles', jobRoleController.getAllJobRoles.bind(jobRoleController));
+router.get('/job-roles/:id/details', jobRoleController.getJobRoleDetails.bind(jobRoleController));
+router.get('/job-roles/:id/apply', jobRoleController.getJobRoleApplication.bind(jobRoleController));
+router.get('/job-roles/:id', jobRoleController.getJobRoleById.bind(jobRoleController));
 
 export default router;
