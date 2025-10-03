@@ -331,11 +331,13 @@ export class MockJobRoleService implements JobRoleService {
     await this.delay(100);
 
     // Generate a new ID
-    const newId = (Math.max(...this.sampleJobRoles.map(role => parseInt(role.id)), 0) + 1).toString();
+    const newId = (
+      Math.max(...this.sampleJobRoles.map((role) => parseInt(role.id, 10)), 0) + 1
+    ).toString();
 
     // Parse responsibilities from string to array
     const responsibilities = jobRoleData.responsibilities
-      ? jobRoleData.responsibilities.split('\n').filter(line => line.trim().length > 0)
+      ? jobRoleData.responsibilities.split('\n').filter((line) => line.trim().length > 0)
       : [];
 
     // Create the new job role

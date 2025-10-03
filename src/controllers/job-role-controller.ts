@@ -125,7 +125,11 @@ export class JobRoleController {
 
       // Validate required fields
       if (!name || !location || !capability || !band || !closingDate) {
-        res.status(400).send('Missing required fields: name, location, capability, band, and closingDate are required');
+        res
+          .status(400)
+          .send(
+            'Missing required fields: name, location, capability, band, and closingDate are required'
+          );
         return;
       }
 
