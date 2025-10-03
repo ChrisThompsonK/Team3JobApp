@@ -1,16 +1,17 @@
 {% extends "layout.njk" %}
 
-{% block title %}{{ jobRole.name }} - Job Details{% endblock %}
+{% block title %}{{ jobRole.name }} - Kainos Careers{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8 max-w-6xl">
   <!-- Page Title -->
-  <h1 class="text-9xl font-bold mb-12 text-center">Job Details</h1>
+  <h1 class="text-6xl font-bold mb-8 text-center kainos-text-gradient">Job Details</h1>
+  <p class="text-center text-lg text-base-content/70 mb-8">Join the Kainos team and make an impact</p>
   
   <div class="card bg-base-100 shadow-xl">
     <div class="card-body">
       <!-- Job Role Name -->
-      <h2 class="text-6xl font-bold mb-8 text-center">{{ jobRole.name }}</h2>
+      <h2 class="text-4xl font-bold mb-8 text-center text-kainos-blue">{{ jobRole.name }}</h2>
       
       <!-- Key Information Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">

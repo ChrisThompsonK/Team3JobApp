@@ -1,20 +1,20 @@
-/* Styles for the home page (index.njk) */
+/* Kainos Styles for the home page (index.njk) */
 
 /* Placeholder text color customization */
 .placeholder-gray-600::placeholder {
-  color: #4b5563 !important;
+  color: #595959 !important;
   opacity: 1;
 }
 .placeholder-gray-600::-webkit-input-placeholder {
-  color: #4b5563 !important;
+  color: #595959 !important;
   opacity: 1;
 }
 .placeholder-gray-600::-moz-placeholder {
-  color: #4b5563 !important;
+  color: #595959 !important;
   opacity: 1;
 }
 .placeholder-gray-600:-ms-input-placeholder {
-  color: #4b5563 !important;
+  color: #595959 !important;
   opacity: 1;
 }
 
@@ -22,11 +22,12 @@
 .job-search-title {
   font-size: 2rem !important;
   line-height: 1.1;
+  font-weight: 600;
 }
 
 /* Underlined title styling */
 .underlined-title {
   text-decoration: underline !important;
-  text-decoration-color: hsl(var(--p)) !important;
+  text-decoration-color: #0066cc !important;
   text-underline-offset: 4px !important;
 }

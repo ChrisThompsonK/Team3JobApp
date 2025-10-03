@@ -1,8 +1,19 @@
 [![Code Quality](https://github.com/ChrisThompsonK/team3-job-app-frontend/actions/workflows/code-quality.yml/badge.svg)](https://github.com/ChrisThompsonK/team3-job-app-frontend/actions/workflows/code-quality.yml)
 
-# Team 3 Job Application Frontend
+# Kainos Job Portal
 
-A TypeScript/Node.js web application built with a clean 3-tier architecture and Nunjucks templating.
+**Connecting talent with opportunity through digital innovation**
+
+A TypeScript/Node.js web application featuring Kainos branding, built with a clean 3-tier architecture and modern web technologies.
+
+## 🎨 Kainos Branding
+
+This application features complete Kainos visual identity including:
+
+- **Brand Colors**: Kainos blue (#003366), light blue (#0066CC), cyan (#00A3D9)
+- **Typography**: Open Sans font family for consistent brand experience  
+- **Logo & Visual Elements**: Custom Kainos logo and branded components
+- **Theme**: Custom DaisyUI theme matching Kainos design system
 
 > 🤖 **For AI Assistants**: Please read [`.copilot-instructions.md`](./.copilot-instructions.md) first to understand project context, architecture, and conventions before starting any task.
 
