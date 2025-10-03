@@ -13,11 +13,20 @@ export default {
           green: '#7CB342', // Official Kainos green
           'green-light': '#A5D66A', // Lighter green
           'green-dark': '#5A8C30', // Darker green
-        }
+        },
       },
       fontFamily: {
-        'kainos': ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-      }
+        kainos: [
+          'system-ui',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'Segoe UI',
+          'Roboto',
+          'Helvetica Neue',
+          'Arial',
+          'sans-serif',
+        ],
+      },
     },
   },
   plugins: [],

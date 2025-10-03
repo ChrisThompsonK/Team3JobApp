@@ -28,6 +28,6 @@
 /* Underlined title styling */
 .underlined-title {
   text-decoration: underline !important;
-  text-decoration-color: #0066CC !important;
+  text-decoration-color: #0066cc !important;
   text-underline-offset: 4px !important;
 }
