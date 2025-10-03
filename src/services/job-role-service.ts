@@ -244,8 +244,6 @@ export class MockJobRoleService implements JobRoleService {
   }
 
   async createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails> {
-    // Simulate API delay
-    await this.delay(100);
 
     // Generate a new ID
     const newId = (
