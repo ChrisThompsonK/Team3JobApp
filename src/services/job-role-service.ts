@@ -1,9 +1,22 @@
 import type { JobRole, JobRoleDetails } from '../models/job-roles.js';
 
+export interface CreateJobRoleRequest {
+  name: string;
+  location: string;
+  capability: string;
+  band: string;
+  closingDate: Date;
+  description?: string | undefined;
+  responsibilities?: string | undefined;
+  jobSpecUrl?: string | undefined;
+  openPositions?: number | undefined;
+}
+
 export interface JobRoleService {
   getAllJobRoles(): Promise<JobRole[]>;
   getJobRoleById(id: string): Promise<JobRole | null>;
   getJobRoleDetailsById(id: string): Promise<JobRoleDetails | null>;
+  createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails>;
 }
 
 export class MockJobRoleService implements JobRoleService {
@@ -311,6 +324,53 @@ export class MockJobRoleService implements JobRoleService {
     await this.delay(50);
     const jobRoleDetails = this.sampleJobRoleDetails.find((role) => role.id === id);
     return jobRoleDetails || null;
+  }
+
+  async createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails> {
+    // Simulate API delay
+    await this.delay(100);
+
+    // Generate a new ID
+    const newId = (Math.max(...this.sampleJobRoles.map(role => parseInt(role.id)), 0) + 1).toString();
+
+    // Parse responsibilities from string to array
+    const responsibilities = jobRoleData.responsibilities
+      ? jobRoleData.responsibilities.split('\n').filter(line => line.trim().length > 0)
+      : [];
+
+    // Create the new job role
+    const newJobRole: JobRole = {
+      id: newId,
+      name: jobRoleData.name,
+      location: jobRoleData.location,
+      capability: jobRoleData.capability,
+      band: jobRoleData.band,
+      closingDate: jobRoleData.closingDate,
+    };
+
+    // Create the detailed job role
+    const newJobRoleDetails: JobRoleDetails = {
+      ...newJobRole,
+      status: 'Open' as const,
+      openPositions: jobRoleData.openPositions || 1,
+    };
+
+    // Add optional properties only if they exist
+    if (jobRoleData.description) {
+      newJobRoleDetails.description = jobRoleData.description;
+    }
+    if (responsibilities.length > 0) {
+      newJobRoleDetails.responsibilities = responsibilities;
+    }
+    if (jobRoleData.jobSpecUrl) {
+      newJobRoleDetails.jobSpecUrl = jobRoleData.jobSpecUrl;
+    }
+
+    // Add to our mock data
+    this.sampleJobRoles.push(newJobRole);
+    this.sampleJobRoleDetails.push(newJobRoleDetails);
+
+    return newJobRoleDetails;
   }
 
   private delay(ms: number): Promise<void> {

@@ -97,4 +97,56 @@ export class JobRoleController {
       res.status(500).send('Error loading job application page');
     }
   }
+
+  async showNewJobRoleForm(_req: Request, res: Response): Promise<void> {
+    try {
+      res.render('job-roles/new', {
+        title: 'Add New Job Role',
+      });
+    } catch (error) {
+      console.error('Error loading new job role form:', error);
+      res.status(500).send('Error loading form');
+    }
+  }
+
+  async createJobRole(req: Request, res: Response): Promise<void> {
+    try {
+      const {
+        name,
+        location,
+        capability,
+        band,
+        closingDate,
+        description,
+        responsibilities,
+        jobSpecUrl,
+        openPositions,
+      } = req.body;
+
+      // Validate required fields
+      if (!name || !location || !capability || !band || !closingDate) {
+        res.status(400).send('Missing required fields: name, location, capability, band, and closingDate are required');
+        return;
+      }
+
+      // Create the job role
+      const newJobRole = await this.jobRoleService.createJobRole({
+        name: name.trim(),
+        location,
+        capability,
+        band,
+        closingDate: new Date(closingDate),
+        description: description?.trim() || undefined,
+        responsibilities: responsibilities?.trim() || undefined,
+        jobSpecUrl: jobSpecUrl?.trim() || undefined,
+        openPositions: openPositions ? parseInt(openPositions, 10) : undefined,
+      });
+
+      // Redirect to the new job role details page
+      res.redirect(`/jobs/${newJobRole.id}/details`);
+    } catch (error) {
+      console.error('Error creating job role:', error);
+      res.status(500).send('Error creating job role');
+    }
+  }
 }
