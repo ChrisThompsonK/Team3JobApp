@@ -70,72 +70,110 @@ npm run dev
 
 The server will start on `http://localhost:3000` (or the port specified in the `PORT` environment variable).
 
-### Available Scripts
+## 📋 Available Commands
 
-- `npm run dev` - Start development server with hot reload
-- `npm run build` - Build the project for production
-- `npm run start` - Start the production server
-- `npm run clean` - Remove build artifacts
-- `npm run type-check` - Run TypeScript type checking
+### 🚀 **Development & Runtime**
+```bash
+# Start development server with hot reload
+npm run dev
 
-## 🌐 API Endpoints
+# Build the project for production
+npm run build
 
-- `GET /` - Home page (HTML)
-- `GET /health` - Health check page (HTML)
-- `GET /api/health` - Health check API (JSON)
+# Start the production server (requires build first)
+npm run start
 
-## 🎨 Template Engine
+# Clean build artifacts
+npm run clean
 
-This project uses **Nunjucks** as the template engine:
-- Auto-escaping enabled for security
-- Template inheritance with base layouts
-- Dynamic content rendering
-- Development mode auto-reloading
+# Type checking without building
+npm run type-check
+```
 
-## 🔧 Code Quality & Formatting
+### 🎨 **CSS & Styling**
+```bash
+
+## �🔧 **Code Quality & Formatting**
 
 This project uses [Biome](https://biomejs.dev/) for code formatting, linting, and import organization.
 
-### Code Quality Scripts
+### **Linting Standards**
+- **TypeScript strict mode** enabled
+- **ESLint-style rules** via Biome
+- **Import organization** and unused import removal
+- **Code formatting** with consistent style
 
-- `npm run format` - Format all files using Biome
-- `npm run lint` - Lint all files and apply safe fixes
-- `npm run check` - Format, lint, and organize imports all at once
-- `npm run ci` - CI-optimized command for build pipelines
-
-### Code Style
-
-The project follows these formatting standards:
-- **Indentation**: 2 spaces
+### **Code Style Guidelines**
+- **Indentation**: Tabs (2 spaces in JSON files)
 - **Line width**: 100 characters
-- **Quotes**: Single quotes for JavaScript/TypeScript, double quotes for JSX
+- **Quotes**: Double quotes for strings
 - **Semicolons**: Always required
-- **Trailing commas**: ES5 style
+- **Trailing commas**: Always where valid
 
-### Pre-commit Workflow
+### **Quality Assurance Workflow**
 
-Before committing code, run:
-
+**During Development:**
 ```bash
+# Check code quality (recommended before commits)
 npm run check
+
+# Fix formatting issues
+npm run format
+
+# Fix linting issues
+npm run lint
 ```
 
-This will automatically:
-- Format your code
-- Fix linting issues
-- Organize imports
-- Report any remaining issues
+**In CI/CD Pipeline:**
+```bash
+# CI-optimized check (no auto-fixes, fails on issues)
+npm run ci
 
-### Editor Integration
+# Type checking
+npm run type-check
 
-For the best development experience, install the Biome extension for your editor:
-- **VS Code**: Search for "Biome" in the Extensions marketplace
+# Run tests
+npm run test:run
+```
+
+### **Editor Integration**
+
+For the best development experience:
+- **VS Code**: Install the "Biome" extension
 - **Other editors**: See [Biome editor integrations](https://biomejs.dev/guides/editors/first-party-extensions/)
+- **Format on save** is configured in `.vscode/settings.json`
 
-## 📡 API Endpoints
+## **Build & Deployment**
 
-- `GET /` - Welcome message with service information
-- `GET /health` - Health check endpoint
+### **Development Build**
+```bash
+npm run build:css        # Build development CSS
+npm run build           # Build TypeScript to JavaScript
+```
+
+### **Production Build**
+```bash
+npm run clean           # Clean previous builds
+npm run build:css:prod  # Build minified production CSS
+npm run build           # Build TypeScript with optimizations
+```
+
+### **Build Outputs**
+- **JavaScript**: `dist/` directory (from TypeScript compilation)
+- **CSS**: `public/css/output.css` (from Tailwind CSS)
+- **Static Assets**: `public/` directory (served directly)
+
+## �📡 **API Endpoints**
+
+### **Frontend Routes**
+- `GET /` - Home page with job listings
+- `GET /health` - Health check page (HTML)
+- `GET /job-roles` - Job roles listing page
+
+### **Static Assets**
+- `GET /css/*` - Stylesheets
+- `GET /js/*` - JavaScript files
+- `GET /images/*` - Images and media
 
 ## 🏗️ Project Structure
 
@@ -150,25 +188,152 @@ For the best development experience, install the Biome extension for your editor
 └── package.json         # Project dependencies and scripts
 ```
 
-## 🛠️ Technology Stack
+## 🧪 **Testing**
 
-- **Runtime**: Node.js
-- **Language**: TypeScript
-- **Framework**: Express.js
-- **Code Quality**: Biome (formatting, linting, import organization)
+This project uses **Vitest** for fast and reliable testing.
+
+### **Test Types**
+- **Unit Tests**: Testing individual functions and components
+- **Integration Tests**: Testing service layer interactions
+- **Coverage Reports**: Comprehensive code coverage analysis
+
+### **Testing Commands**
+```bash
+# Interactive test runner (watches for changes)
+npm run test
+
+# Run all tests once (CI/CD)
+npm run test:run
+
+# Visual test interface in browser
+npm run test:ui
+
+# Generate coverage report
+npm run test:coverage
+```
+
+### **Test Structure**
+- **Test files**: `*.test.ts` or `*.spec.ts`
+- **Test utilities**: `/src/utils.test.ts`
+- **Service tests**: `/src/services/*.test.ts`
+- **Coverage output**: `/coverage` directory
+
+### **Writing Tests**
+```typescript
+// Example test structure
+import { describe, it, expect } from 'vitest'
+import { myFunction } from './my-module'
+
+describe('MyModule', () => {
+  it('should do something', () => {
+    expect(myFunction()).toBe('expected result')
+  })
+})
+```
+
+## 🛠️ **Technology Stack**
+
+### **Core Technologies**
+- **Runtime**: Node.js >= 18.0.0
+- **Language**: TypeScript 5.3.3
+- **Framework**: Express.js 5.1.0
+- **Template Engine**: Nunjucks 3.2.4
+
+### **Development Tools**
 - **Build Tool**: TypeScript Compiler (tsc)
-- **Development**: tsx (TypeScript execution with hot reload)
+- **Development Server**: tsx (hot reload)
+- **Code Quality**: Biome 2.2.4 (formatting, linting)
+- **Testing**: Vitest 3.2.4 (unit testing, coverage)
+- **CSS Framework**: Tailwind CSS 4.1.13 + DaisyUI 5.1.26
+
+### **Architecture**
+- **Pattern**: 3-tier architecture (Presentation, Business, Data)
+- **Module System**: ES Modules
+- **Package Manager**: npm
 
 ## 📝 Environment Variables
 
 - `PORT` - Server port (default: 3000)
 
-## 🤝 Contributing
+## 🚨 **Troubleshooting**
 
-1. Ensure your code follows the project's formatting standards by running `npm run check`
-2. All linting rules should pass
-3. Add appropriate tests for new features
-4. Update documentation as needed
+### **Common Issues**
+
+**Port already in use:**
+```bash
+# Kill process on port 3000
+lsof -ti:3000 | xargs kill -9
+
+# Or use a different port
+PORT=3001 npm run dev
+```
+
+**TypeScript compilation errors:**
+```bash
+# Clean and rebuild
+npm run clean
+npm run build
+```
+
+**CSS not updating:**
+```bash
+# Rebuild CSS
+npm run build:css
+
+# Or use watch mode
+npm run build:css:watch
+```
+
+**Tests failing:**
+```bash
+# Run tests with verbose output
+npm run test:run -- --reporter=verbose
+
+# Clear test cache
+rm -rf node_modules/.vite
+```
+
+### **Performance Tips**
+- Use `npm run dev` for development (hot reload)
+- Use `npm run build:css:watch` for CSS development
+- Run `npm run test:ui` for interactive testing
+- Use `npm run ci` to validate before pushing
+
+## 🤝 **Contributing**
+
+### **Development Workflow**
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/my-feature`
+3. **Install** dependencies: `npm install`
+4. **Develop** with: `npm run dev`
+
+### **Before Submitting**
+```bash
+# 1. Run all quality checks
+npm run check
+
+# 2. Run type checking
+npm run type-check
+
+# 3. Run tests
+npm run test:run
+
+# 4. Test build
+npm run build
+```
+
+### **Code Standards**
+- **Code Quality**: All Biome checks must pass
+- **Testing**: Add tests for new features
+- **Types**: Maintain strict TypeScript compliance
+- **Documentation**: Update README for significant changes
+
+### **Pull Request Checklist**
+- [ ] Code follows project formatting standards
+- [ ] All tests pass
+- [ ] TypeScript compilation succeeds
+- [ ] No linting errors
+- [ ] Documentation updated if needed
 
 ## 📄 License
 
