@@ -105,33 +105,39 @@
           </div>
         </div>
 
-        <!-- Description -->
-        <div class="form-control">
-          <label class="label" for="description">
-            <span class="label-text text-lg font-semibold">Job Description</span>
-          </label>
-          <textarea 
-            id="description"
-            name="description" 
-            class="textarea textarea-bordered textarea-lg h-32" 
-            placeholder="Provide a brief description of the role and its key objectives..."
-          ></textarea>
-        </div>
+        <!-- Description and Responsibilities Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Description -->
+          <div class="form-control">
+            <label class="label" for="description">
+              <span class="label-text text-lg font-semibold">Job Description</span>
+            </label>
+            <textarea 
+              id="description"
+              name="description" 
+              class="textarea textarea-bordered textarea-lg h-40 resize-none" 
+              placeholder="Provide a brief description of the role and its key objectives..."
+            ></textarea>
+            <label class="label">
+              <span class="label-text-alt">Describe the role's purpose and main objectives</span>
+            </label>
+          </div>
 
-        <!-- Responsibilities -->
-        <div class="form-control">
-          <label class="label" for="responsibilities">
-            <span class="label-text text-lg font-semibold">Key Responsibilities</span>
-          </label>
-          <textarea 
-            id="responsibilities"
-            name="responsibilities" 
-            class="textarea textarea-bordered textarea-lg h-40" 
-            placeholder="List the main responsibilities for this role (one per line)..."
-          ></textarea>
-          <label class="label">
-            <span class="label-text-alt">Enter each responsibility on a new line</span>
-          </label>
+          <!-- Responsibilities -->
+          <div class="form-control">
+            <label class="label" for="responsibilities">
+              <span class="label-text text-lg font-semibold">Key Responsibilities</span>
+            </label>
+            <textarea 
+              id="responsibilities"
+              name="responsibilities" 
+              class="textarea textarea-bordered textarea-lg h-40 resize-none" 
+              placeholder="List the main responsibilities for this role (one per line)..."
+            ></textarea>
+            <label class="label">
+              <span class="label-text-alt">Enter each responsibility on a new line</span>
+            </label>
+          </div>
         </div>
 
         <!-- Job Spec URL -->
