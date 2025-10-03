@@ -7,7 +7,7 @@ export class JobRoleController {
   async getAllJobRoles(_req: Request, res: Response): Promise<void> {
     try {
       const jobRoles = await this.jobRoleService.getAllJobRoles();
-      res.render('job-roles/list', {
+      res.render('job-roles/job-role-list', {
         title: 'Available Job Roles',
         jobRoles,
       });
