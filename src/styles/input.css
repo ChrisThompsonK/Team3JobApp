@@ -1,9 +1,83 @@
 @import "tailwindcss";
-@import "daisyui";
 
-/* 
-@theme {
-  // You can customize your theme here if needed
-  --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+/* Kainos Brand Styles - Based on actual official website */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
 }
-*/
+
+/* Kainos Official Brand Colors - From actual logo */
+:root {
+  --kainos-primary: #2B4C7E;
+  --kainos-secondary: #1E3A5F;
+  --kainos-accent: #7CB342;
+  --kainos-dark: #152238;
+  --kainos-light: #E8F0FF;
+  --kainos-text: #2B4C7E;
+  --kainos-green: #7CB342;
+}
+
+/* Custom Kainos styling - Navy blue and green theme */
+.kainos-gradient {
+  background: linear-gradient(135deg, var(--kainos-primary) 0%, var(--kainos-secondary) 100%);
+}
+
+.kainos-text-gradient {
+  background: linear-gradient(135deg, var(--kainos-primary) 0%, var(--kainos-green) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.kainos-logo {
+  height: 48px;
+  width: auto;
+}
+
+/* Clean typography matching Kainos.com */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--kainos-text);
+}
+
+/* Kainos button styling with navy and green */
+.btn-kainos {
+  background: var(--kainos-green);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 12px 24px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-kainos:hover {
+  background: #5A8C30;
+  color: white;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.btn-kainos-outline {
+  background: transparent;
+  color: var(--kainos-primary);
+  border: 2px solid var(--kainos-primary);
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 10px 22px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-kainos-outline:hover {
+  background: var(--kainos-primary);
+  color: white;
+  text-decoration: none;
+}

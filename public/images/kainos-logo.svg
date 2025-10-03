@@ -1,0 +1,25 @@
+<svg width="160" height="48" viewBox="0 0 160 48" xmlns="http://www.w3.org/2000/svg">
+  <!-- Official Kainos Logo Recreation with correct colors -->
+  <!-- Navy blue text with green circle for 'o' -->
+  
+  <!-- Letter k -->
+  <text x="0" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="400" fill="#2B4C7E">k</text>
+  
+  <!-- Letter a -->
+  <text x="18" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="400" fill="#2B4C7E">a</text>
+  
+  <!-- Letter i -->
+  <text x="34" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="400" fill="#2B4C7E">i</text>
+  
+  <!-- Letter n -->
+  <text x="44" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="400" fill="#2B4C7E">n</text>
+  
+  <!-- Green circle for 'o' -->
+  <circle cx="72" cy="22" r="9" fill="#7CB342"/>
+  
+  <!-- Letter s -->
+  <text x="84" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="400" fill="#2B4C7E">s</text>
+  
+  <!-- Registered trademark -->
+  <text x="102" y="18" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" fill="#2B4C7E">®</text>
+</svg>

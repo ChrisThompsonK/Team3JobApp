@@ -1,10 +1,11 @@
 {% extends "layout.njk" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ title }} - Kainos{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
-  <h1 class="text-5xl font-bold mb-8 text-center">{{ title }}</h1>
+  <h1 class="text-5xl font-bold mb-4 text-center kainos-text-gradient">{{ title }}</h1>
+  <p class="text-center text-lg text-base-content/70 mb-8">Discover exciting career opportunities at Kainos</p>
 
   {% if jobRoles.length > 0 %}
     <div class="overflow-x-auto shadow-lg rounded-lg">

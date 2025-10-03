@@ -1,30 +1,70 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="corporate">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Job Portal{% endblock %}</title>
+    <title>{% block title %}Kainos Job Portal{% endblock %}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/css/output.css">
     {% block head %}{% endblock %}
 </head>
-<body class="min-h-screen bg-base-200 flex flex-col">
+<body class="min-h-screen bg-gray-50 flex flex-col font-kainos">
+    <!-- Kainos Header - Navy blue and green theme -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="container mx-auto max-w-7xl px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <img src="/images/kainos-logo.svg" alt="Kainos" class="h-12 w-auto">
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="/" class="text-kainos-primary hover:text-kainos-accent transition-colors font-medium text-base">Home</a>
+                    <a href="/job-roles" class="text-kainos-primary hover:text-kainos-accent transition-colors font-medium text-base">Careers</a>
+                    <a href="/health" class="text-kainos-primary hover:text-kainos-accent transition-colors font-medium text-base">System Health</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
     <!-- Main Content -->
     <main class="flex-1">
         <div class="container mx-auto max-w-4xl p-8">
-            <div class="card bg-base-100 shadow-xl">
-                <div class="card-body text-center">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                <div class="p-8 text-center">
                     {% block content %}{% endblock %}
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-neutral text-neutral-content">
-        <div class="container mx-auto max-w-4xl px-8 py-6">
-            <div class="text-center">
-                <p class="text-sm opacity-80">© 2025 Job Portal. Connecting talent with opportunity.</p>
-                <p class="text-xs opacity-60 mt-1">Building careers, one opportunity at a time.</p>
+    <!-- Kainos Footer - Navy blue theme -->
+    <footer class="bg-kainos-primary text-white">
+        <div class="container mx-auto max-w-7xl px-6 py-12">
+            <div class="flex justify-center">
+                <div class="grid md:grid-cols-2 gap-8 text-center">
+                    <!-- Quick Links -->
+                    <div>
+                        <h3 class="font-semibold mb-4 text-white">Navigation</h3>
+                        <div class="space-y-3">
+                            <a href="/" class="block text-blue-200 hover:text-kainos-accent transition-colors">Home</a>
+                            <a href="/job-roles" class="block text-blue-200 hover:text-kainos-accent transition-colors">Careers</a>
+                            <a href="/health" class="block text-blue-200 hover:text-kainos-accent transition-colors">System Health</a>
+                        </div>
+                    </div>
+                    
+                    <!-- About -->
+                    <div>
+                        <h3 class="font-semibold mb-4 text-white">About Kainos</h3>
+                        <div class="space-y-3">
+                            <p class="text-blue-200 text-sm">Digital Services</p>
+                            <p class="text-blue-200 text-sm">Innovation</p>
+                            <p class="text-blue-200 text-sm">Career Opportunities</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-kainos-secondary mt-8 pt-6 text-center">
+                <p class="text-blue-300 text-sm">© 2025 Kainos. All rights reserved. Registered in NI NI019370</p>
             </div>
         </div>
     </footer>
