@@ -30,3 +30,13 @@
   text-decoration-color: hsl(var(--p)) !important;
   text-underline-offset: 4px !important;
 }
+
+/* Dropdown styling for better visibility */
+#jobCapabilitySelect {
+  color: #1f2937 !important;
+}
+
+#jobCapabilitySelect option {
+  color: #1f2937 !important;
+  background-color: #ffffff !important;
+}

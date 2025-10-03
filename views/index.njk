@@ -26,17 +26,28 @@
                 <h2 class="job-search-title font-bold justify-center mb-6 tracking-wide">Job Search</h2>
                 <p class="mb-6">Browse through available job opportunities</p>
                 
-                <!-- Search Bar -->
+                <!-- Capability Dropdown -->
                 <div class="form-control w-full mb-4">
-                    <input 
-                        type="text" 
-                        placeholder="Search for jobs..." 
-                        class="input input-bordered w-full text-base-content bg-base-100 placeholder-gray-600" 
-                        id="jobSearchInput"
-                    />
+                    <select 
+                        class="select select-bordered w-full bg-base-100 font-medium" 
+                        id="jobCapabilitySelect"
+                        style="color: #1f2937 !important;"
+                    >
+                        <option value="">All Capabilities</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Product">Product</option>
+                        <option value="Design">Design</option>
+                        <option value="Data & Analytics">Data & Analytics</option>
+                        <option value="Business Analysis">Business Analysis</option>
+                        <option value="Delivery">Delivery</option>
+                        <option value="Cyber Security">Cyber Security</option>
+                        <option value="Quality Assurance">Quality Assurance</option>
+                        <option value="DevOps">DevOps</option>
+                    </select>
                 </div>
 
                 <div class="card-actions justify-center mt-4">
+                    <button onclick="searchJobsByCapability()" class="btn btn-primary-content btn-outline mr-2">Filter Jobs</button>
                     <a href="/jobs" class="btn btn-primary-content btn-outline">View All Jobs</a>
                 </div>
             </div>
