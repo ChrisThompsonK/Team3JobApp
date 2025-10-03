@@ -17,6 +17,7 @@ export interface JobRoleService {
   getJobRoleById(id: string): Promise<JobRole | null>;
   getJobRoleDetailsById(id: string): Promise<JobRoleDetails | null>;
   createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails>;
+  deleteJobRole(id: string): Promise<boolean>;
 }
 
 export class MockJobRoleService implements JobRoleService {
@@ -281,6 +282,15 @@ export class MockJobRoleService implements JobRoleService {
     this.sampleJobRoles.push(newJobRoleDetails);
 
     return newJobRoleDetails;
+  }
+
+  async deleteJobRole(id: string): Promise<boolean> {
+    const index = this.sampleJobRoles.findIndex(jobRole => jobRole.id === id);
+    if (index === -1) {
+      return false;
+    }
+    this.sampleJobRoles.splice(index, 1);
+    return true;
   }
 
   private delay(ms: number): Promise<void> {

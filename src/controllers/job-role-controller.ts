@@ -211,4 +211,28 @@ export class JobRoleController {
       res.status(500).send('Error creating job role');
     }
   }
+
+  async deleteJobRole(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        res.status(400).send('Job role ID is required');
+        return;
+      }
+
+      const success = await this.jobRoleService.deleteJobRole(id);
+
+      if (!success) {
+        res.status(404).send(`Job role with ID ${id} not found`);
+        return;
+      }
+
+      // Redirect to the job list page with a success message
+      res.redirect('/jobs?deleted=true');
+    } catch (error) {
+      console.error('Error deleting job role:', error);
+      res.status(500).send('Error deleting job role');
+    }
+  }
 }

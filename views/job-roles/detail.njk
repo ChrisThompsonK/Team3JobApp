@@ -93,7 +93,7 @@
       {% endif %}
       
       <!-- Action Buttons -->
-      <div class="flex justify-center mt-8">
+      <div class="flex justify-center gap-4 mt-8">
         {% if jobRole.status == 'Open' or jobRole.status == 'Closing Soon' or not jobRole.status %}
         <a href="/jobs/{{ jobRole.id }}/apply" class="btn btn-primary">
           Apply for This Position
@@ -103,6 +103,11 @@
           Applications Closed
         </div>
         {% endif %}
+        
+        <!-- Delete Button -->
+        <button onclick="confirmDelete('{{ jobRole.id }}', '{{ jobRole.name }}')" class="btn btn-error">
+          Delete Job Role
+        </button>
       </div>
     </div>
   </div>
@@ -112,4 +117,18 @@
 <div class="mt-8 text-center">
   <a href="/jobs" class="btn btn-primary btn-sm text-base">← Back to Job List</a>
 </div>
+
+<!-- Hidden form for DELETE request -->
+<form id="deleteForm" method="POST" style="display: none;">
+</form>
+
+<script>
+function confirmDelete(jobId, jobName) {
+  if (confirm(`Are you sure you want to delete the job role "${jobName}"? This action cannot be undone.`)) {
+    const form = document.getElementById('deleteForm');
+    form.action = `/jobs/${jobId}/delete`;
+    form.submit();
+  }
+}
+</script>
 {% endblock %}

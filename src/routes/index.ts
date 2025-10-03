@@ -25,6 +25,8 @@ router.get('/jobs/new', jobRoleController.showNewJobRoleForm.bind(jobRoleControl
 router.post('/jobs/new', jobRoleController.createJobRole.bind(jobRoleController));
 router.get('/jobs/:id/details', jobRoleController.getJobRoleDetails.bind(jobRoleController));
 router.get('/jobs/:id/apply', jobRoleController.getJobRoleApplication.bind(jobRoleController));
+router.delete('/jobs/:id', jobRoleController.deleteJobRole.bind(jobRoleController));
+router.post('/jobs/:id/delete', jobRoleController.deleteJobRole.bind(jobRoleController));
 router.get('/jobs/:id', jobRoleController.getJobRoleById.bind(jobRoleController));
 
 export default router;
