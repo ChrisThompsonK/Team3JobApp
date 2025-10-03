@@ -8,37 +8,38 @@ export class JobRoleController {
     try {
       const allJobRoles = await this.jobRoleService.getAllJobRoles();
       const { search, capability } = req.query;
-      
+
       let filteredJobRoles = allJobRoles;
-      
+
       // Filter by capability if specified
       if (capability && typeof capability === 'string') {
-        filteredJobRoles = filteredJobRoles.filter(job => 
-          job.capability.toLowerCase() === capability.toLowerCase()
+        filteredJobRoles = filteredJobRoles.filter(
+          (job) => job.capability.toLowerCase() === capability.toLowerCase()
         );
       }
-      
+
       // Filter by search term if specified (search in job name, location, or capability)
       if (search && typeof search === 'string') {
         const searchTerm = search.toLowerCase();
-        filteredJobRoles = filteredJobRoles.filter(job =>
-          job.name.toLowerCase().includes(searchTerm) ||
-          job.location.toLowerCase().includes(searchTerm) ||
-          job.capability.toLowerCase().includes(searchTerm)
+        filteredJobRoles = filteredJobRoles.filter(
+          (job) =>
+            job.name.toLowerCase().includes(searchTerm) ||
+            job.location.toLowerCase().includes(searchTerm) ||
+            job.capability.toLowerCase().includes(searchTerm)
         );
       }
-      
+
       let title = 'Available Job Roles';
       if (capability) {
         title = `${capability} Job Roles`;
       } else if (search) {
         title = `Job Roles - Search: "${search}"`;
       }
-      
+
       res.render('job-roles/list', {
         title,
         jobRoles: filteredJobRoles,
-        currentFilter: { search, capability }
+        currentFilter: { search, capability },
       });
     } catch (error) {
       console.error('Error fetching job roles:', error);
