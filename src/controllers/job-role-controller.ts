@@ -173,7 +173,13 @@ export class JobRoleController {
       const jobRoleData = req.body as NewJobRole;
 
       // Validate required fields
-      if (!jobRoleData.name || !jobRoleData.location || !jobRoleData.capability || !jobRoleData.band || !jobRoleData.closingDate) {
+      if (
+        !jobRoleData.name ||
+        !jobRoleData.location ||
+        !jobRoleData.capability ||
+        !jobRoleData.band ||
+        !jobRoleData.closingDate
+      ) {
         res
           .status(400)
           .send(
@@ -192,7 +198,9 @@ export class JobRoleController {
         description: jobRoleData.description?.trim() || undefined,
         responsibilities: jobRoleData.responsibilities?.trim() || undefined,
         jobSpecUrl: jobRoleData.jobSpecUrl?.trim() || undefined,
-        openPositions: jobRoleData.openPositions ? parseInt(jobRoleData.openPositions, 10) : undefined,
+        openPositions: jobRoleData.openPositions
+          ? parseInt(jobRoleData.openPositions, 10)
+          : undefined,
       });
 
       // Redirect to the new job role details page
