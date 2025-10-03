@@ -1,0 +1,52 @@
+# Copilot Ignore File
+# Files and directories that Copilot should ignore for context
+
+# Build outputs
+dist/
+build/
+coverage/
+
+# Dependencies
+node_modules/
+
+# Generated CSS
+public/css/output.css
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+.tmp/
+temp/
+*.tmp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env.local
+.env.production
+
+# Cache directories
+.cache/
+.parcel-cache/
+
+# Test artifacts
+.nyc_output/
+
+# Package manager lock files (focus on package.json instead)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Git files
+.git/
+.gitignore
