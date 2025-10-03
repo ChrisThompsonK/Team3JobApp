@@ -285,7 +285,7 @@ export class MockJobRoleService implements JobRoleService {
   }
 
   async deleteJobRole(id: string): Promise<boolean> {
-    const index = this.sampleJobRoles.findIndex(jobRole => jobRole.id === id);
+    const index = this.sampleJobRoles.findIndex((jobRole) => jobRole.id === id);
     if (index === -1) {
       return false;
     }
