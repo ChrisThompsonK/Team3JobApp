@@ -1,96 +1,27 @@
 import type { JobRole, JobRoleDetails } from '../models/job-roles.js';
 
+export interface CreateJobRoleRequest {
+  name: string;
+  location: string;
+  capability: string;
+  band: string;
+  closingDate: Date;
+  description?: string | undefined;
+  responsibilities?: string | undefined;
+  jobSpecUrl?: string | undefined;
+  openPositions?: number | undefined;
+}
+
 export interface JobRoleService {
   getAllJobRoles(): Promise<JobRole[]>;
   getJobRoleById(id: string): Promise<JobRole | null>;
   getJobRoleDetailsById(id: string): Promise<JobRoleDetails | null>;
+  createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails>;
+  deleteJobRole(id: string): Promise<boolean>;
 }
 
 export class MockJobRoleService implements JobRoleService {
-  private readonly sampleJobRoles: JobRole[] = [
-    {
-      id: '1',
-      name: 'Software Engineer',
-      location: 'Belfast',
-      capability: 'Engineering',
-      band: 'Associate',
-      closingDate: new Date('2024-12-15'),
-    },
-    {
-      id: '2',
-      name: 'Senior Software Engineer',
-      location: 'London',
-      capability: 'Engineering',
-      band: 'Senior Associate',
-      closingDate: new Date('2024-11-30'),
-    },
-    {
-      id: '3',
-      name: 'Product Manager',
-      location: 'Manchester',
-      capability: 'Product',
-      band: 'Senior Associate',
-      closingDate: new Date('2024-12-01'),
-    },
-    {
-      id: '4',
-      name: 'UX Designer',
-      location: 'Birmingham',
-      capability: 'Design',
-      band: 'Associate',
-      closingDate: new Date('2024-11-25'),
-    },
-    {
-      id: '5',
-      name: 'Data Scientist',
-      location: 'Edinburgh',
-      capability: 'Data & Analytics',
-      band: 'Senior Associate',
-      closingDate: new Date('2024-12-10'),
-    },
-    {
-      id: '6',
-      name: 'DevOps Engineer',
-      location: 'Belfast',
-      capability: 'Engineering',
-      band: 'Associate',
-      closingDate: new Date('2024-12-05'),
-    },
-    {
-      id: '7',
-      name: 'Principal Software Engineer',
-      location: 'London',
-      capability: 'Engineering',
-      band: 'Principal',
-      closingDate: new Date('2024-12-20'),
-    },
-    {
-      id: '8',
-      name: 'Business Analyst',
-      location: 'Leeds',
-      capability: 'Business Analysis',
-      band: 'Associate',
-      closingDate: new Date('2024-11-28'),
-    },
-    {
-      id: '9',
-      name: 'Scrum Master',
-      location: 'Glasgow',
-      capability: 'Delivery',
-      band: 'Senior Associate',
-      closingDate: new Date('2024-12-03'),
-    },
-    {
-      id: '10',
-      name: 'Security Engineer',
-      location: 'London',
-      capability: 'Cyber Security',
-      band: 'Senior Associate',
-      closingDate: new Date('2024-12-12'),
-    },
-  ];
-
-  private readonly sampleJobRoleDetails: JobRoleDetails[] = [
+  private readonly sampleJobRoles: JobRoleDetails[] = [
     {
       id: '1',
       name: 'Software Engineer',
@@ -309,8 +240,57 @@ export class MockJobRoleService implements JobRoleService {
   async getJobRoleDetailsById(id: string): Promise<JobRoleDetails | null> {
     // Simulate API delay
     await this.delay(50);
-    const jobRoleDetails = this.sampleJobRoleDetails.find((role) => role.id === id);
+    const jobRoleDetails = this.sampleJobRoles.find((role) => role.id === id);
     return jobRoleDetails || null;
+  }
+
+  async createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails> {
+    // Generate a new ID
+    const newId = (
+      Math.max(...this.sampleJobRoles.map((role) => parseInt(role.id, 10)), 0) + 1
+    ).toString();
+
+    // Parse responsibilities from string to array
+    const responsibilities = jobRoleData.responsibilities
+      ? jobRoleData.responsibilities.split('\n').filter((line) => line.trim().length > 0)
+      : [];
+
+    // Create the detailed job role
+    const newJobRoleDetails: JobRoleDetails = {
+      id: newId,
+      name: jobRoleData.name,
+      location: jobRoleData.location,
+      capability: jobRoleData.capability,
+      band: jobRoleData.band,
+      closingDate: jobRoleData.closingDate,
+      status: 'Open' as const,
+      openPositions: jobRoleData.openPositions || 1,
+    };
+
+    // Add optional properties only if they exist
+    if (jobRoleData.description) {
+      newJobRoleDetails.description = jobRoleData.description;
+    }
+    if (responsibilities.length > 0) {
+      newJobRoleDetails.responsibilities = responsibilities;
+    }
+    if (jobRoleData.jobSpecUrl) {
+      newJobRoleDetails.jobSpecUrl = jobRoleData.jobSpecUrl;
+    }
+
+    // Add to our mock data
+    this.sampleJobRoles.push(newJobRoleDetails);
+
+    return newJobRoleDetails;
+  }
+
+  async deleteJobRole(id: string): Promise<boolean> {
+    const index = this.sampleJobRoles.findIndex((jobRole) => jobRole.id === id);
+    if (index === -1) {
+      return false;
+    }
+    this.sampleJobRoles.splice(index, 1);
+    return true;
   }
 
   private delay(ms: number): Promise<void> {

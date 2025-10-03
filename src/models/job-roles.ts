@@ -14,3 +14,15 @@ export interface JobRoleDetails extends JobRole {
   status?: 'Open' | 'Closing Soon' | 'Closed';
   openPositions?: number;
 }
+
+export interface NewJobRole {
+  name: string;
+  location: string;
+  capability: string;
+  band: string;
+  closingDate: string;
+  description?: string;
+  responsibilities?: string;
+  jobSpecUrl?: string;
+  openPositions?: string;
+}

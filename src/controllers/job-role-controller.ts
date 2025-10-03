@@ -1,15 +1,46 @@
 import type { Request, Response } from 'express';
+import type { NewJobRole } from '../models/job-roles.js';
 import type { JobRoleService } from '../services/job-role-service.js';
 
 export class JobRoleController {
   constructor(private readonly jobRoleService: JobRoleService) {}
 
-  async getAllJobRoles(_req: Request, res: Response): Promise<void> {
+  async getAllJobRoles(req: Request, res: Response): Promise<void> {
     try {
-      const jobRoles = await this.jobRoleService.getAllJobRoles();
+      const allJobRoles = await this.jobRoleService.getAllJobRoles();
+      const { search, capability } = req.query;
+
+      let filteredJobRoles = allJobRoles;
+
+      // Filter by capability if specified
+      if (capability && typeof capability === 'string') {
+        filteredJobRoles = filteredJobRoles.filter(
+          (job) => job.capability.toLowerCase() === capability.toLowerCase()
+        );
+      }
+
+      // Filter by search term if specified (search in job name, location, or capability)
+      if (search && typeof search === 'string') {
+        const searchTerm = search.toLowerCase();
+        filteredJobRoles = filteredJobRoles.filter(
+          (job) =>
+            job.name.toLowerCase().includes(searchTerm) ||
+            job.location.toLowerCase().includes(searchTerm) ||
+            job.capability.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      let title = 'Available Job Roles';
+      if (capability) {
+        title = `${capability} Job Roles`;
+      } else if (search) {
+        title = `Job Roles - Search: "${search}"`;
+      }
+
       res.render('job-roles/job-role-list', {
-        title: 'Available Job Roles',
-        jobRoles,
+        title,
+        jobRoles: filteredJobRoles,
+        currentFilter: { search, capability },
       });
     } catch (error) {
       console.error('Error fetching job roles:', error);
@@ -95,6 +126,112 @@ export class JobRoleController {
     } catch (error) {
       console.error('Error fetching job role for application:', error);
       res.status(500).send('Error loading job application page');
+    }
+  }
+
+  async showNewJobRoleForm(_req: Request, res: Response): Promise<void> {
+    try {
+      const locationOptions = [
+        'Belfast',
+        'London',
+        'Manchester',
+        'Birmingham',
+        'Edinburgh',
+        'Leeds',
+        'Glasgow',
+        'Remote',
+      ];
+
+      const capabilityOptions = [
+        'Engineering',
+        'Product',
+        'Design',
+        'Data & Analytics',
+        'Business Analysis',
+        'Delivery',
+        'Cyber Security',
+        'Quality Assurance',
+        'DevOps',
+      ];
+
+      const bandOptions = ['Graduate', 'Associate', 'Senior Associate', 'Principal', 'Director'];
+
+      res.render('job-roles/new', {
+        title: 'Add New Job Role',
+        locationOptions,
+        capabilityOptions,
+        bandOptions,
+      });
+    } catch (error) {
+      console.error('Error loading new job role form:', error);
+      res.status(500).send('Error loading form');
+    }
+  }
+
+  async createJobRole(req: Request, res: Response): Promise<void> {
+    try {
+      const jobRoleData = req.body as NewJobRole;
+
+      // Validate required fields
+      if (
+        !jobRoleData.name ||
+        !jobRoleData.location ||
+        !jobRoleData.capability ||
+        !jobRoleData.band ||
+        !jobRoleData.closingDate
+      ) {
+        res
+          .status(400)
+          .send(
+            'Missing required fields: name, location, capability, band, and closingDate are required'
+          );
+        return;
+      }
+
+      // Create the job role
+      const newJobRole = await this.jobRoleService.createJobRole({
+        name: jobRoleData.name.trim(),
+        location: jobRoleData.location,
+        capability: jobRoleData.capability,
+        band: jobRoleData.band,
+        closingDate: new Date(jobRoleData.closingDate),
+        description: jobRoleData.description?.trim() || undefined,
+        responsibilities: jobRoleData.responsibilities?.trim() || undefined,
+        jobSpecUrl: jobRoleData.jobSpecUrl?.trim() || undefined,
+        openPositions: jobRoleData.openPositions
+          ? parseInt(jobRoleData.openPositions, 10)
+          : undefined,
+      });
+
+      // Redirect to the new job role details page
+      res.redirect(`/jobs/${newJobRole.id}/details`);
+    } catch (error) {
+      console.error('Error creating job role:', error);
+      res.status(500).send('Error creating job role');
+    }
+  }
+
+  async deleteJobRole(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        res.status(400).send('Job role ID is required');
+        return;
+      }
+
+      const success = await this.jobRoleService.deleteJobRole(id);
+
+      if (!success) {
+        res.status(404).send(`Job role with ID ${id} not found`);
+        return;
+      }
+
+      // Redirect to the job list page with a success message
+      res.redirect('/jobs?deleted=true');
+    } catch (error) {
+      console.error('Error deleting job role:', error);
+      res.status(500).send('Error deleting job role');
     }
   }
 }
