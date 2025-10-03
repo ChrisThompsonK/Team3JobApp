@@ -36,7 +36,7 @@ export class JobRoleController {
         title = `Job Roles - Search: "${search}"`;
       }
 
-      res.render('job-roles/list', {
+      res.render('job-roles/job-role-list', {
         title,
         jobRoles: filteredJobRoles,
         currentFilter: { search, capability },
