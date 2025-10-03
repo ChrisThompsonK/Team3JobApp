@@ -100,8 +100,42 @@ export class JobRoleController {
 
   async showNewJobRoleForm(_req: Request, res: Response): Promise<void> {
     try {
+      const locationOptions = [
+        'Belfast',
+        'London',
+        'Manchester',
+        'Birmingham',
+        'Edinburgh',
+        'Leeds',
+        'Glasgow',
+        'Remote'
+      ];
+
+      const capabilityOptions = [
+        'Engineering',
+        'Product',
+        'Design',
+        'Data & Analytics',
+        'Business Analysis',
+        'Delivery',
+        'Cyber Security',
+        'Quality Assurance',
+        'DevOps'
+      ];
+
+      const bandOptions = [
+        'Graduate',
+        'Associate',
+        'Senior Associate',
+        'Principal',
+        'Director'
+      ];
+
       res.render('job-roles/new', {
         title: 'Add New Job Role',
+        locationOptions,
+        capabilityOptions,
+        bandOptions,
       });
     } catch (error) {
       console.error('Error loading new job role form:', error);

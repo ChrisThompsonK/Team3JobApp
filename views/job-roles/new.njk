@@ -42,14 +42,9 @@
             </label>
             <select id="location" name="location" class="select select-bordered select-lg w-full" required>
               <option disabled selected>Select location</option>
-              <option value="Belfast">Belfast</option>
-              <option value="London">London</option>
-              <option value="Manchester">Manchester</option>
-              <option value="Birmingham">Birmingham</option>
-              <option value="Edinburgh">Edinburgh</option>
-              <option value="Leeds">Leeds</option>
-              <option value="Glasgow">Glasgow</option>
-              <option value="Remote">Remote</option>
+              {% for location in locationOptions %}
+              <option value="{{ location }}">{{ location }}</option>
+              {% endfor %}
             </select>
           </div>
 
@@ -60,15 +55,9 @@
             </label>
             <select id="capability" name="capability" class="select select-bordered select-lg w-full" required>
               <option disabled selected>Select capability</option>
-              <option value="Engineering">Engineering</option>
-              <option value="Product">Product</option>
-              <option value="Design">Design</option>
-              <option value="Data & Analytics">Data & Analytics</option>
-              <option value="Business Analysis">Business Analysis</option>
-              <option value="Delivery">Delivery</option>
-              <option value="Cyber Security">Cyber Security</option>
-              <option value="Quality Assurance">Quality Assurance</option>
-              <option value="DevOps">DevOps</option>
+              {% for capability in capabilityOptions %}
+              <option value="{{ capability }}">{{ capability }}</option>
+              {% endfor %}
             </select>
           </div>
 
@@ -79,11 +68,9 @@
             </label>
             <select id="band" name="band" class="select select-bordered select-lg w-full" required>
               <option disabled selected>Select band</option>
-              <option value="Graduate">Graduate</option>
-              <option value="Associate">Associate</option>
-              <option value="Senior Associate">Senior Associate</option>
-              <option value="Principal">Principal</option>
-              <option value="Director">Director</option>
+              {% for band in bandOptions %}
+              <option value="{{ band }}">{{ band }}</option>
+              {% endfor %}
             </select>
           </div>
 
