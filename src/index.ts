@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import 'dotenv/config';
 import { createApp, startServer } from './app.js';
 
 // Create the application using the 3-tier architecture
