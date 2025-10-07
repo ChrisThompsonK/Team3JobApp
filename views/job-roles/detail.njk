@@ -96,8 +96,8 @@
   </div>
 </div>
 
-<!-- Apply Button - Outside container margins -->
-<div class="mt-6 flex justify-center">
+<!-- Action Buttons - Outside container margins -->
+<div class="mt-6 flex justify-center gap-4">
   {% if jobRole.status == 'Open' or jobRole.status == 'Closing Soon' or not jobRole.status %}
   <a href="/jobs/{{ jobRole.id }}/apply" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 min-w-[180px] no-underline text-center">
     Apply for This Position
@@ -107,10 +107,29 @@
     Applications Closed
   </div>
   {% endif %}
+  
+  <!-- Delete Button -->
+  <button onclick="confirmDelete('{{ jobRole.id }}', '{{ jobRole.name }}')" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 min-w-[160px]">
+    Delete Job Role
+  </button>
 </div>
 
 <!-- Back to Job List Button -->
 <div class="mt-8 flex justify-center">
   <a href="/job-roles" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 min-w-[160px] no-underline text-center">← Back to Job List</a>
 </div>
+
+<!-- Hidden form for DELETE request -->
+<form id="deleteForm" method="POST" style="display: none;">
+</form>
+
+<script>
+function confirmDelete(jobId, jobName) {
+  if (confirm(`Are you sure you want to delete the job role "${jobName}"? This action cannot be undone.`)) {
+    const form = document.getElementById('deleteForm');
+    form.action = `/jobs/${jobId}/delete`;
+    form.submit();
+  }
+}
+</script>
 {% endblock %}

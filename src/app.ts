@@ -1,4 +1,5 @@
 import express from 'express';
+import methodOverride from 'method-override';
 import nunjucks from 'nunjucks';
 import { config } from './config/index.js';
 import { errorHandler, notFoundHandler, requestLogger } from './middleware/index.js';
@@ -25,6 +26,7 @@ export const createApp = (): express.Application => {
   app.use(requestLogger);
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(methodOverride('_method')); // Enable DELETE/PUT requests from forms
 
   // Serve static files
   app.use(express.static(config.paths.public));
