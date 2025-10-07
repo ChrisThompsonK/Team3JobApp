@@ -12,11 +12,25 @@ export interface CreateJobRoleRequest {
   openPositions?: number | undefined;
 }
 
+export interface UpdateJobRoleRequest {
+  name?: string;
+  location?: string;
+  capability?: string;
+  band?: string;
+  closingDate?: Date;
+  description?: string | undefined;
+  responsibilities?: string | undefined;
+  jobSpecUrl?: string | undefined;
+  openPositions?: number | undefined;
+  status?: 'Open' | 'Closing Soon' | 'Closed';
+}
+
 export interface JobRoleService {
   getAllJobRoles(): Promise<JobRole[]>;
   getJobRoleById(id: string): Promise<JobRole | null>;
   getJobRoleDetailsById(id: string): Promise<JobRoleDetails | null>;
   createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails>;
+  updateJobRole(id: string, jobRoleData: UpdateJobRoleRequest): Promise<JobRoleDetails | null>;
   deleteJobRole(id: string): Promise<boolean>;
 }
 
@@ -282,6 +296,77 @@ export class MockJobRoleService implements JobRoleService {
     this.sampleJobRoles.push(newJobRoleDetails);
 
     return newJobRoleDetails;
+  }
+
+  async updateJobRole(
+    id: string,
+    jobRoleData: UpdateJobRoleRequest
+  ): Promise<JobRoleDetails | null> {
+    await this.delay(50);
+    const index = this.sampleJobRoles.findIndex((jobRole) => jobRole.id === id);
+    if (index === -1) {
+      return null;
+    }
+
+    const existingJobRole = this.sampleJobRoles[index];
+    if (!existingJobRole) {
+      return null;
+    }
+
+    // Parse responsibilities from string to array if provided
+    let responsibilities = existingJobRole.responsibilities;
+    if (jobRoleData.responsibilities !== undefined) {
+      responsibilities = jobRoleData.responsibilities
+        ? jobRoleData.responsibilities.split('\n').filter((line) => line.trim().length > 0)
+        : undefined;
+    }
+
+    // Update the job role with new data
+    const updatedJobRole: JobRoleDetails = {
+      id: existingJobRole.id,
+      name: jobRoleData.name ?? existingJobRole.name,
+      location: jobRoleData.location ?? existingJobRole.location,
+      capability: jobRoleData.capability ?? existingJobRole.capability,
+      band: jobRoleData.band ?? existingJobRole.band,
+      closingDate: jobRoleData.closingDate ?? existingJobRole.closingDate,
+    };
+
+    // Add optional status and openPositions
+    if (jobRoleData.status !== undefined) {
+      updatedJobRole.status = jobRoleData.status;
+    } else if (existingJobRole.status) {
+      updatedJobRole.status = existingJobRole.status;
+    }
+
+    if (jobRoleData.openPositions !== undefined) {
+      updatedJobRole.openPositions = jobRoleData.openPositions;
+    } else if (existingJobRole.openPositions !== undefined) {
+      updatedJobRole.openPositions = existingJobRole.openPositions;
+    }
+
+    // Add optional fields only if they have values
+    if (jobRoleData.description !== undefined) {
+      if (jobRoleData.description) {
+        updatedJobRole.description = jobRoleData.description;
+      }
+    } else if (existingJobRole.description) {
+      updatedJobRole.description = existingJobRole.description;
+    }
+
+    if (responsibilities) {
+      updatedJobRole.responsibilities = responsibilities;
+    }
+
+    if (jobRoleData.jobSpecUrl !== undefined) {
+      if (jobRoleData.jobSpecUrl) {
+        updatedJobRole.jobSpecUrl = jobRoleData.jobSpecUrl;
+      }
+    } else if (existingJobRole.jobSpecUrl) {
+      updatedJobRole.jobSpecUrl = existingJobRole.jobSpecUrl;
+    }
+
+    this.sampleJobRoles[index] = updatedJobRole;
+    return updatedJobRole;
   }
 
   async deleteJobRole(id: string): Promise<boolean> {
