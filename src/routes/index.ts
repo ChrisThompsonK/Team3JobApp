@@ -21,6 +21,7 @@ router.get('/health', HealthController.index);
  * Job Role Routes
  */
 router.get('/jobs', jobRoleController.getAllJobRoles.bind(jobRoleController));
+router.get('/jobs/report', jobRoleController.generateJobRolesReport.bind(jobRoleController));
 router.get('/jobs/new', jobRoleController.showNewJobRoleForm.bind(jobRoleController));
 router.post('/jobs/new', jobRoleController.createJobRole.bind(jobRoleController));
 router.get('/jobs/:id/edit', jobRoleController.showEditJobRoleForm.bind(jobRoleController));

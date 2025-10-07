@@ -129,6 +129,42 @@ export class JobRoleController {
     }
   }
 
+  async generateJobRolesReport(_req: Request, res: Response): Promise<void> {
+    try {
+      const allJobRoles = await this.jobRoleService.getAllJobRoles();
+      
+      // Create CSV headers
+      const headers = ['ID', 'Job Name', 'Location', 'Capability', 'Band', 'Closing Date'];
+      
+      // Create CSV rows
+      const rows = allJobRoles.map(job => [
+        job.id,
+        `"${job.name.replace(/"/g, '""')}"`, // Escape quotes in job names
+        job.location,
+        job.capability,
+        job.band,
+        job.closingDate.toISOString().split('T')[0] // Format date as YYYY-MM-DD
+      ]);
+      
+      // Combine headers and rows into CSV format
+      const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.join(','))
+      ].join('\n');
+      
+      // Set headers for file download
+      const timestamp = new Date().toISOString().split('T')[0];
+      const filename = `job-roles-report-${timestamp}.csv`;
+      
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      res.status(200).send(csvContent);
+    } catch (error) {
+      console.error('Error generating job roles report:', error);
+      res.status(500).send('Error generating report');
+    }
+  }
+
   async showNewJobRoleForm(_req: Request, res: Response): Promise<void> {
     try {
       const locationOptions = [
