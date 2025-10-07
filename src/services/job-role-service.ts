@@ -32,6 +32,7 @@ export interface JobRoleService {
   createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails>;
   updateJobRole(id: string, jobRoleData: UpdateJobRoleRequest): Promise<JobRoleDetails | null>;
   deleteJobRole(id: string): Promise<boolean>;
+  generateJobRolesReportCsv(): Promise<string>;
 }
 
 export class MockJobRoleService implements JobRoleService {
@@ -376,6 +377,28 @@ export class MockJobRoleService implements JobRoleService {
     }
     this.sampleJobRoles.splice(index, 1);
     return true;
+  }
+
+  async generateJobRolesReportCsv(): Promise<string> {
+    const allJobRoles = await this.getAllJobRoles();
+
+    // Create CSV headers
+    const headers = ['ID', 'Job Name', 'Location', 'Capability', 'Band', 'Closing Date'];
+
+    // Create CSV rows
+    const rows = allJobRoles.map((job) => [
+      job.id,
+      `"${job.name.replace(/"/g, '""')}"`, // Escape quotes in job names
+      job.location,
+      job.capability,
+      job.band,
+      job.closingDate.toISOString().split('T')[0], // Format date as YYYY-MM-DD
+    ]);
+
+    // Combine headers and rows into CSV format
+    const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+
+    return csvContent;
   }
 
   private delay(ms: number): Promise<void> {
