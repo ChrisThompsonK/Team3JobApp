@@ -15,69 +15,77 @@
     </div>
     
     <!-- Success Alert -->
-    <div class="alert alert-success shadow-lg mb-6">
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+    <div style="background: linear-gradient(135deg, #e8f0ff 0%, #f0f9e8 100%); border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 2px solid #e5e7eb; padding: 1.5rem; margin-bottom: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" style="height: 2rem; width: 2rem; color: #7cb342; flex-shrink: 0;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
-                <h3 class="font-bold">System Status: All Systems Operational!</h3>
-                <div class="text-xs">All services are running smoothly and responding correctly.</div>
+                <h3 style="font-weight: 700; font-size: 1.125rem; color: #2b4c7e; margin-bottom: 0.25rem;">System Status: All Systems Operational!</h3>
+                <div style="font-size: 0.875rem; color: #4b5563;">All services are running smoothly and responding correctly.</div>
             </div>
         </div>
     </div>
 
     <!-- System Stats -->
-    <div class="stats stats-vertical lg:stats-horizontal shadow w-full mb-6">
-        <div class="stat">
-            <div class="stat-figure text-success">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+    <div style="background: linear-gradient(135deg, #e8f0ff 0%, #f0f9e8 100%); border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 2px solid #e5e7eb; padding: 2rem; margin-bottom: 1.5rem; width: 100%;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+            <div style="text-align: center;">
+                <div style="display: flex; justify-content: center; margin-bottom: 0.5rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width: 2rem; height: 2rem; color: #7cb342;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">System Status</div>
+                <div style="font-size: 2rem; font-weight: 700; color: #7cb342; margin-bottom: 0.25rem;">{{ status }}</div>
+                <div style="font-size: 0.875rem; color: #9ca3af;">All systems operational</div>
             </div>
-            <div class="stat-title">System Status</div>
-            <div class="stat-value text-success">{{ status }}</div>
-            <div class="stat-desc">All systems operational</div>
-        </div>
-        
-        <div class="stat">
-            <div class="stat-figure text-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+            
+            <div style="text-align: center;">
+                <div style="display: flex; justify-content: center; margin-bottom: 0.5rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width: 2rem; height: 2rem; color: #2b4c7e;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">System Uptime</div>
+                <div style="font-size: 2rem; font-weight: 700; color: #2b4c7e; margin-bottom: 0.25rem;">{{ uptime }}</div>
+                <div style="font-size: 0.875rem; color: #9ca3af;">seconds running</div>
             </div>
-            <div class="stat-title">System Uptime</div>
-            <div class="stat-value text-primary">{{ uptime }}</div>
-            <div class="stat-desc">seconds running</div>
-        </div>
-        
-        <div class="stat">
-            <div class="stat-figure text-secondary">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="8 7V3a4 4 0 118 0v4m-4 8a2 2 0 11-4 0m4 0a2 2 0 104 0m-4 0V9a2 2 0 118 0v6m-9-6h10" />
-                </svg>
+            
+            <div style="text-align: center;">
+                <div style="display: flex; justify-content: center; margin-bottom: 0.5rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width: 2rem; height: 2rem; color: #6366f1;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="8 7V3a4 4 0 118 0v4m-4 8a2 2 0 11-4 0m4 0a2 2 0 104 0m-4 0V9a2 2 0 118 0v6m-9-6h10" />
+                    </svg>
+                </div>
+                <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Last Check</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: #6366f1; margin-bottom: 0.25rem;">{{ timestamp }}</div>
+                <div style="font-size: 0.875rem; color: #9ca3af;">Most recent health check</div>
             </div>
-            <div class="stat-title">Last Check</div>
-            <div class="stat-value text-secondary text-lg">{{ timestamp }}</div>
-            <div class="stat-desc">Most recent health check</div>
         </div>
     </div>
 
     <!-- Navigation -->
-    <div class="card bg-neutral text-neutral-content shadow-xl">
-        <div class="card-body text-center">
-            <h2 class="card-title justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div style="background: linear-gradient(135deg, #e8f0ff 0%, #f0f9e8 100%); border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 2px solid #e5e7eb; padding: 2rem;">
+        <div style="text-align: center;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: #2b4c7e; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" style="height: 1.75rem; width: 1.75rem; color: #7cb342;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="9 5l7 7-7 7" />
                 </svg>
-                Navigation
+                Quick Navigation
             </h2>
-            <div class="card-actions justify-center">
-                <a href="/" class="btn btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="10 19l-7-7m0 0l7-7m-7 7h18" />
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1rem; max-width: 600px; margin: 0 auto;">
+                <a href="/" class="btn-kainos" style="min-width: 200px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="height: 1.25rem; width: 1.25rem; display: inline; margin-right: 0.5rem; vertical-align: middle;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
                     Back to Home
+                </a>
+                <a href="/jobs" class="btn-kainos" style="min-width: 200px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="height: 1.25rem; width: 1.25rem; display: inline; margin-right: 0.5rem; vertical-align: middle;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    View All Careers
                 </a>
             </div>
         </div>
