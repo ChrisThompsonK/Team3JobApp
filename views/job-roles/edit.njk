@@ -1,0 +1,190 @@
+{% extends "layout.njk" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 pb-16 max-w-4xl">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-5xl font-bold kainos-text-gradient">{{ title }}</h1>
+    <a href="/jobs/{{ jobRole.id }}/details" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 no-underline inline-flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+      </svg>
+      Cancel
+    </a>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title text-2xl mb-6">Edit Job Role Information</h2>
+      
+      <form id="editJobForm" action="/jobs/{{ jobRole.id }}/edit" method="POST" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Job Name -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="name">
+              <span class="label-text text-lg font-semibold text-blue-900">Job Name *</span>
+            </label>
+            <input 
+              type="text" 
+              id="name"
+              name="name" 
+              value="{{ jobRole.name }}"
+              placeholder="e.g., Software Engineer" 
+              class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200" 
+              required
+            />
+          </div>
+
+          <!-- Location -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="location">
+              <span class="label-text text-lg font-semibold text-blue-900">Location *</span>
+            </label>
+            <select id="location" name="location" class="select select-bordered select-lg w-full focus:select-primary transition-colors duration-200" required>
+              {% for location in locationOptions %}
+              <option value="{{ location }}" {% if location == jobRole.location %}selected{% endif %}>{{ location }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Capability -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="capability">
+              <span class="label-text text-lg font-semibold text-blue-900">Capability *</span>
+            </label>
+            <select id="capability" name="capability" class="select select-bordered select-lg w-full focus:select-primary transition-colors duration-200" required>
+              {% for capability in capabilityOptions %}
+              <option value="{{ capability }}" {% if capability == jobRole.capability %}selected{% endif %}>{{ capability }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Band -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="band">
+              <span class="label-text text-lg font-semibold text-blue-900">Band *</span>
+            </label>
+            <select id="band" name="band" class="select select-bordered select-lg w-full focus:select-primary transition-colors duration-200" required>
+              {% for band in bandOptions %}
+              <option value="{{ band }}" {% if band == jobRole.band %}selected{% endif %}>{{ band }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Closing Date -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="closingDate">
+              <span class="label-text text-lg font-semibold text-blue-900">Closing Date *</span>
+            </label>
+            <input 
+              type="date" 
+              id="closingDate"
+              name="closingDate" 
+              value="{{ jobRole.closingDate }}"
+              class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200" 
+              required
+            />
+          </div>
+
+          <!-- Status -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="status">
+              <span class="label-text text-lg font-semibold text-blue-900">Status *</span>
+            </label>
+            <select id="status" name="status" class="select select-bordered select-lg w-full focus:select-primary transition-colors duration-200" required>
+              {% for status in statusOptions %}
+              <option value="{{ status }}" {% if status == jobRole.status %}selected{% endif %}>{{ status }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Open Positions -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200 md:col-span-2">
+            <label class="label" for="openPositions">
+              <span class="label-text text-lg font-semibold text-blue-900">Number of Open Positions</span>
+            </label>
+            <input 
+              type="number" 
+              id="openPositions"
+              name="openPositions" 
+              value="{{ jobRole.openPositions }}"
+              placeholder="e.g., 3" 
+              class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200" 
+              min="1"
+            />
+            <label class="label">
+              <span class="label-text-alt text-sm opacity-70">Specify how many positions are available for this role</span>
+            </label>
+          </div>
+
+          <!-- Job Description -->
+          <div class="form-control md:col-span-2 bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="description">
+              <span class="label-text text-lg font-semibold text-blue-900">Job Description</span>
+            </label>
+            <textarea 
+              id="description"
+              name="description" 
+              class="textarea textarea-bordered textarea-lg h-32 resize-none w-full focus:textarea-primary transition-colors duration-200" 
+              placeholder="Provide a brief description of the role and its key objectives..."
+            >{{ jobRole.description }}</textarea>
+            <label class="label">
+              <span class="label-text-alt text-sm opacity-70">Describe the role's purpose and main objectives</span>
+            </label>
+          </div>
+
+          <!-- Job Responsibilities -->
+          <div class="form-control md:col-span-2 bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="responsibilities">
+              <span class="label-text text-lg font-semibold text-blue-900">Key Responsibilities</span>
+            </label>
+            <textarea 
+              id="responsibilities"
+              name="responsibilities" 
+              class="textarea textarea-bordered textarea-lg h-32 resize-none w-full focus:textarea-primary transition-colors duration-200" 
+              placeholder="List the main responsibilities for this role (one per line)..."
+            >{{ jobRole.responsibilities }}</textarea>
+            <label class="label">
+              <span class="label-text-alt text-sm opacity-70">Enter each responsibility on a new line</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Job Spec URL (SharePoint Link) -->
+        <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+          <label class="label" for="jobSpecUrl">
+            <span class="label-text text-lg font-semibold text-blue-900">SharePoint Link / Job Specification URL</span>
+          </label>
+          <input 
+            type="url" 
+            id="jobSpecUrl"
+            name="jobSpecUrl" 
+            value="{{ jobRole.jobSpecUrl }}"
+            placeholder="https://sharepoint.company.com/job-spec.pdf" 
+            class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200"
+          />
+          <label class="label">
+            <span class="label-text-alt text-sm opacity-70">Optional: Link to detailed job specification document on SharePoint or other location</span>
+          </label>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Form Actions - Outside container -->
+<div class="mt-8 mb-12 flex justify-center">
+  <div class="flex flex-col sm:flex-row gap-4 items-center">
+    <a href="/jobs/{{ jobRole.id }}/details" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 no-underline text-center min-w-[140px]">
+      Cancel
+    </a>
+    <button type="submit" form="editJobForm" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 min-w-[180px] inline-flex items-center justify-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+      </svg>
+      Update Job Role
+    </button>
+  </div>
+</div>
+{% endblock %}

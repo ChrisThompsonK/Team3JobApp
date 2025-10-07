@@ -234,4 +234,153 @@ export class JobRoleController {
       res.status(500).send('Error deleting job role');
     }
   }
+
+  async showEditJobRoleForm(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        res.status(400).send('Job role ID is required');
+        return;
+      }
+
+      const jobRole = await this.jobRoleService.getJobRoleDetailsById(id);
+
+      if (!jobRole) {
+        res.status(404).send(`Job role with ID ${id} not found`);
+        return;
+      }
+
+      const locationOptions = [
+        'Belfast',
+        'London',
+        'Manchester',
+        'Birmingham',
+        'Edinburgh',
+        'Leeds',
+        'Glasgow',
+        'Remote',
+      ];
+
+      const capabilityOptions = [
+        'Engineering',
+        'Product',
+        'Design',
+        'Data & Analytics',
+        'Business Analysis',
+        'Delivery',
+        'Cyber Security',
+        'Quality Assurance',
+        'DevOps',
+      ];
+
+      const bandOptions = ['Graduate', 'Associate', 'Senior Associate', 'Principal', 'Director'];
+
+      const statusOptions = ['Open', 'Closing Soon', 'Closed'];
+
+      // Format responsibilities as string for textarea
+      const responsibilitiesText = Array.isArray(jobRole.responsibilities)
+        ? jobRole.responsibilities.join('\n')
+        : jobRole.responsibilities || '';
+
+      // Format closing date for input field (YYYY-MM-DD)
+      const closingDateFormatted = jobRole.closingDate.toISOString().split('T')[0];
+
+      res.render('job-roles/edit', {
+        title: `Edit ${jobRole.name}`,
+        jobRole: {
+          ...jobRole,
+          responsibilities: responsibilitiesText,
+          closingDate: closingDateFormatted,
+        },
+        locationOptions,
+        capabilityOptions,
+        bandOptions,
+        statusOptions,
+      });
+    } catch (error) {
+      console.error('Error loading edit job role form:', error);
+      res.status(500).send('Error loading form');
+    }
+  }
+
+  async updateJobRole(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        res.status(400).send('Job role ID is required');
+        return;
+      }
+
+      const jobRoleData = req.body as NewJobRole;
+
+      // Validate required fields
+      if (
+        !jobRoleData.name ||
+        !jobRoleData.location ||
+        !jobRoleData.capability ||
+        !jobRoleData.band ||
+        !jobRoleData.closingDate
+      ) {
+        res
+          .status(400)
+          .send(
+            'Missing required fields: name, location, capability, band, and closingDate are required'
+          );
+        return;
+      }
+
+      // Build update object
+      const updateData = {
+        name: jobRoleData.name.trim(),
+        location: jobRoleData.location,
+        capability: jobRoleData.capability,
+        band: jobRoleData.band,
+        closingDate: new Date(jobRoleData.closingDate),
+      };
+
+      // Add optional fields
+      const optionalData: {
+        description?: string;
+        responsibilities?: string;
+        jobSpecUrl?: string;
+        openPositions?: number;
+        status?: 'Open' | 'Closing Soon' | 'Closed';
+      } = {};
+
+      if (jobRoleData.description?.trim()) {
+        optionalData.description = jobRoleData.description.trim();
+      }
+      if (jobRoleData.responsibilities?.trim()) {
+        optionalData.responsibilities = jobRoleData.responsibilities.trim();
+      }
+      if (jobRoleData.jobSpecUrl?.trim()) {
+        optionalData.jobSpecUrl = jobRoleData.jobSpecUrl.trim();
+      }
+      if (jobRoleData.openPositions) {
+        optionalData.openPositions = parseInt(jobRoleData.openPositions, 10);
+      }
+      if (req.body.status) {
+        optionalData.status = req.body.status as 'Open' | 'Closing Soon' | 'Closed';
+      }
+
+      // Update the job role
+      const updatedJobRole = await this.jobRoleService.updateJobRole(id, {
+        ...updateData,
+        ...optionalData,
+      });
+
+      if (!updatedJobRole) {
+        res.status(404).send(`Job role with ID ${id} not found`);
+        return;
+      }
+
+      // Redirect to the updated job role details page
+      res.redirect(`/jobs/${id}/details`);
+    } catch (error) {
+      console.error('Error updating job role:', error);
+      res.status(500).send('Error updating job role');
+    }
+  }
 }
