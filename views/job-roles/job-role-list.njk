@@ -3,13 +3,13 @@
 {% block title %}{{ title }} - Kainos{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
+<div class="w-full max-w-7xl mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-4">
     <div class="flex-1">
       <h1 class="text-5xl font-bold text-center kainos-text-gradient">{{ title }}</h1>
     </div>
-    <a href="/jobs/new" class="ml-4 btn-kainos">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" viewBox="0 0 20 20" fill="currentColor">
+    <a href="/jobs/new" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 no-underline flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
       </svg>
       Add New Job Role
@@ -18,8 +18,8 @@
   <p class="text-center text-lg text-base-content/70 mb-8">Discover exciting career opportunities at Kainos</p>
 
   {% if jobRoles.length > 0 %}
-    <div class="overflow-x-auto shadow-lg rounded-lg">
-      <table class="table w-full min-w-max">
+    <div class="shadow-lg rounded-lg w-full">
+      <table class="table w-full">
         <!-- head -->
         <thead class="bg-base-200">
           <tr>
@@ -28,7 +28,7 @@
             <th class="text-left px-4 py-4 text-lg font-semibold">Location</th>
             <th class="text-left px-4 py-4 text-lg font-semibold">Capability</th>
             <th class="w-20 text-left px-4 py-4 text-lg font-semibold">Band</th>
-            <th class="w-60 text-left px-4 py-4 text-lg font-semibold">Actions</th>
+            <th class="w-40 text-left px-4 py-4 text-lg font-semibold">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -42,10 +42,10 @@
               <td class="text-base-content/70 px-4 py-4 text-lg">{{ job.band }}</td>
               <td class="px-4 py-4">
                 <div class="flex gap-2">
-                  <a href="/jobs/{{ job.id }}/details" class="btn btn-secondary btn-sm text-base whitespace-nowrap">
+                  <a href="/job-roles/{{ job.id }}/details" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 no-underline text-center text-sm">
                     View Details
                   </a>
-                  <a href="/jobs/{{ job.id }}/apply" class="btn btn-primary btn-sm text-base whitespace-nowrap">
+                  <a href="/jobs/{{ job.id }}/apply" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 no-underline text-center text-sm">
                     Apply
                   </a>
                 </div>
@@ -61,7 +61,7 @@
     </div>
   {% endif %}
 </div>
-<div class="mt-8 text-center">
-    <a href="/" class="btn btn-primary btn-sm text-base">← Back to Home</a>
+<div class="mt-8 flex justify-center">
+    <a href="/" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 min-w-[140px] no-underline text-center">← Back to Home</a>
   </div>
 {% endblock %}

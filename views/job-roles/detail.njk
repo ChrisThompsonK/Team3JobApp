@@ -75,7 +75,7 @@
       
       <!-- Responsibilities Section -->
       {% if jobRole.responsibilities %}
-      <div class="mb-10">
+      <div class="mb-2">
         <h3 class="text-3xl font-semibold text-primary mb-6">Key Responsibilities</h3>
         <div class="bg-base-200 p-8 rounded-lg">
           <div class="prose max-w-none">
@@ -92,31 +92,31 @@
         </div>
       </div>
       {% endif %}
-      
-      <!-- Action Buttons -->
-      <div class="flex justify-center gap-4 mt-8">
-        {% if jobRole.status == 'Open' or jobRole.status == 'Closing Soon' or not jobRole.status %}
-        <a href="/jobs/{{ jobRole.id }}/apply" class="btn btn-primary">
-          Apply for This Position
-        </a>
-        {% else %}
-        <div class="btn btn-disabled">
-          Applications Closed
-        </div>
-        {% endif %}
-        
-        <!-- Delete Button -->
-        <button onclick="confirmDelete('{{ jobRole.id }}', '{{ jobRole.name }}')" class="btn btn-error">
-          Delete Job Role
-        </button>
-      </div>
     </div>
   </div>
 </div>
 
+<!-- Action Buttons - Outside container margins -->
+<div class="mt-6 flex justify-center gap-4">
+  {% if jobRole.status == 'Open' or jobRole.status == 'Closing Soon' or not jobRole.status %}
+  <a href="/jobs/{{ jobRole.id }}/apply" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 min-w-[180px] no-underline text-center">
+    Apply for This Position
+  </a>
+  {% else %}
+  <div class="bg-gray-400 text-white font-semibold px-6 py-3 rounded-lg shadow-md min-w-[180px] cursor-not-allowed text-center">
+    Applications Closed
+  </div>
+  {% endif %}
+  
+  <!-- Delete Button -->
+  <button onclick="confirmDelete('{{ jobRole.id }}', '{{ jobRole.name }}')" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 min-w-[160px]">
+    Delete Job Role
+  </button>
+</div>
+
 <!-- Back to Job List Button -->
-<div class="mt-8 text-center">
-  <a href="/jobs" class="btn btn-primary btn-sm text-base">← Back to Job List</a>
+<div class="mt-8 flex justify-center">
+  <a href="/job-roles" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 min-w-[160px] no-underline text-center">← Back to Job List</a>
 </div>
 
 <!-- Hidden form for DELETE request -->
