@@ -85,6 +85,7 @@ export const api = {
   },
 
   // Jobs endpoint - returns array of job roles
+  // Note: Filtering is done on the frontend until backend supports query parameters
   getJobs: async (): Promise<JobRole[]> => {
     const response = await apiClient.get<BackendJobRole[]>('/jobs');
     // Transform backend format to frontend format
@@ -118,5 +119,21 @@ export const api = {
       }
       throw error;
     }
+  },
+
+  // Get distinct filter values for job roles
+  getDistinctValues: async (): Promise<{
+    locations: string[];
+    capabilities: string[];
+    bands: string[];
+  }> => {
+    // Get all jobs and extract distinct values
+    const jobs = await api.getJobs();
+
+    const locations = [...new Set(jobs.map((job) => job.location))].sort();
+    const capabilities = [...new Set(jobs.map((job) => job.capability))].sort();
+    const bands = [...new Set(jobs.map((job) => job.band))].sort();
+
+    return { locations, capabilities, bands };
   },
 };

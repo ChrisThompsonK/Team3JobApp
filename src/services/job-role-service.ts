@@ -407,7 +407,7 @@ export class MockJobRoleService implements JobRoleService {
 }
 
 // Import RealJobRoleService
-import { RealJobRoleService } from './real-job-role-service';
+import { RealJobRoleService } from './real-job-role-service.js';
 
 // Export a singleton instance for easy use
 // Switch between Mock and Real service based on environment
