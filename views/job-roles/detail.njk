@@ -8,6 +8,21 @@
   <h1 class="text-6xl font-bold mb-8 text-center kainos-text-gradient">Job Details</h1>
   <p class="text-center text-lg text-base-content/70 mb-8">Join the Kainos team and make an impact</p>
   
+  <!-- Success Message (shown when application is submitted) -->
+  {% if applicationSubmitted %}
+  <div class="alert alert-success shadow-lg mb-8">
+    <div>
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <div>
+        <h3 class="font-bold">Application Submitted Successfully!</h3>
+        <div class="text-sm">Thank you for applying. We'll review your application and get back to you soon.</div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  
   <div class="card bg-base-100 shadow-xl">
     <div class="card-body">
       <!-- Job Role Name -->

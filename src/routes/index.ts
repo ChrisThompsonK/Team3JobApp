@@ -34,6 +34,7 @@ router.get('/jobs/:id/edit', jobRoleController.showEditJobRoleForm.bind(jobRoleC
 router.post('/jobs/:id/edit', jobRoleController.updateJobRole.bind(jobRoleController));
 router.get('/jobs/:id/details', jobRoleController.getJobRoleDetails.bind(jobRoleController));
 router.get('/jobs/:id/apply', jobRoleController.getJobRoleApplication.bind(jobRoleController));
+router.post('/jobs/:id/apply', jobRoleController.submitJobRoleApplication.bind(jobRoleController));
 router.post('/jobs/:id/delete', jobRoleController.deleteJobRole.bind(jobRoleController));
 router.delete('/jobs/:id', jobRoleController.deleteJobRole.bind(jobRoleController));
 

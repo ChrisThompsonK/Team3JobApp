@@ -1,0 +1,294 @@
+{% extends "layout.njk" %}
+
+{% block title %}Apply for {{ jobRole.name }} - Kainos Careers{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-5xl font-bold kainos-text-gradient">Apply for Job Role</h1>
+    <a href="/jobs/{{ jobRole.id }}/details" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 no-underline flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+      </svg>
+      Back to Job Details
+    </a>
+  </div>
+
+  <!-- Job Role Summary Card -->
+  <div class="card bg-blue-50 border-2 border-blue-200 shadow-lg mb-8">
+    <div class="card-body">
+      <h2 class="text-3xl font-bold mb-4 text-blue-900">{{ jobRole.name }}</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-base">
+        <div>
+          <span class="font-semibold text-blue-800">Location:</span>
+          <p class="text-gray-700">{{ jobRole.location }}</p>
+        </div>
+        <div>
+          <span class="font-semibold text-blue-800">Capability:</span>
+          <p class="text-gray-700">{{ jobRole.capability }}</p>
+        </div>
+        <div>
+          <span class="font-semibold text-blue-800">Band:</span>
+          <p class="text-gray-700">{{ jobRole.band }}</p>
+        </div>
+        <div>
+          <span class="font-semibold text-blue-800">Closing Date:</span>
+          <p class="text-gray-700">{{ jobRole.closingDate.toLocaleDateString() if jobRole.closingDate else 'Open' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Form -->
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title text-2xl mb-6">Application Information</h2>
+      
+      <form id="applicationForm" action="/jobs/{{ jobRole.id }}/apply" method="POST" class="space-y-6">
+        <!-- Personal Information Section -->
+        <div class="divider text-lg font-semibold text-blue-800">Personal Information</div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- First Name -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="firstName">
+              <span class="label-text text-lg font-semibold">First Name *</span>
+            </label>
+            <input 
+              type="text" 
+              id="firstName"
+              name="firstName" 
+              placeholder="John" 
+              class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200" 
+              required
+            />
+          </div>
+
+          <!-- Last Name -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="lastName">
+              <span class="label-text text-lg font-semibold">Last Name *</span>
+            </label>
+            <input 
+              type="text" 
+              id="lastName"
+              name="lastName" 
+              placeholder="Doe" 
+              class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200" 
+              required
+            />
+          </div>
+
+          <!-- Email -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="email">
+              <span class="label-text text-lg font-semibold">Email Address *</span>
+            </label>
+            <input 
+              type="email" 
+              id="email"
+              name="email" 
+              placeholder="john.doe@example.com" 
+              class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200" 
+              required
+            />
+          </div>
+
+          <!-- Phone -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="phone">
+              <span class="label-text text-lg font-semibold">Phone Number *</span>
+            </label>
+            <input 
+              type="tel" 
+              id="phone"
+              name="phone" 
+              placeholder="+44 7XXX XXXXXX" 
+              class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200" 
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Professional Information Section -->
+        <div class="divider text-lg font-semibold text-blue-800">Professional Information</div>
+
+        <div class="grid grid-cols-1 gap-6">
+          <!-- Current Job Title -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="currentJobTitle">
+              <span class="label-text text-lg font-semibold">Current/Most Recent Job Title *</span>
+            </label>
+            <input 
+              type="text" 
+              id="currentJobTitle"
+              name="currentJobTitle" 
+              placeholder="e.g., Software Engineer" 
+              class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200" 
+              required
+            />
+          </div>
+
+          <!-- Years of Experience -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="yearsOfExperience">
+              <span class="label-text text-lg font-semibold">Years of Experience *</span>
+            </label>
+            <select 
+              id="yearsOfExperience" 
+              name="yearsOfExperience" 
+              class="select select-bordered select-lg w-full focus:select-primary transition-colors duration-200" 
+              required
+            >
+              <option disabled selected>Select experience level</option>
+              <option value="0-1">0-1 years</option>
+              <option value="1-3">1-3 years</option>
+              <option value="3-5">3-5 years</option>
+              <option value="5-10">5-10 years</option>
+              <option value="10+">10+ years</option>
+            </select>
+          </div>
+
+          <!-- LinkedIn Profile -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="linkedinUrl">
+              <span class="label-text text-lg font-semibold">LinkedIn Profile</span>
+            </label>
+            <input 
+              type="url" 
+              id="linkedinUrl"
+              name="linkedinUrl" 
+              placeholder="https://www.linkedin.com/in/yourprofile" 
+              class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200"
+            />
+            <label class="label">
+              <span class="label-text-alt text-sm opacity-70">Optional</span>
+            </label>
+          </div>
+
+          <!-- CV Upload -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="cv">
+              <span class="label-text text-lg font-semibold">Upload CV/Resume *</span>
+            </label>
+            <input 
+              type="file" 
+              id="cv"
+              name="cv" 
+              accept=".pdf,.doc,.docx"
+              class="file-input file-input-bordered file-input-lg w-full focus:file-input-primary transition-colors duration-200" 
+              required
+            />
+            <label class="label">
+              <span class="label-text-alt text-sm opacity-70">Accepted formats: PDF, DOC, DOCX (Max 5MB)</span>
+            </label>
+          </div>
+
+          <!-- Cover Letter -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="coverLetter">
+              <span class="label-text text-lg font-semibold">Cover Letter *</span>
+            </label>
+            <textarea 
+              id="coverLetter"
+              name="coverLetter" 
+              class="textarea textarea-bordered textarea-lg h-40 resize-none w-full focus:textarea-primary transition-colors duration-200" 
+              placeholder="Tell us why you're interested in this role and what makes you a great fit for Kainos..."
+              required
+            ></textarea>
+            <label class="label">
+              <span class="label-text-alt text-sm opacity-70">Minimum 100 characters</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Additional Information Section -->
+        <div class="divider text-lg font-semibold text-blue-800">Additional Information</div>
+
+        <div class="grid grid-cols-1 gap-6">
+          <!-- Notice Period -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="noticePeriod">
+              <span class="label-text text-lg font-semibold">Notice Period *</span>
+            </label>
+            <select 
+              id="noticePeriod" 
+              name="noticePeriod" 
+              class="select select-bordered select-lg w-full focus:select-primary transition-colors duration-200" 
+              required
+            >
+              <option disabled selected>Select notice period</option>
+              <option value="immediate">Immediate</option>
+              <option value="1-week">1 week</option>
+              <option value="2-weeks">2 weeks</option>
+              <option value="1-month">1 month</option>
+              <option value="2-months">2 months</option>
+              <option value="3-months">3 months</option>
+            </select>
+          </div>
+
+          <!-- Right to Work -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="rightToWork">
+              <span class="label-text text-lg font-semibold">Right to Work in UK *</span>
+            </label>
+            <select 
+              id="rightToWork" 
+              name="rightToWork" 
+              class="select select-bordered select-lg w-full focus:select-primary transition-colors duration-200" 
+              required
+            >
+              <option disabled selected>Select option</option>
+              <option value="yes">Yes - UK Citizen or have work permit</option>
+              <option value="no">No - Would require visa sponsorship</option>
+            </select>
+          </div>
+
+          <!-- Additional Comments -->
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label class="label" for="additionalComments">
+              <span class="label-text text-lg font-semibold">Additional Comments</span>
+            </label>
+            <textarea 
+              id="additionalComments"
+              name="additionalComments" 
+              class="textarea textarea-bordered textarea-lg h-24 resize-none w-full focus:textarea-primary transition-colors duration-200" 
+              placeholder="Any additional information you'd like to share..."
+            ></textarea>
+            <label class="label">
+              <span class="label-text-alt text-sm opacity-70">Optional</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Terms and Conditions -->
+        <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+          <label class="label cursor-pointer justify-start gap-4">
+            <input type="checkbox" name="acceptTerms" class="checkbox checkbox-primary checkbox-lg" required />
+            <span class="label-text text-base">
+              I confirm that the information provided is accurate and I agree to Kainos' 
+              <a href="#" class="link link-primary">privacy policy</a> and 
+              <a href="#" class="link link-primary">terms of service</a> *
+            </span>
+          </label>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Form Actions - Outside the card -->
+  <div class="mt-8 mb-12 flex flex-col sm:flex-row gap-4 justify-center items-center">
+    <a href="/jobs/{{ jobRole.id }}/details" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 no-underline text-center min-w-[160px]">
+      Cancel
+    </a>
+    <button type="submit" form="applicationForm" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 text-center min-w-[160px] flex items-center justify-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+      </svg>
+      Submit Application
+    </button>
+  </div>
+</div>
+{% endblock %}
