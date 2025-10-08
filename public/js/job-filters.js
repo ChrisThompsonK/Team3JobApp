@@ -63,7 +63,7 @@ function initializeFilters() {
         applyFilters();
       }
     });
-    
+
     // Auto-apply filters after user stops typing (debounced)
     let nameFilterTimeout;
     nameFilter.addEventListener('input', () => {

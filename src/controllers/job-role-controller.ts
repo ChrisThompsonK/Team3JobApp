@@ -13,9 +13,19 @@ export class JobRoleController {
 
       // Parse multiple values for checkboxes (location, capability, band can have multiple values)
       const nameFilter = name && typeof name === 'string' ? name : undefined;
-      const locationFilters = location ? (Array.isArray(location) ? location : [location]).filter((l): l is string => typeof l === 'string') : [];
-      const capabilityFilters = capability ? (Array.isArray(capability) ? capability : [capability]).filter((c): c is string => typeof c === 'string') : [];
-      const bandFilters = band ? (Array.isArray(band) ? band : [band]).filter((b): b is string => typeof b === 'string') : [];
+      const locationFilters = location
+        ? (Array.isArray(location) ? location : [location]).filter(
+            (l): l is string => typeof l === 'string'
+          )
+        : [];
+      const capabilityFilters = capability
+        ? (Array.isArray(capability) ? capability : [capability]).filter(
+            (c): c is string => typeof c === 'string'
+          )
+        : [];
+      const bandFilters = band
+        ? (Array.isArray(band) ? band : [band]).filter((b): b is string => typeof b === 'string')
+        : [];
 
       // Fetch all job roles from the API
       let jobRoles: JobRole[] = await api.getJobs();
@@ -23,26 +33,24 @@ export class JobRoleController {
       // Apply filters on the frontend side
       if (nameFilter) {
         const searchTerm = nameFilter.toLowerCase();
-        jobRoles = jobRoles.filter(job => 
-          job.name.toLowerCase().includes(searchTerm)
-        );
+        jobRoles = jobRoles.filter((job) => job.name.toLowerCase().includes(searchTerm));
       }
 
       if (locationFilters.length > 0) {
-        jobRoles = jobRoles.filter(job => 
-          locationFilters.some(loc => job.location.toLowerCase() === loc.toLowerCase())
+        jobRoles = jobRoles.filter((job) =>
+          locationFilters.some((loc) => job.location.toLowerCase() === loc.toLowerCase())
         );
       }
 
       if (capabilityFilters.length > 0) {
-        jobRoles = jobRoles.filter(job => 
-          capabilityFilters.some(cap => job.capability.toLowerCase() === cap.toLowerCase())
+        jobRoles = jobRoles.filter((job) =>
+          capabilityFilters.some((cap) => job.capability.toLowerCase() === cap.toLowerCase())
         );
       }
 
       if (bandFilters.length > 0) {
-        jobRoles = jobRoles.filter(job => 
-          bandFilters.some(b => job.band.toLowerCase() === b.toLowerCase())
+        jobRoles = jobRoles.filter((job) =>
+          bandFilters.some((b) => job.band.toLowerCase() === b.toLowerCase())
         );
       }
 
@@ -55,11 +63,11 @@ export class JobRoleController {
       res.render('job-roles/job-role-list', {
         title,
         jobRoles,
-        currentFilters: { 
-          name: nameFilter, 
-          location: locationFilters, 
-          capability: capabilityFilters, 
-          band: bandFilters 
+        currentFilters: {
+          name: nameFilter,
+          location: locationFilters,
+          capability: capabilityFilters,
+          band: bandFilters,
         },
         distinctValues,
       });

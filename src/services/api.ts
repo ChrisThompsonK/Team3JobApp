@@ -129,11 +129,11 @@ export const api = {
   }> => {
     // Get all jobs and extract distinct values
     const jobs = await api.getJobs();
-    
-    const locations = [...new Set(jobs.map(job => job.location))].sort();
-    const capabilities = [...new Set(jobs.map(job => job.capability))].sort();
-    const bands = [...new Set(jobs.map(job => job.band))].sort();
-    
+
+    const locations = [...new Set(jobs.map((job) => job.location))].sort();
+    const capabilities = [...new Set(jobs.map((job) => job.capability))].sort();
+    const bands = [...new Set(jobs.map((job) => job.band))].sort();
+
     return { locations, capabilities, bands };
   },
 };
