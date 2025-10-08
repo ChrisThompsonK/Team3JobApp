@@ -99,7 +99,7 @@ export const api = {
   getJobRolesReportCsv: async (): Promise<string> => {
     const response = await apiClient.get('/jobs/report', {
       headers: {
-        'Accept': 'text/csv',
+        Accept: 'text/csv',
       },
     });
     return response.data;
