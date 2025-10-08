@@ -97,4 +97,26 @@ export const api = {
     // Transform backend format to frontend format
     return transformJobRoleDetails(response.data);
   },
+
+  // Update a job role
+  updateJob: async (
+    id: string,
+    updates: {
+      roleName?: string;
+      location?: string;
+      capabilityId?: number;
+      bandId?: number;
+      closingDate?: string;
+    }
+  ): Promise<JobRole | null> => {
+    try {
+      const response = await apiClient.put<BackendJobRole>(`/jobs/${id}`, updates);
+      return transformJobRole(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return null;
+      }
+      throw error;
+    }
+  },
 };
