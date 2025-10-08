@@ -8,42 +8,60 @@ export class JobRoleController {
 
   async getAllJobRoles(req: Request, res: Response): Promise<void> {
     try {
-      // Fetch job roles from the API instead of mock service
-      const allJobRoles: JobRole[] = await api.getJobs();
+      // Extract filter parameters from query string
+      const { name, location, capability, band } = req.query;
 
-      const { search, capability } = req.query;
+      // Parse multiple values for checkboxes (location, capability, band can have multiple values)
+      const nameFilter = name && typeof name === 'string' ? name : undefined;
+      const locationFilters = location ? (Array.isArray(location) ? location : [location]).filter((l): l is string => typeof l === 'string') : [];
+      const capabilityFilters = capability ? (Array.isArray(capability) ? capability : [capability]).filter((c): c is string => typeof c === 'string') : [];
+      const bandFilters = band ? (Array.isArray(band) ? band : [band]).filter((b): b is string => typeof b === 'string') : [];
 
-      let filteredJobRoles = allJobRoles;
+      // Fetch all job roles from the API
+      let jobRoles: JobRole[] = await api.getJobs();
 
-      // Filter by capability if specified
-      if (capability && typeof capability === 'string') {
-        filteredJobRoles = filteredJobRoles.filter(
-          (job) => job.capability.toLowerCase() === capability.toLowerCase()
+      // Apply filters on the frontend side
+      if (nameFilter) {
+        const searchTerm = nameFilter.toLowerCase();
+        jobRoles = jobRoles.filter(job => 
+          job.name.toLowerCase().includes(searchTerm)
         );
       }
 
-      // Filter by search term if specified (search in job name, location, or capability)
-      if (search && typeof search === 'string') {
-        const searchTerm = search.toLowerCase();
-        filteredJobRoles = filteredJobRoles.filter(
-          (job) =>
-            job.name.toLowerCase().includes(searchTerm) ||
-            job.location.toLowerCase().includes(searchTerm) ||
-            job.capability.toLowerCase().includes(searchTerm)
+      if (locationFilters.length > 0) {
+        jobRoles = jobRoles.filter(job => 
+          locationFilters.some(loc => job.location.toLowerCase() === loc.toLowerCase())
         );
       }
 
-      let title = 'Available Job Roles';
-      if (capability) {
-        title = `${capability} Job Roles`;
-      } else if (search) {
-        title = `Job Roles - Search: "${search}"`;
+      if (capabilityFilters.length > 0) {
+        jobRoles = jobRoles.filter(job => 
+          capabilityFilters.some(cap => job.capability.toLowerCase() === cap.toLowerCase())
+        );
       }
+
+      if (bandFilters.length > 0) {
+        jobRoles = jobRoles.filter(job => 
+          bandFilters.some(b => job.band.toLowerCase() === b.toLowerCase())
+        );
+      }
+
+      // Get distinct values for filter dropdowns from all jobs
+      const distinctValues = await api.getDistinctValues();
+
+      // Keep title consistent regardless of filters
+      const title = 'Available Job Roles';
 
       res.render('job-roles/job-role-list', {
         title,
-        jobRoles: filteredJobRoles,
-        currentFilter: { search, capability },
+        jobRoles,
+        currentFilters: { 
+          name: nameFilter, 
+          location: locationFilters, 
+          capability: capabilityFilters, 
+          band: bandFilters 
+        },
+        distinctValues,
       });
     } catch (error) {
       console.error('Error fetching job roles:', error);

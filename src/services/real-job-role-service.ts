@@ -1,10 +1,10 @@
-import type { JobRole, JobRoleDetails } from '../models/job-roles';
-import { api } from './api';
+import type { JobRole, JobRoleDetails } from '../models/job-roles.js';
+import { api } from './api.js';
 import type {
   CreateJobRoleRequest,
   JobRoleService,
   UpdateJobRoleRequest,
-} from './job-role-service';
+} from './job-role-service.js';
 
 /**
  * Real implementation of JobRoleService that connects to the backend API

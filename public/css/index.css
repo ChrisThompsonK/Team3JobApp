@@ -41,3 +41,40 @@
   color: #1f2937 !important;
   background-color: #ffffff !important;
 }
+
+/* Professional filter dropdown styling */
+.select.appearance-none {
+  background-image: none;
+}
+
+.select.appearance-none:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Filter form controls enhanced styling */
+.form-control.group .select:focus,
+.form-control.group input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.form-control.group label .label-text {
+  transition: color 0.2s ease;
+}
+
+/* Custom dropdown arrow styling */
+.form-control .relative svg:last-child {
+  transition: transform 0.2s ease;
+}
+
+.form-control .relative:hover svg:last-child {
+  transform: rotate(180deg);
+}
+
+/* Enhanced button hover effects */
+.btn-kainos,
+button[onclick*="Filter"] {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

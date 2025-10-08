@@ -3,6 +3,8 @@
 {% block title %}{{ title }} - Kainos{% endblock %}
 
 {% block content %}
+<script src="/js/job-filters.js"></script>
+
 <div class="w-full max-w-7xl mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-4">
     <div class="flex-1">
@@ -24,6 +26,152 @@
     </div>
   </div>
   <p class="text-center text-lg text-base-content/70 mb-8">Discover exciting career opportunities at Kainos</p>
+
+  <!-- Filter Panel -->
+  <div class="bg-white rounded-xl shadow-xl border border-gray-100 p-8 mb-8">
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">Filter Job Roles</h2>
+        <p class="text-gray-600">Refine your search to find the perfect opportunity</p>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="applyFilters()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"></path>
+          </svg>
+          <span>Apply Filters</span>
+        </button>
+        <button onclick="clearFilters()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+          <span>Clear All</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <!-- Name Filter (Text Input) -->
+      <div class="form-control group">
+        <label class="label">
+          <span class="label-text font-semibold text-lg text-gray-700 group-focus-within:text-blue-600">Job Name</span>
+        </label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+          <input 
+            type="text" 
+            id="nameFilter" 
+            placeholder="Search by job name..." 
+            value="{{ currentFilters.name or '' }}"
+            class="input input-bordered w-full pl-10 pr-4 py-3 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 rounded-lg"
+          />
+        </div>
+      </div>
+
+      <!-- Location Filter (Dropdown) -->
+      <div class="form-control group">
+        <label class="label">
+          <span class="label-text font-semibold text-lg text-gray-700 group-focus-within:text-blue-600">Location</span>
+        </label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          </div>
+          <select id="locationFilter" class="select select-bordered w-full pl-10 pr-4 py-3 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 rounded-lg appearance-none">
+            <option value="">All Locations</option>
+            {% for loc in distinctValues.locations %}
+                      <option value="{{ loc }}" {% if currentFilters.location and (currentFilters.location.includes(loc)) %}selected{% endif %}>
+            {{ loc }}
+          </option>
+            {% endfor %}
+          </select>
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Capability Filter (Dropdown) -->
+      <div class="form-control group">
+        <label class="label">
+          <span class="label-text font-semibold text-lg text-gray-700 group-focus-within:text-blue-600">Capability</span>
+        </label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+          </div>
+          <select id="capabilityFilter" class="select select-bordered w-full pl-10 pr-4 py-3 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 rounded-lg appearance-none">
+            <option value="">All Capabilities</option>
+            {% for cap in distinctValues.capabilities %}
+            <option value="{{ cap }}" {% if currentFilters.capability and (currentFilters.capability.includes(cap)) %}selected{% endif %}>
+              {{ cap }}
+            </option>
+            {% endfor %}
+          </select>
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Band Filter (Dropdown) -->
+      <div class="form-control group">
+        <label class="label">
+          <span class="label-text font-semibold text-lg text-gray-700 group-focus-within:text-blue-600">Band</span>
+        </label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+            </svg>
+          </div>
+          <select id="bandFilter" class="select select-bordered w-full pl-10 pr-4 py-3 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 rounded-lg appearance-none">
+            <option value="">All Bands</option>
+            {% for b in distinctValues.bands %}
+            <option value="{{ b }}" {% if currentFilters.band and (currentFilters.band.includes(b)) %}selected{% endif %}>
+              {{ b }}
+            </option>
+            {% endfor %}
+          </select>
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Count -->
+  <div class="mb-6 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <div class="bg-blue-100 p-2 rounded-lg">
+        <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+        </svg>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-gray-800">
+          {{ jobRoles.length }} Job Role{% if jobRoles.length != 1 %}s{% endif %} Found
+        </p>
+        <p class="text-gray-600">Ready to launch your career</p>
+      </div>
+    </div>
+  </div>
 
   {% if jobRoles.length > 0 %}
     <div class="shadow-lg rounded-lg w-full">
