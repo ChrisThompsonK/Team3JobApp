@@ -1,6 +1,6 @@
 // frontend/src/services/api.ts
 import axios from 'axios';
-import type { JobRole } from '../models/job-roles.js';
+import type { JobRole, JobRoleDetails } from '../models/job-roles.js';
 
 const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001';
 
@@ -22,6 +22,15 @@ interface BackendJobRole {
   closingDate: string;
 }
 
+// Backend API response type for job details (includes all fields)
+interface BackendJobRoleDetails extends BackendJobRole {
+  description?: string;
+  responsibilities?: string;
+  jobSpecUrl?: string;
+  status?: string;
+  openPositions?: number;
+}
+
 // Transform backend response to frontend format
 function transformJobRole(backendJob: BackendJobRole): JobRole {
   return {
@@ -32,6 +41,28 @@ function transformJobRole(backendJob: BackendJobRole): JobRole {
     band: backendJob.bandName,
     closingDate: new Date(backendJob.closingDate),
   };
+}
+
+// Transform backend job details response to frontend format
+function transformJobRoleDetails(backendJob: BackendJobRoleDetails): JobRoleDetails {
+  const baseJob: JobRole = {
+    id: backendJob.jobRoleId.toString(),
+    name: backendJob.roleName,
+    location: backendJob.location,
+    capability: backendJob.capabilityName,
+    band: backendJob.bandName,
+    closingDate: new Date(backendJob.closingDate),
+  };
+
+  const details: JobRoleDetails = { ...baseJob };
+
+  if (backendJob.description) details.description = backendJob.description;
+  if (backendJob.responsibilities) details.responsibilities = backendJob.responsibilities;
+  if (backendJob.jobSpecUrl) details.jobSpecUrl = backendJob.jobSpecUrl;
+  if (backendJob.status) details.status = backendJob.status as 'Open' | 'Closing Soon' | 'Closed';
+  if (backendJob.openPositions !== undefined) details.openPositions = backendJob.openPositions;
+
+  return details;
 }
 
 export const api = {
@@ -60,17 +91,11 @@ export const api = {
     return response.data.map(transformJobRole);
   },
 
-  // Get a single job role by ID
-  getJobById: async (id: string): Promise<JobRole | null> => {
-    try {
-      const response = await apiClient.get<BackendJobRole>(`/jobs/${id}`);
-      return transformJobRole(response.data);
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return null;
-      }
-      throw error;
-    }
+  // Get single job role by ID with full details
+  getJobById: async (id: string): Promise<JobRoleDetails> => {
+    const response = await apiClient.get<BackendJobRoleDetails>(`/jobs/${id}`);
+    // Transform backend format to frontend format
+    return transformJobRoleDetails(response.data);
   },
 
   // Update a job role

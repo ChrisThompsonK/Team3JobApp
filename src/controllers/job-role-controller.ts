@@ -52,20 +52,16 @@ export class JobRoleController {
   }
 
   async getJobRoleById(req: Request, res: Response): Promise<void> {
-    try {
-      const { id } = req.params;
+    const { id } = req.params;
 
+    try {
       if (!id) {
         res.status(400).send('Job role ID is required');
         return;
       }
 
-      const jobRole = await this.jobRoleService.getJobRoleById(id);
-
-      if (!jobRole) {
-        res.status(404).send(`Job role with ID ${id} not found`);
-        return;
-      }
+      // Fetch job role details directly from the backend API
+      const jobRole = await api.getJobById(id);
 
       res.render('job-roles/detail', {
         title: jobRole.name,
@@ -73,25 +69,29 @@ export class JobRoleController {
       });
     } catch (error) {
       console.error('Error fetching job role:', error);
+      // Check if it's a 404 error
+      if (error instanceof Error && 'response' in error) {
+        const axiosError = error as { response?: { status: number } };
+        if (axiosError.response?.status === 404) {
+          res.status(404).send(`Job role with ID ${id} not found`);
+          return;
+        }
+      }
       res.status(500).send('Error loading job role details');
     }
   }
 
   async getJobRoleDetails(req: Request, res: Response): Promise<void> {
-    try {
-      const { id } = req.params;
+    const { id } = req.params;
 
+    try {
       if (!id) {
         res.status(400).send('Job role ID is required');
         return;
       }
 
-      const jobRoleDetails = await this.jobRoleService.getJobRoleDetailsById(id);
-
-      if (!jobRoleDetails) {
-        res.status(404).send(`Job role with ID ${id} not found`);
-        return;
-      }
+      // Fetch job role details directly from the backend API
+      const jobRoleDetails = await api.getJobById(id);
 
       res.render('job-roles/detail', {
         title: `${jobRoleDetails.name} - Job Details`,
@@ -99,25 +99,29 @@ export class JobRoleController {
       });
     } catch (error) {
       console.error('Error fetching job role details:', error);
+      // Check if it's a 404 error
+      if (error instanceof Error && 'response' in error) {
+        const axiosError = error as { response?: { status: number } };
+        if (axiosError.response?.status === 404) {
+          res.status(404).send(`Job role with ID ${id} not found`);
+          return;
+        }
+      }
       res.status(500).send('Error loading job role details');
     }
   }
 
   async getJobRoleApplication(req: Request, res: Response): Promise<void> {
-    try {
-      const { id } = req.params;
+    const { id } = req.params;
 
+    try {
       if (!id) {
         res.status(400).send('Job role ID is required');
         return;
       }
 
-      const jobRoleDetails = await this.jobRoleService.getJobRoleDetailsById(id);
-
-      if (!jobRoleDetails) {
-        res.status(404).send(`Job role with ID ${id} not found`);
-        return;
-      }
+      // Fetch job role details directly from the backend API
+      const jobRoleDetails = await api.getJobById(id);
 
       // For now, redirect to the existing detail page
       // You can create a separate application form view later
@@ -128,6 +132,14 @@ export class JobRoleController {
       });
     } catch (error) {
       console.error('Error fetching job role for application:', error);
+      // Check if it's a 404 error
+      if (error instanceof Error && 'response' in error) {
+        const axiosError = error as { response?: { status: number } };
+        if (axiosError.response?.status === 404) {
+          res.status(404).send(`Job role with ID ${id} not found`);
+          return;
+        }
+      }
       res.status(500).send('Error loading job application page');
     }
   }
