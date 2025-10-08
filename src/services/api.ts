@@ -59,4 +59,39 @@ export const api = {
     // Transform backend format to frontend format
     return response.data.map(transformJobRole);
   },
+
+  // Get a single job role by ID
+  getJobById: async (id: string): Promise<JobRole | null> => {
+    try {
+      const response = await apiClient.get<BackendJobRole>(`/jobs/${id}`);
+      return transformJobRole(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return null;
+      }
+      throw error;
+    }
+  },
+
+  // Update a job role
+  updateJob: async (
+    id: string,
+    updates: {
+      roleName?: string;
+      location?: string;
+      capabilityId?: number;
+      bandId?: number;
+      closingDate?: string;
+    }
+  ): Promise<JobRole | null> => {
+    try {
+      const response = await apiClient.put<BackendJobRole>(`/jobs/${id}`, updates);
+      return transformJobRole(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return null;
+      }
+      throw error;
+    }
+  },
 };
