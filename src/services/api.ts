@@ -55,13 +55,13 @@ function transformJobRoleDetails(backendJob: BackendJobRoleDetails): JobRoleDeta
   };
 
   const details: JobRoleDetails = { ...baseJob };
-  
+
   if (backendJob.description) details.description = backendJob.description;
   if (backendJob.responsibilities) details.responsibilities = backendJob.responsibilities;
   if (backendJob.jobSpecUrl) details.jobSpecUrl = backendJob.jobSpecUrl;
   if (backendJob.status) details.status = backendJob.status as 'Open' | 'Closing Soon' | 'Closed';
   if (backendJob.openPositions !== undefined) details.openPositions = backendJob.openPositions;
-  
+
   return details;
 }
 

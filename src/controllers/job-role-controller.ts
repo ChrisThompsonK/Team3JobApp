@@ -53,7 +53,7 @@ export class JobRoleController {
 
   async getJobRoleById(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
-    
+
     try {
       if (!id) {
         res.status(400).send('Job role ID is required');
@@ -83,7 +83,7 @@ export class JobRoleController {
 
   async getJobRoleDetails(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
-    
+
     try {
       if (!id) {
         res.status(400).send('Job role ID is required');
@@ -113,7 +113,7 @@ export class JobRoleController {
 
   async getJobRoleApplication(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
-    
+
     try {
       if (!id) {
         res.status(400).send('Job role ID is required');
