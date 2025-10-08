@@ -132,6 +132,23 @@ export class JobRoleController {
     }
   }
 
+  async generateJobRolesReport(_req: Request, res: Response): Promise<void> {
+    try {
+      const csvContent = await this.jobRoleService.generateJobRolesReportCsv();
+
+      // Set headers for file download
+      const timestamp = new Date().toISOString().split('T')[0];
+      const filename = `job-roles-report-${timestamp}.csv`;
+
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      res.status(200).send(csvContent);
+    } catch (error) {
+      console.error('Error generating job roles report:', error);
+      res.status(500).send('Error generating report');
+    }
+  }
+
   async showNewJobRoleForm(_req: Request, res: Response): Promise<void> {
     try {
       const locationOptions = [
