@@ -18,10 +18,10 @@
     <div class="card-body">
       <h2 class="card-title text-2xl mb-6">Job Role Information</h2>
       
-      <form action="/jobs/new" method="POST" class="space-y-6">
+      <form id="newJobForm" action="/jobs/new" method="POST" class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Job Name -->
-          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-100">
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
             <label class="label" for="name">
               <span class="label-text text-lg font-semibold">Job Name *</span>
             </label>
@@ -36,7 +36,7 @@
           </div>
 
           <!-- Location -->
-          <div class="form-control bg-green-50 p-4 rounded-lg border border-green-100">
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
             <label class="label" for="location">
               <span class="label-text text-lg font-semibold">Location *</span>
             </label>
@@ -49,7 +49,7 @@
           </div>
 
           <!-- Capability -->
-          <div class="form-control bg-purple-50 p-4 rounded-lg border border-purple-100">
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
             <label class="label" for="capability">
               <span class="label-text text-lg font-semibold">Capability *</span>
             </label>
@@ -62,7 +62,7 @@
           </div>
 
           <!-- Band -->
-          <div class="form-control bg-orange-50 p-4 rounded-lg border border-orange-100">
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
             <label class="label" for="band">
               <span class="label-text text-lg font-semibold">Band *</span>
             </label>
@@ -75,7 +75,7 @@
           </div>
 
           <!-- Closing Date -->
-          <div class="form-control bg-pink-50 p-4 rounded-lg border border-pink-100">
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
             <label class="label" for="closingDate">
               <span class="label-text text-lg font-semibold">Closing Date *</span>
             </label>
@@ -89,7 +89,7 @@
           </div>
 
           <!-- Open Positions -->
-          <div class="form-control bg-yellow-50 p-4 rounded-lg border border-yellow-100">
+          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
             <label class="label" for="openPositions">
               <span class="label-text text-lg font-semibold">Open Positions</span>
             </label>
@@ -105,7 +105,7 @@
           </div>
 
           <!-- Job Description -->
-          <div class="form-control md:col-span-2 bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+          <div class="form-control md:col-span-2 bg-blue-50 p-4 rounded-lg border border-blue-200">
             <label class="label" for="description">
               <span class="label-text text-lg font-semibold">Job Description</span>
             </label>
@@ -121,7 +121,7 @@
           </div>
 
           <!-- Job Responsibilities -->
-          <div class="form-control md:col-span-2 bg-teal-50 p-4 rounded-lg border border-teal-100">
+          <div class="form-control md:col-span-2 bg-blue-50 p-4 rounded-lg border border-blue-200">
             <label class="label" for="responsibilities">
               <span class="label-text text-lg font-semibold">Key Responsibilities</span>
             </label>
@@ -138,7 +138,7 @@
         </div>
 
         <!-- Job Spec URL -->
-        <div class="form-control bg-slate-50 p-4 rounded-lg border border-slate-100">
+        <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
           <label class="label" for="jobSpecUrl">
             <span class="label-text text-lg font-semibold">Job Specification URL</span>
           </label>
@@ -153,23 +153,21 @@
             <span class="label-text-alt text-sm opacity-70">Optional: Link to detailed job specification document</span>
           </label>
         </div>
-
-        <!-- Form Actions -->
-        <div class="form-control mt-8">
-          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a href="/jobs" class="btn-kainos-outline">
-              Cancel
-            </a>
-            <button type="submit" class="btn-kainos">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-              </svg>
-              Create Job Role
-            </button>
-          </div>
-        </div>
       </form>
     </div>
+  </div>
+
+  <!-- Form Actions - Outside the card -->
+  <div class="mt-8 mb-12 flex flex-col sm:flex-row gap-4 justify-center items-center">
+    <a href="/jobs" class="btn-kainos-outline">
+      Cancel
+    </a>
+    <button type="submit" form="newJobForm" class="btn-kainos">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+      </svg>
+      Create Job Role
+    </button>
   </div>
 </div>
 {% endblock %}
