@@ -87,9 +87,28 @@ export class RealJobRoleService implements JobRoleService {
   }
 
   /**
-   * Generate CSV report (not yet implemented in backend)
+   * Generate CSV report from backend database data
    */
   async generateJobRolesReportCsv(): Promise<string> {
-    throw new Error('CSV report generation not yet implemented for real API');
+    // Get all job roles from the backend database
+    const allJobRoles = await this.getAllJobRoles();
+
+    // Create CSV headers
+    const headers = ['ID', 'Job Name', 'Location', 'Capability', 'Band', 'Closing Date'];
+
+    // Create CSV rows from real backend data
+    const rows = allJobRoles.map((job) => [
+      job.id,
+      `"${job.name.replace(/"/g, '""')}"`, // Escape quotes in job names
+      job.location,
+      job.capability,
+      job.band,
+      job.closingDate.toISOString().split('T')[0], // Format date as YYYY-MM-DD
+    ]);
+
+    // Combine headers and rows into CSV format
+    const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+
+    return csvContent;
   }
 }
