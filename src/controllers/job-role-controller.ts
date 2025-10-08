@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
-import type { NewJobRole } from '../models/job-roles.js';
+import type { JobRole, NewJobRole } from '../models/job-roles.js';
+import { api } from '../services/api.js';
 import type { JobRoleService } from '../services/job-role-service.js';
 
 export class JobRoleController {
@@ -7,7 +8,9 @@ export class JobRoleController {
 
   async getAllJobRoles(req: Request, res: Response): Promise<void> {
     try {
-      const allJobRoles = await this.jobRoleService.getAllJobRoles();
+      // Fetch job roles from the API instead of mock service
+      const allJobRoles: JobRole[] = await api.getJobs();
+
       const { search, capability } = req.query;
 
       let filteredJobRoles = allJobRoles;
