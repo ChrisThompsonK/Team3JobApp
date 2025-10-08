@@ -406,5 +406,12 @@ export class MockJobRoleService implements JobRoleService {
   }
 }
 
+// Import RealJobRoleService
+import { RealJobRoleService } from './real-job-role-service';
+
 // Export a singleton instance for easy use
-export const jobRoleService = new MockJobRoleService();
+// Switch between Mock and Real service based on environment
+const USE_REAL_API = process.env['USE_REAL_API'] === 'true' || true; // Set to true to use real API
+export const jobRoleService = USE_REAL_API 
+  ? new RealJobRoleService()
+  : new MockJobRoleService();
