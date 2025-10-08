@@ -44,10 +44,7 @@ export class RealJobRoleService implements JobRoleService {
   /**
    * Update a job role in the backend database
    */
-  async updateJobRole(
-    id: string,
-    updates: UpdateJobRoleRequest
-  ): Promise<JobRoleDetails | null> {
+  async updateJobRole(id: string, updates: UpdateJobRoleRequest): Promise<JobRoleDetails | null> {
     // Transform the frontend format to backend format
     const backendUpdates: Record<string, string | number> = {};
 
@@ -68,14 +65,17 @@ export class RealJobRoleService implements JobRoleService {
     // Note: capability and band are currently strings in UpdateJobRoleRequest
     // but the backend expects IDs. You may need to add mapping logic here
     // or update the form to pass IDs instead of names.
-    
-    const result = await api.updateJob(id, backendUpdates as {
-      roleName?: string;
-      location?: string;
-      capabilityId?: number;
-      bandId?: number;
-      closingDate?: string;
-    });
+
+    const result = await api.updateJob(
+      id,
+      backendUpdates as {
+        roleName?: string;
+        location?: string;
+        capabilityId?: number;
+        bandId?: number;
+        closingDate?: string;
+      }
+    );
     return result as JobRoleDetails | null;
   }
 
