@@ -94,4 +94,14 @@ export const api = {
       throw error;
     }
   },
+
+  // Get CSV report from backend
+  getJobRolesReportCsv: async (): Promise<string> => {
+    const response = await apiClient.get('/jobs/report', {
+      headers: {
+        'Accept': 'text/csv',
+      },
+    });
+    return response.data;
+  },
 };
