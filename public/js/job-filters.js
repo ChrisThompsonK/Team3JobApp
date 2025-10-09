@@ -39,7 +39,7 @@ function applyFilters() {
 /**
  * Clear all filters and reload the page
  */
-function _clearFilters() {
+function clearFilters() {
   window.location.href = '/jobs';
 }
 
