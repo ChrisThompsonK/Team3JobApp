@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import type { JobRole, NewJobRole } from '../models/job-roles.js';
+import type { JobApplicationData, JobRole, NewJobRole } from '../models/job-roles.js';
 import { api } from '../services/api.js';
 import type { JobRoleService } from '../services/job-role-service.js';
 
@@ -187,6 +187,7 @@ export class JobRoleController {
       }
 
       // Get form data
+      const applicationData = req.body as JobApplicationData;
       const {
         firstName,
         lastName,
@@ -198,7 +199,7 @@ export class JobRoleController {
         coverLetter,
         additionalComments,
         acceptTerms,
-      } = req.body;
+      } = applicationData;
 
       // Validate required fields
       if (
