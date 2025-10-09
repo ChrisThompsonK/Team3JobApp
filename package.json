@@ -35,7 +35,6 @@
   "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
-    "@tailwindcss/cli": "^4.1.13",
     "@types/express": "^5.0.3",
     "@types/method-override": "^3.0.0",
     "@types/node": "^20.11.17",
@@ -46,7 +45,8 @@
     "autoprefixer": "^10.4.21",
     "chokidar": "^3.6.0",
     "daisyui": "^5.1.26",
-    "tailwindcss": "^4.1.13",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
     "vitest": "^3.2.4"
