@@ -200,36 +200,11 @@ export class JobRoleController {
         return;
       }
 
-      const {
-        firstName,
-        lastName,
-        email,
-        phone,
-        currentJobTitle,
-        yearsOfExperience,
-        linkedinUrl,
-        coverLetter,
-        additionalComments,
-      } = applicationData;
-
       // TODO: In a real application, you would:
       // 1. Upload the CV file to storage
       // 2. Save the application to a database
       // 3. Send confirmation email to applicant
       // 4. Notify HR team
-
-      console.log('Application received:', {
-        jobRoleId: id,
-        firstName,
-        lastName,
-        email,
-        phone,
-        currentJobTitle,
-        yearsOfExperience,
-        linkedinUrl,
-        coverLetter: `${coverLetter.substring(0, 50)}...`,
-        additionalComments,
-      });
 
       // For now, redirect to a success page or back to job details with a success message
       // You can create a success page later
