@@ -2,10 +2,12 @@ import { Router } from 'express';
 import { HealthController, HomeController } from '../controllers/index.js';
 import { JobRoleController } from '../controllers/job-role-controller.js';
 import { jobRoleService } from '../services/job-role-service.js';
+import { JobApplicationValidator } from '../validators/index.js';
 
 const router = Router();
 
-const jobRoleController = new JobRoleController(jobRoleService);
+const applicationValidator = new JobApplicationValidator();
+const jobRoleController = new JobRoleController(jobRoleService, applicationValidator);
 /**
  * Home Routes
  */

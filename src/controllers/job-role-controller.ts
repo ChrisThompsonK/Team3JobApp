@@ -2,9 +2,13 @@ import type { Request, Response } from 'express';
 import type { JobApplicationData, JobRole, NewJobRole } from '../models/job-roles.js';
 import { api } from '../services/api.js';
 import type { JobRoleService } from '../services/job-role-service.js';
+import type { JobApplicationValidator } from '../validators/index.js';
 
 export class JobRoleController {
-  constructor(private readonly jobRoleService: JobRoleService) {}
+  constructor(
+    private readonly jobRoleService: JobRoleService,
+    private readonly applicationValidator: JobApplicationValidator
+  ) {}
 
   async getAllJobRoles(req: Request, res: Response): Promise<void> {
     try {
@@ -188,6 +192,14 @@ export class JobRoleController {
 
       // Get form data
       const applicationData = req.body as JobApplicationData;
+
+      // Validate application data
+      const validationResult = this.applicationValidator.validate(applicationData);
+      if (!validationResult.isValid) {
+        res.status(400).send(validationResult.errors.join(', '));
+        return;
+      }
+
       const {
         firstName,
         lastName,
@@ -198,23 +210,7 @@ export class JobRoleController {
         linkedinUrl,
         coverLetter,
         additionalComments,
-        acceptTerms,
       } = applicationData;
-
-      // Validate required fields
-      if (
-        !firstName ||
-        !lastName ||
-        !email ||
-        !phone ||
-        !currentJobTitle ||
-        !yearsOfExperience ||
-        !coverLetter ||
-        !acceptTerms
-      ) {
-        res.status(400).send('Please fill in all required fields');
-        return;
-      }
 
       // TODO: In a real application, you would:
       // 1. Upload the CV file to storage
