@@ -96,8 +96,17 @@ export const api = {
 
   // Jobs endpoint - returns array of job roles
   // Note: Filtering is done on the frontend until backend supports query parameters
-  getJobs: async (): Promise<JobRole[]> => {
-    const response = await apiClient.get<BackendJobRole[]>('/jobs');
+  // Sorting is now supported via query parameters
+  getJobs: async (sortBy?: string, sortOrder?: 'asc' | 'desc'): Promise<JobRole[]> => {
+    const params = new URLSearchParams();
+    
+    if (sortBy && sortOrder) {
+      params.append('sortBy', sortBy);
+      params.append('sortOrder', sortOrder);
+    }
+    
+    const url = params.toString() ? `/jobs?${params.toString()}` : '/jobs';
+    const response = await apiClient.get<BackendJobRole[]>(url);
     // Transform backend format to frontend format
     return response.data.map(transformJobRole);
   },

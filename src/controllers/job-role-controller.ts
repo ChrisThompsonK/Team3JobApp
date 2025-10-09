@@ -13,7 +13,7 @@ export class JobRoleController {
   async getAllJobRoles(req: Request, res: Response): Promise<void> {
     try {
       // Extract filter parameters from query string
-      const { name, location, capability, band } = req.query;
+      const { name, location, capability, band, sortBy, sortOrder } = req.query;
 
       // Parse multiple values for checkboxes (location, capability, band can have multiple values)
       const nameFilter = name && typeof name === 'string' ? name : undefined;
@@ -31,8 +31,18 @@ export class JobRoleController {
         ? (Array.isArray(band) ? band : [band]).filter((b): b is string => typeof b === 'string')
         : [];
 
-      // Fetch all job roles from the API
-      let jobRoles: JobRole[] = await api.getJobs();
+      // Parse sort parameters
+      const sortField =
+        sortBy && typeof sortBy === 'string' && ['name', 'location', 'capability', 'band'].includes(sortBy)
+          ? sortBy
+          : undefined;
+      const sortOrderValue =
+        sortOrder && typeof sortOrder === 'string' && ['asc', 'desc'].includes(sortOrder)
+          ? (sortOrder as 'asc' | 'desc')
+          : undefined;
+
+      // Fetch all job roles from the API with sorting parameters
+      let jobRoles: JobRole[] = await api.getJobs(sortField, sortOrderValue);
 
       // Apply filters on the frontend side
       if (nameFilter) {
@@ -72,6 +82,10 @@ export class JobRoleController {
           location: locationFilters,
           capability: capabilityFilters,
           band: bandFilters,
+        },
+        currentSort: {
+          field: sortField,
+          order: sortOrderValue,
         },
         distinctValues,
       });
@@ -255,88 +269,6 @@ export class JobRoleController {
     } catch (error) {
       console.error('Error generating job roles report:', error);
       res.status(500).send('Error generating report');
-    }
-  }
-
-  async showNewJobRoleForm(_req: Request, res: Response): Promise<void> {
-    try {
-      const locationOptions = [
-        'Belfast',
-        'London',
-        'Manchester',
-        'Birmingham',
-        'Edinburgh',
-        'Leeds',
-        'Glasgow',
-        'Remote',
-      ];
-
-      const capabilityOptions = [
-        'Engineering',
-        'Product',
-        'Design',
-        'Data & Analytics',
-        'Business Analysis',
-        'Delivery',
-        'Cyber Security',
-        'Quality Assurance',
-        'DevOps',
-      ];
-
-      const bandOptions = ['Graduate', 'Associate', 'Senior Associate', 'Principal', 'Director'];
-
-      res.render('job-roles/new', {
-        title: 'Add New Job Role',
-        locationOptions,
-        capabilityOptions,
-        bandOptions,
-      });
-    } catch (error) {
-      console.error('Error loading new job role form:', error);
-      res.status(500).send('Error loading form');
-    }
-  }
-
-  async createJobRole(req: Request, res: Response): Promise<void> {
-    try {
-      const jobRoleData = req.body as NewJobRole;
-
-      // Validate required fields
-      if (
-        !jobRoleData.name ||
-        !jobRoleData.location ||
-        !jobRoleData.capability ||
-        !jobRoleData.band ||
-        !jobRoleData.closingDate
-      ) {
-        res
-          .status(400)
-          .send(
-            'Missing required fields: name, location, capability, band, and closingDate are required'
-          );
-        return;
-      }
-
-      // Create the job role
-      const newJobRole = await this.jobRoleService.createJobRole({
-        name: jobRoleData.name.trim(),
-        location: jobRoleData.location,
-        capability: jobRoleData.capability,
-        band: jobRoleData.band,
-        closingDate: new Date(jobRoleData.closingDate),
-        description: jobRoleData.description?.trim() || undefined,
-        responsibilities: jobRoleData.responsibilities?.trim() || undefined,
-        jobSpecUrl: jobRoleData.jobSpecUrl?.trim() || undefined,
-        openPositions: jobRoleData.openPositions
-          ? parseInt(jobRoleData.openPositions, 10)
-          : undefined,
-      });
-
-      // Redirect to the new job role details page
-      res.redirect(`/jobs/${newJobRole.id}/details`);
-    } catch (error) {
-      console.error('Error creating job role:', error);
-      res.status(500).send('Error creating job role');
     }
   }
 

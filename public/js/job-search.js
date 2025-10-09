@@ -31,6 +31,50 @@ function searchJobsByCapability() {
 }
 
 /**
+ * Toggle sorting for a specific column
+ * Cycles through: no sort -> ascending -> descending -> no sort
+ */
+function toggleSort(column) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentSortField = urlParams.get('sortBy');
+  const currentSortOrder = urlParams.get('sortOrder');
+
+  // Determine the next sort state
+  let newSortField = null;
+  let newSortOrder = null;
+
+  if (currentSortField === column) {
+    // Same column clicked
+    if (currentSortOrder === 'asc') {
+      // Change to descending
+      newSortField = column;
+      newSortOrder = 'desc';
+    } else if (currentSortOrder === 'desc') {
+      // Remove sorting (go back to no sort)
+      newSortField = null;
+      newSortOrder = null;
+    }
+  } else {
+    // Different column clicked, start with ascending
+    newSortField = column;
+    newSortOrder = 'asc';
+  }
+
+  // Update URL parameters
+  if (newSortField && newSortOrder) {
+    urlParams.set('sortBy', newSortField);
+    urlParams.set('sortOrder', newSortOrder);
+  } else {
+    urlParams.delete('sortBy');
+    urlParams.delete('sortOrder');
+  }
+
+  // Redirect with new sort parameters
+  const queryString = urlParams.toString();
+  window.location.href = queryString ? `/jobs?${queryString}` : '/jobs';
+}
+
+/**
  * Initialize job search functionality
  */
 function initializeJobSearch() {

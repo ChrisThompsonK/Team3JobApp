@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { HealthController, HomeController } from '../controllers/index.js';
+import { CreateJobRoleController, HealthController, HomeController } from '../controllers/index.js';
 import { JobRoleController } from '../controllers/job-role-controller.js';
 import { jobRoleService } from '../services/job-role-service.js';
 import { JobApplicationValidator } from '../validators/index.js';
@@ -8,6 +8,7 @@ const router = Router();
 
 const applicationValidator = new JobApplicationValidator();
 const jobRoleController = new JobRoleController(jobRoleService, applicationValidator);
+const createJobRoleController = new CreateJobRoleController(jobRoleService);
 /**
  * Home Routes
  */
@@ -28,8 +29,8 @@ router.get('/jobs', jobRoleController.getAllJobRoles.bind(jobRoleController));
 
 // Special routes that don't use :id parameter - MUST come before /jobs/:id routes
 router.get('/jobs/report', jobRoleController.generateJobRolesReport.bind(jobRoleController));
-router.get('/jobs/new', jobRoleController.showNewJobRoleForm.bind(jobRoleController));
-router.post('/jobs/new', jobRoleController.createJobRole.bind(jobRoleController));
+router.get('/jobs/new', createJobRoleController.showNewJobRoleForm.bind(createJobRoleController));
+router.post('/jobs/new', createJobRoleController.createJobRole.bind(createJobRoleController));
 
 // Parameterized routes - these use :id so they should come after specific routes
 router.get('/jobs/:id/edit', jobRoleController.showEditJobRoleForm.bind(jobRoleController));
