@@ -10,8 +10,8 @@ describe('MockJobRoleService', () => {
     expect(jobRoles[0]).toHaveProperty('id');
     expect(jobRoles[0]).toHaveProperty('name');
     expect(jobRoles[0]).toHaveProperty('location');
-    expect(jobRoles[0]).toHaveProperty('capability');
-    expect(jobRoles[0]).toHaveProperty('band');
+    expect(jobRoles[0]).toHaveProperty('capabilityName');
+    expect(jobRoles[0]).toHaveProperty('bandName');
     expect(jobRoles[0]).toHaveProperty('closingDate');
   });
 
@@ -19,7 +19,7 @@ describe('MockJobRoleService', () => {
     const jobRole = await service.getJobRoleById('1');
     expect(jobRole).not.toBeNull();
     expect(jobRole?.name).toBe('Software Engineer');
-    expect(jobRole?.capability).toBe('Engineering');
+    expect(jobRole?.capabilityName).toBe('Engineering');
   });
 
   it('should return null for non-existent job role', async () => {
