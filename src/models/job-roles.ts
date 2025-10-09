@@ -36,7 +36,7 @@ export interface JobRoleCreate {
   responsibilities?: string | null;
   jobSpecUrl?: string | null;
   status?: string;
-  openPositions?: number;
+  openPositions?: number | undefined;
 }
 
 // For updating (all optional)
@@ -62,6 +62,19 @@ export interface Capability {
 export interface Band {
   id: number;
   name: string;
+}
+
+// For form submissions (uses string IDs from dropdowns)
+export interface NewJobRole {
+  name: string;
+  location: string;
+  capability: string;
+  band: string;
+  closingDate: string;
+  description?: string;
+  responsibilities?: string;
+  jobSpecUrl?: string;
+  openPositions?: string;
 }
 
 export interface JobApplicationData {

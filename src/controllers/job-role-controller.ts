@@ -48,13 +48,13 @@ export class JobRoleController {
 
       if (capabilityFilters.length > 0) {
         jobRoles = jobRoles.filter((job) =>
-          capabilityFilters.some((cap) => job.capability.toLowerCase() === cap.toLowerCase())
+          capabilityFilters.some((cap) => job.capabilityName?.toLowerCase() === cap.toLowerCase())
         );
       }
 
       if (bandFilters.length > 0) {
         jobRoles = jobRoles.filter((job) =>
-          bandFilters.some((b) => job.band.toLowerCase() === b.toLowerCase())
+          bandFilters.some((b) => job.bandName?.toLowerCase() === b.toLowerCase())
         );
       }
 
@@ -333,15 +333,34 @@ export class JobRoleController {
       const openPositions =
         parsedOpenPositions && !Number.isNaN(parsedOpenPositions) ? parsedOpenPositions : undefined;
 
+      // Fetch capabilities and bands to map names to IDs
+      const [capabilities, bands] = await Promise.all([
+        api.getCapabilities(),
+        api.getBands(),
+      ]);
+
+      const capability = capabilities.find(c => c.name === jobRoleData.capability);
+      const band = bands.find(b => b.name === jobRoleData.band);
+
+      if (!capability) {
+        res.status(400).send(`Invalid capability: ${jobRoleData.capability}`);
+        return;
+      }
+
+      if (!band) {
+        res.status(400).send(`Invalid band: ${jobRoleData.band}`);
+        return;
+      }
+
       const newJobRole = await this.jobRoleService.createJobRole({
         name: jobRoleData.name.trim(),
         location: jobRoleData.location,
-        capability: jobRoleData.capability,
-        band: jobRoleData.band,
-        closingDate: new Date(jobRoleData.closingDate),
-        description: jobRoleData.description?.trim() || undefined,
-        responsibilities: jobRoleData.responsibilities?.trim() || undefined,
-        jobSpecUrl: jobRoleData.jobSpecUrl?.trim() || undefined,
+        capabilityId: capability.id,
+        bandId: band.id,
+        closingDate: jobRoleData.closingDate,
+        description: jobRoleData.description?.trim() || null,
+        responsibilities: jobRoleData.responsibilities?.trim() || null,
+        jobSpecUrl: jobRoleData.jobSpecUrl?.trim() || null,
         openPositions,
       });
 
@@ -451,7 +470,8 @@ export class JobRoleController {
         : jobRole.responsibilities || '';
 
       // Format closing date for input field (YYYY-MM-DD)
-      const closingDateFormatted = jobRole.closingDate.toISOString().split('T')[0];
+      // closingDate is already a string in format YYYY-MM-DD from the backend
+      const closingDateFormatted = jobRole.closingDate.split('T')[0];
 
       res.render('job-roles/edit', {
         title: `Edit ${jobRole.name}`,
@@ -505,45 +525,64 @@ export class JobRoleController {
         return;
       }
 
-      // Build update object
-      const updateData = {
+      // Fetch capabilities and bands to map names to IDs
+      const [capabilities, bands] = await Promise.all([
+        api.getCapabilities(),
+        api.getBands(),
+      ]);
+
+      const capability = capabilities.find(c => c.name === jobRoleData.capability);
+      const band = bands.find(b => b.name === jobRoleData.band);
+
+      if (!capability) {
+        res.status(400).send(`Invalid capability: ${jobRoleData.capability}`);
+        return;
+      }
+
+      if (!band) {
+        res.status(400).send(`Invalid band: ${jobRoleData.band}`);
+        return;
+      }
+
+      // Build update object with correct types
+      const updateData: {
+        name?: string;
+        location?: string;
+        capabilityId?: number;
+        bandId?: number;
+        closingDate?: string;
+        description?: string | null;
+        responsibilities?: string | null;
+        jobSpecUrl?: string | null;
+        openPositions?: number;
+        status?: 'Open' | 'Closing Soon' | 'Closed';
+      } = {
         name: jobRoleData.name.trim(),
         location: jobRoleData.location,
-        capability: jobRoleData.capability,
-        band: jobRoleData.band,
-        closingDate: new Date(jobRoleData.closingDate),
+        capabilityId: capability.id,
+        bandId: band.id,
+        closingDate: jobRoleData.closingDate,
       };
 
       // Add optional fields
-      const optionalData: {
-        description?: string;
-        responsibilities?: string;
-        jobSpecUrl?: string;
-        openPositions?: number;
-        status?: 'Open' | 'Closing Soon' | 'Closed';
-      } = {};
-
       if (jobRoleData.description?.trim()) {
-        optionalData.description = jobRoleData.description.trim();
+        updateData.description = jobRoleData.description.trim();
       }
       if (jobRoleData.responsibilities?.trim()) {
-        optionalData.responsibilities = jobRoleData.responsibilities.trim();
+        updateData.responsibilities = jobRoleData.responsibilities.trim();
       }
       if (jobRoleData.jobSpecUrl?.trim()) {
-        optionalData.jobSpecUrl = jobRoleData.jobSpecUrl.trim();
+        updateData.jobSpecUrl = jobRoleData.jobSpecUrl.trim();
       }
       if (jobRoleData.openPositions) {
-        optionalData.openPositions = parseInt(jobRoleData.openPositions, 10);
+        updateData.openPositions = parseInt(jobRoleData.openPositions, 10);
       }
       if (req.body.status) {
-        optionalData.status = req.body.status as 'Open' | 'Closing Soon' | 'Closed';
+        updateData.status = req.body.status as 'Open' | 'Closing Soon' | 'Closed';
       }
 
       // Update the job role
-      const updatedJobRole = await this.jobRoleService.updateJobRole(id, {
-        ...updateData,
-        ...optionalData,
-      });
+      const updatedJobRole = await this.jobRoleService.updateJobRole(id, updateData);
 
       if (!updatedJobRole) {
         res.status(404).send(`Job role with ID ${id} not found`);
