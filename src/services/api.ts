@@ -1,6 +1,11 @@
 // frontend/src/services/api.ts
 import axios from 'axios';
-import type { JobRole, JobRoleDetails, CreateJobRoleRequest, UpdateJobRoleRequest } from '../models/job-roles.js';
+import type {
+  CreateJobRoleRequest,
+  JobRole,
+  JobRoleDetails,
+  UpdateJobRoleRequest,
+} from '../models/job-roles.js';
 
 const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001';
 
