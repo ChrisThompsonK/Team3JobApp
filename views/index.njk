@@ -3,36 +3,45 @@
 {% block title %}Home - Kainos Job Portal{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="./css/output.css">
 {% endblock %}
 
 {% block content %}
-    <!-- Main Title - Navy blue and green theme -->
-    <div class="text-center mb-16">
-        <div class="mb-8">
-            <img src="/images/kainos-logo.svg" alt="Kainos" class="h-16 w-auto mx-auto mb-6">
+    <!-- Hero Section with DaisyUI -->
+    <div class="hero min-h-[60vh] bg-gradient-to-br from-kainos-light to-base-100">
+        <div class="hero-content text-center">
+            <div class="max-w-4xl">
+                <div class="mb-8">
+                    <img src="/images/kainos-logo.svg" alt="Kainos" class="h-20 w-auto mx-auto mb-6">
+                </div>
+                <h1 class="text-5xl md:text-6xl font-bold text-kainos-primary mb-6 leading-tight">
+                    True partners change the <br>
+                    <span class="text-kainos-accent">world together</span>
+                </h1>
+                <p class="text-xl text-base-content/70 mb-12">
+                    We're on a mission to make people's lives better through technology. 
+                    Join our team and discover unlimited career opportunities.
+                </p>
+            </div>
         </div>
-        <h1 class="text-5xl font-bold text-kainos-primary mb-6 leading-tight">
-            True partners change the <br>
-            <span class="text-kainos-accent">world together</span>
-        </h1>
-        <p class="text-xl text-gray-700 mb-12 max-w-3xl mx-auto">
-            We're on a mission to make people's lives better through technology. 
-            Join our team and discover unlimited career opportunities.
-        </p>
     </div>
 
-    <!-- Job Search Card - Clean design -->
-    <div class="flex justify-center">
-        <div class="bg-white rounded-xl shadow-lg border border-gray-200 max-w-lg w-full p-8">
-            <div class="text-center">
-                <h2 class="text-2xl font-semibold text-kainos-primary mb-4">Find Your Next Role</h2>
-                <p class="text-gray-600 mb-8">Discover exciting career opportunities at Kainos</p>
+    <!-- Job Search Card with DaisyUI -->
+    <div class="flex justify-center -mt-20">
+        <div class="card w-full max-w-lg bg-base-100 shadow-2xl">
+            <div class="card-body">
+                <h2 class="card-title text-3xl text-kainos-primary justify-center">Find Your Next Role</h2>
+                <p class="text-center text-base-content/70 mb-4">Discover exciting career opportunities at Kainos</p>
                 
-                <!-- Capability Dropdown -->
-                <div class="mb-6">
+                <div class="divider"></div>
+                
+                <!-- Capability Dropdown with DaisyUI -->
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text font-semibold">Select Capability</span>
+                    </label>
                     <select 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kainos-accent focus:border-transparent text-gray-700" 
+                        class="select select-bordered select-primary w-full" 
                         id="jobCapabilitySelect"
                     >
                         <option value="">All Capabilities</option>
@@ -48,10 +57,25 @@
                     </select>
                 </div>
 
-                <div class="space-y-3">
-                    <button onclick="searchJobsByCapability()" class="btn-kainos block w-full py-3 text-center rounded-lg font-medium">Filter Jobs by Capability</button>
-                    <a href="/jobs" class="btn-kainos block w-full py-3 text-center rounded-lg font-medium">Browse All Jobs</a>
-                    <a href="/health" class="block w-full py-3 text-center text-gray-600 hover:text-kainos-primary transition-colors">System Health</a>
+                <div class="card-actions flex-col gap-2 mt-4">
+                    <button onclick="searchJobsByCapability()" class="btn btn-primary btn-block">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
+                        </svg>
+                        Filter Jobs by Capability
+                    </button>
+                    <a href="/jobs" class="btn btn-outline btn-primary btn-block">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Browse All Jobs
+                    </a>
+                    <a href="/health" class="btn btn-ghost btn-block">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        System Health
+                    </a>
                 </div>
             </div>
         </div>

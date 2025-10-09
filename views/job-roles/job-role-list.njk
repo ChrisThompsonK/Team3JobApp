@@ -5,19 +5,22 @@
 {% block content %}
 <script src="/js/job-filters.js"></script>
 
-<div class="w-full max-w-7xl mx-auto px-4 py-8">
-  <div class="flex justify-between items-center mb-4">
-    <div class="flex-1">
-      <h1 class="text-5xl font-bold text-center kainos-text-gradient">{{ title }}</h1>
+<div class="w-full max-w-7xl mx-auto">
+  <!-- Page Header with DaisyUI -->
+  <div class="flex flex-col lg:flex-row justify-between items-center mb-6 gap-4">
+    <div class="flex-1 text-center lg:text-left">
+      <h1 class="text-5xl font-bold kainos-text-gradient">{{ title }}</h1>
+      <p class="text-lg text-base-content/70 mt-2">Discover exciting career opportunities at Kainos</p>
     </div>
-    <div class="flex flex-col gap-2">
-      <a href="/jobs/job" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 no-underline flex items-center gap-2">
+
+    <div class="flex flex-col sm:flex-row gap-2">
+      <a href="/jobs/new" class="btn btn-primary gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
         </svg>
         Add New Job Role
       </a>
-      <a href="/jobs/report" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 no-underline flex items-center gap-2">
+      <a href="/jobs/report" class="btn btn-error gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
         </svg>
@@ -25,93 +28,74 @@
       </a>
     </div>
   </div>
-  <p class="text-center text-lg text-base-content/70 mb-8">Discover exciting career opportunities at Kainos</p>
 
-  <!-- Filter Panel -->
-  <div class="bg-white rounded-xl shadow-xl border border-gray-100 p-8 mb-8">
-    <div class="flex justify-between items-center mb-6">
-      <div>
-        <h2 class="text-3xl font-bold text-gray-800 mb-2">Filter Job Roles</h2>
-        <p class="text-gray-600">Refine your search to find the perfect opportunity</p>
+  <!-- Filter Panel with DaisyUI Card -->
+  <div class="card bg-base-100 shadow-xl mb-8">
+    <div class="card-body">
+      <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4">
+        <div>
+          <h2 class="card-title text-3xl text-kainos-primary">Filter Job Roles</h2>
+          <p class="text-base-content/70">Refine your search to find the perfect opportunity</p>
+        </div>
+        <div class="flex gap-3">
+          <button onclick="applyFilters()" class="btn btn-primary gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"></path>
+            </svg>
+            Apply Filters
+          </button>
+          <button onclick="clearFilters()" class="btn btn-error gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            Clear All
+          </button>
+        </div>
       </div>
-      <div class="flex gap-3">
-        <button onclick="applyFilters()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"></path>
-          </svg>
-          <span>Apply Filters</span>
-        </button>
-        <button onclick="clearFilters()" style="background-color: #ef4444 !important; color: white !important;" class="hover:bg-red-600 text-white font-bold px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2">
-          <svg class="w-5 h-5" style="color: white !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-          <span style="color: white !important; font-weight: bold !important;">Clear All</span>
-        </button>
-      </div>
-    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      <!-- Name Filter (Text Input) -->
-      <div class="form-control group">
-        <label class="label">
-          <span class="label-text font-semibold text-lg text-gray-700 group-focus-within:text-blue-600">Job Name</span>
-        </label>
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="divider"></div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Name Filter -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">Job Name</span>
+          </label>
+          <label class="input input-bordered flex items-center gap-2">
+            <svg class="h-4 w-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
-          </div>
-          <input 
-            type="text" 
-            id="nameFilter" 
-            placeholder="Search by job name..." 
-            value="{{ currentFilters.name or '' }}"
-            class="input input-bordered w-full pl-10 pr-4 py-3 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 rounded-lg"
-          />
+            <input 
+              type="text" 
+              id="nameFilter" 
+              placeholder="Search by job name..." 
+              value="{{ currentFilters.name or '' }}"
+              class="grow"
+            />
+          </label>
         </div>
-      </div>
 
-      <!-- Location Filter (Dropdown) -->
-      <div class="form-control group">
-        <label class="label">
-          <span class="label-text font-semibold text-lg text-gray-700 group-focus-within:text-blue-600">Location</span>
-        </label>
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            </svg>
-          </div>
-          <select id="locationFilter" class="select select-bordered w-full pl-10 pr-4 py-3 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 rounded-lg appearance-none">
+        <!-- Location Filter -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">Location</span>
+          </label>
+          <select id="locationFilter" class="select select-bordered w-full">
             <option value="">All Locations</option>
             {% for loc in distinctValues.locations %}
-                      <option value="{{ loc }}" {% if currentFilters.location and (currentFilters.location.includes(loc)) %}selected{% endif %}>
-            {{ loc }}
-          </option>
+            <option value="{{ loc }}" {% if currentFilters.location and (currentFilters.location.includes(loc)) %}selected{% endif %}>
+              {{ loc }}
+            </option>
             {% endfor %}
           </select>
-          <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </div>
         </div>
-      </div>
 
-      <!-- Capability Filter (Dropdown) -->
-      <div class="form-control group">
-        <label class="label">
-          <span class="label-text font-semibold text-lg text-gray-700 group-focus-within:text-blue-600">Capability</span>
-        </label>
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-            </svg>
-          </div>
-          <select id="capabilityFilter" class="select select-bordered w-full pl-10 pr-4 py-3 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 rounded-lg appearance-none">
+        <!-- Capability Filter -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">Capability</span>
+          </label>
+          <select id="capabilityFilter" class="select select-bordered w-full">
             <option value="">All Capabilities</option>
             {% for cap in distinctValues.capabilities %}
             <option value="{{ cap }}" {% if currentFilters.capability and (currentFilters.capability.includes(cap)) %}selected{% endif %}>
@@ -119,26 +103,14 @@
             </option>
             {% endfor %}
           </select>
-          <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </div>
         </div>
-      </div>
 
-      <!-- Band Filter (Dropdown) -->
-      <div class="form-control group">
-        <label class="label">
-          <span class="label-text font-semibold text-lg text-gray-700 group-focus-within:text-blue-600">Band</span>
-        </label>
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-            </svg>
-          </div>
-          <select id="bandFilter" class="select select-bordered w-full pl-10 pr-4 py-3 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 rounded-lg appearance-none">
+        <!-- Band Filter -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">Band</span>
+          </label>
+          <select id="bandFilter" class="select select-bordered w-full">
             <option value="">All Bands</option>
             {% for b in distinctValues.bands %}
             <option value="{{ b }}" {% if currentFilters.band and (currentFilters.band.includes(b)) %}selected{% endif %}>
@@ -146,73 +118,76 @@
             </option>
             {% endfor %}
           </select>
-          <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Results Count -->
-  <div class="mb-6 flex items-center justify-between">
-    <div class="flex items-center space-x-3">
-      <div class="bg-blue-100 p-2 rounded-lg">
-        <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <!-- Results Count with Stats -->
+  <div class="stats shadow mb-6 w-full bg-base-100">
+    <div class="stat">
+      <div class="stat-figure text-primary">
+        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
         </svg>
       </div>
-      <div>
-        <p class="text-2xl font-bold text-gray-800">
-          {{ jobRoles.length }} Job Role{% if jobRoles.length != 1 %}s{% endif %} Found
-        </p>
-        <p class="text-gray-600">Ready to launch your career</p>
-      </div>
+      <div class="stat-title">Available Positions</div>
+      <div class="stat-value text-primary">{{ jobRoles.length }}</div>
+      <div class="stat-desc">Ready to launch your career</div>
     </div>
   </div>
 
   {% if jobRoles.length > 0 %}
-    <div class="shadow-lg rounded-lg w-full">
-      <table class="table w-full">
-        <!-- head -->
-        <thead class="bg-base-200">
-          <tr>
-            <th class="w-16 text-left px-4 py-4 text-lg font-semibold">ID</th>
-            <th class="text-left px-4 py-4 text-lg font-semibold">Job Name</th>
-            <th class="text-left px-4 py-4 text-lg font-semibold">Location</th>
-            <th class="text-left px-4 py-4 text-lg font-semibold">Capability</th>
-            <th class="w-20 text-left px-4 py-4 text-lg font-semibold">Band</th>
-            <th class="w-40 text-left px-4 py-4 text-lg font-semibold">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for job in jobRoles %}
-            <!-- row {{ loop.index }} -->
-            <tr class="hover:bg-base-100 border-b border-base-300">
-              <th class="font-medium px-4 py-7 text-lg">{{ job.id }}</th>
-              <td class="font-medium px-4 py-7 text-lg">{{ job.name }}</td>
-              <td class="text-base-content/70 px-4 py-8 text-lg">{{ job.location }}</td>
-              <td class="text-base-content/70 px-4 py-8 text-lg">{{ job.capability }}</td>
-              <td class="text-base-content/70 px-4 py-4 text-lg">{{ job.band }}</td>
-              <td class="px-4 py-4">
-                <a href="/jobs/{{ job.id }}/details" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 no-underline text-center text-sm whitespace-nowrap inline-block">
+    <!-- Table with DaisyUI -->
+    <div class="card bg-base-100 shadow-xl">
+      <div class="overflow-x-auto">
+        <table class="table table-zebra">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Job Name</th>
+              <th>Location</th>
+              <th>Capability</th>
+              <th>Band</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for job in jobRoles %}
+            <tr class="hover">
+              <th>{{ job.id }}</th>
+              <td class="font-medium">{{ job.name }}</td>
+              <td>{{ job.location }}</td>
+              <td>{{ job.capability }}</td>
+              <td>{{ job.band }}</td>
+              <td>
+                <a href="/jobs/{{ job.id }}/details" class="btn btn-primary btn-sm">
                   View Details
                 </a>
               </td>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   {% else %}
-    <div class="alert alert-info">
-      <span>No job roles found.</span>
+    <div role="alert" class="alert alert-info">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span>No job roles found matching your criteria.</span>
     </div>
   {% endif %}
-</div>
-<div class="mt-8 flex justify-center">
-    <a href="/" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 min-w-[140px] no-underline text-center">← Back to Home</a>
+
+  <!-- Back Button -->
+  <div class="mt-8 flex justify-center">
+    <a href="/" class="btn btn-outline btn-primary gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+      </svg>
+      Back to Home
+    </a>
   </div>
+</div>
 {% endblock %}
