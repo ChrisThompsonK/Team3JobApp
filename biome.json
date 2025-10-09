@@ -86,7 +86,7 @@
   },
   "overrides": [
     {
-      "includes": ["public/**/*.css"],
+      "includes": ["public/**/*.css", "src/styles/**/*.css"],
       "css": {
         "linter": {
           "enabled": false
