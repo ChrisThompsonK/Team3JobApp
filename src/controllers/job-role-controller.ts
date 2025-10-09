@@ -196,8 +196,6 @@ export class JobRoleController {
         yearsOfExperience,
         linkedinUrl,
         coverLetter,
-        noticePeriod,
-        rightToWork,
         additionalComments,
         acceptTerms,
       } = req.body;
@@ -211,8 +209,6 @@ export class JobRoleController {
         !currentJobTitle ||
         !yearsOfExperience ||
         !coverLetter ||
-        !noticePeriod ||
-        !rightToWork ||
         !acceptTerms
       ) {
         res.status(400).send('Please fill in all required fields');
@@ -235,8 +231,6 @@ export class JobRoleController {
         yearsOfExperience,
         linkedinUrl,
         coverLetter: `${coverLetter.substring(0, 50)}...`,
-        noticePeriod,
-        rightToWork,
         additionalComments,
       });
 
