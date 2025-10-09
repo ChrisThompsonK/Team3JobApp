@@ -16,25 +16,23 @@
   </div>
 
   <!-- Job Role Summary Card -->
-  <div class="card bg-blue-50 border-2 border-blue-200 shadow-lg mb-8">
+  <div class="card bg-blue-50 border-2 border-blue-200 shadow-lg mb-16">
     <div class="card-body">
-      <h2 class="text-3xl font-bold mb-4 text-blue-900">{{ jobRole.name }}</h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-base">
-        <div>
+      <h2 class="text-3xl font-bold mb-6 text-blue-900 text-center">{{ jobRole.name }}</h2>
+      <div class="flex flex-col gap-4 text-base items-center justify-center">
+        <div class="flex items-center gap-4">
           <span class="font-semibold text-blue-800">Location:</span>
-          <p class="text-gray-700">{{ jobRole.location }}</p>
-        </div>
-        <div>
+          <span class="text-gray-700">{{ jobRole.location }}</span>
+          <span class="mx-8 text-gray-400">|</span>
           <span class="font-semibold text-blue-800">Capability:</span>
-          <p class="text-gray-700">{{ jobRole.capability }}</p>
+          <span class="text-gray-700">{{ jobRole.capability }}</span>
         </div>
-        <div>
+        <div class="flex items-center gap-4">
           <span class="font-semibold text-blue-800">Band:</span>
-          <p class="text-gray-700">{{ jobRole.band }}</p>
-        </div>
-        <div>
+          <span class="text-gray-700">{{ jobRole.band }}</span>
+          <span class="mx-8 text-gray-400">|</span>
           <span class="font-semibold text-blue-800">Closing Date:</span>
-          <p class="text-gray-700">{{ jobRole.closingDate.toLocaleDateString() if jobRole.closingDate else 'Open' }}</p>
+          <span class="text-gray-700">{{ jobRole.closingDate.toLocaleDateString() if jobRole.closingDate else 'Open' }}</span>
         </div>
       </div>
     </div>
@@ -100,14 +98,72 @@
             <label class="label" for="phone">
               <span class="label-text text-lg font-semibold">Phone Number *</span>
             </label>
-            <input 
-              type="tel" 
-              id="phone"
-              name="phone" 
-              placeholder="+44 7XXX XXXXXX" 
-              class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200" 
-              required
-            />
+            <div class="flex gap-2">
+              <select 
+                id="countryCode" 
+                name="countryCode" 
+                class="select select-bordered select-lg w-32 focus:select-primary transition-colors duration-200" 
+                required
+              >
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+86">🇨🇳 +86</option>
+                <option value="+81">🇯🇵 +81</option>
+                <option value="+49">🇩🇪 +49</option>
+                <option value="+33">🇫🇷 +33</option>
+                <option value="+39">🇮🇹 +39</option>
+                <option value="+34">🇪🇸 +34</option>
+                <option value="+7">🇷🇺 +7</option>
+                <option value="+61">🇦🇺 +61</option>
+                <option value="+55">🇧🇷 +55</option>
+                <option value="+27">🇿🇦 +27</option>
+                <option value="+82">🇰🇷 +82</option>
+                <option value="+31">🇳🇱 +31</option>
+                <option value="+46">🇸🇪 +46</option>
+                <option value="+41">🇨🇭 +41</option>
+                <option value="+45">🇩🇰 +45</option>
+                <option value="+47">🇳🇴 +47</option>
+                <option value="+48">🇵🇱 +48</option>
+                <option value="+351">🇵🇹 +351</option>
+                <option value="+353">🇮🇪 +353</option>
+                <option value="+32">🇧🇪 +32</option>
+                <option value="+43">🇦🇹 +43</option>
+                <option value="+30">🇬🇷 +30</option>
+                <option value="+420">🇨🇿 +420</option>
+                <option value="+36">🇭🇺 +36</option>
+                <option value="+40">🇷🇴 +40</option>
+                <option value="+359">🇧🇬 +359</option>
+                <option value="+385">🇭🇷 +385</option>
+                <option value="+64">🇳🇿 +64</option>
+                <option value="+65">🇸🇬 +65</option>
+                <option value="+60">🇲🇾 +60</option>
+                <option value="+63">🇵🇭 +63</option>
+                <option value="+66">🇹🇭 +66</option>
+                <option value="+84">🇻🇳 +84</option>
+                <option value="+62">🇮🇩 +62</option>
+                <option value="+20">🇪🇬 +20</option>
+                <option value="+234">🇳🇬 +234</option>
+                <option value="+254">🇰🇪 +254</option>
+                <option value="+971">🇦🇪 +971</option>
+                <option value="+966">🇸🇦 +966</option>
+                <option value="+972">🇮🇱 +972</option>
+                <option value="+90">🇹🇷 +90</option>
+                <option value="+52">🇲🇽 +52</option>
+                <option value="+54">🇦🇷 +54</option>
+                <option value="+56">🇨🇱 +56</option>
+                <option value="+57">🇨🇴 +57</option>
+                <option value="+51">🇵🇪 +51</option>
+              </select>
+              <input 
+                type="tel" 
+                id="phone"
+                name="phone" 
+                placeholder="7XXX XXXXXX" 
+                class="input input-bordered input-lg flex-1 focus:input-primary transition-colors duration-200" 
+                required
+              />
+            </div>
           </div>
         </div>
 
@@ -203,63 +259,20 @@
           </div>
         </div>
 
-        <!-- Additional Information Section -->
-        <div class="divider text-lg font-semibold text-blue-800">Additional Information</div>
-
-        <div class="grid grid-cols-1 gap-6">
-          <!-- Notice Period -->
-          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <label class="label" for="noticePeriod">
-              <span class="label-text text-lg font-semibold">Notice Period *</span>
-            </label>
-            <select 
-              id="noticePeriod" 
-              name="noticePeriod" 
-              class="select select-bordered select-lg w-full focus:select-primary transition-colors duration-200" 
-              required
-            >
-              <option disabled selected>Select notice period</option>
-              <option value="immediate">Immediate</option>
-              <option value="1-week">1 week</option>
-              <option value="2-weeks">2 weeks</option>
-              <option value="1-month">1 month</option>
-              <option value="2-months">2 months</option>
-              <option value="3-months">3 months</option>
-            </select>
-          </div>
-
-          <!-- Right to Work -->
-          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <label class="label" for="rightToWork">
-              <span class="label-text text-lg font-semibold">Right to Work in UK *</span>
-            </label>
-            <select 
-              id="rightToWork" 
-              name="rightToWork" 
-              class="select select-bordered select-lg w-full focus:select-primary transition-colors duration-200" 
-              required
-            >
-              <option disabled selected>Select option</option>
-              <option value="yes">Yes - UK Citizen or have work permit</option>
-              <option value="no">No - Would require visa sponsorship</option>
-            </select>
-          </div>
-
-          <!-- Additional Comments -->
-          <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <label class="label" for="additionalComments">
-              <span class="label-text text-lg font-semibold">Additional Comments</span>
-            </label>
-            <textarea 
-              id="additionalComments"
-              name="additionalComments" 
-              class="textarea textarea-bordered textarea-lg h-24 resize-none w-full focus:textarea-primary transition-colors duration-200" 
-              placeholder="Any additional information you'd like to share..."
-            ></textarea>
-            <label class="label">
-              <span class="label-text-alt text-sm opacity-70">Optional</span>
-            </label>
-          </div>
+        <!-- Additional Comments -->
+        <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
+          <label class="label" for="additionalComments">
+            <span class="label-text text-lg font-semibold">Additional Comments</span>
+          </label>
+          <textarea 
+            id="additionalComments"
+            name="additionalComments" 
+            class="textarea textarea-bordered textarea-lg h-24 resize-none w-full focus:textarea-primary transition-colors duration-200" 
+            placeholder="Any additional information you'd like to share..."
+          ></textarea>
+          <label class="label">
+            <span class="label-text-alt text-sm opacity-70">Optional</span>
+          </label>
         </div>
 
         <!-- Terms and Conditions -->
@@ -282,7 +295,7 @@
     <a href="/jobs/{{ jobRole.id }}/details" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 no-underline text-center min-w-[160px]">
       Cancel
     </a>
-    <button type="submit" form="applicationForm" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 text-center min-w-[160px] flex items-center justify-center gap-2">
+    <button type="submit" id="submitBtn" form="applicationForm" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 text-center min-w-[160px] flex items-center justify-center gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100" disabled>
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
         <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
         <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
@@ -291,4 +304,118 @@
     </button>
   </div>
 </div>
+
+<script>
+  // Phone number format examples for different countries
+  const phoneFormats = {
+    '+44': '7XXX XXXXXX',      // UK
+    '+1': '(555) 123-4567',    // US/Canada
+    '+91': '98765 43210',      // India
+    '+86': '138 0013 8000',    // China
+    '+81': '90-1234-5678',     // Japan
+    '+49': '151 23456789',     // Germany
+    '+33': '6 12 34 56 78',    // France
+    '+39': '312 345 6789',     // Italy
+    '+34': '612 34 56 78',     // Spain
+    '+7': '912 345-67-89',     // Russia
+    '+61': '412 345 678',      // Australia
+    '+55': '(11) 91234-5678',  // Brazil
+    '+27': '82 123 4567',      // South Africa
+    '+82': '10-1234-5678',     // South Korea
+    '+31': '6 12345678',       // Netherlands
+    '+46': '70-123 45 67',     // Sweden
+    '+41': '78 123 45 67',     // Switzerland
+    '+45': '12 34 56 78',      // Denmark
+    '+47': '412 34 567',       // Norway
+    '+48': '512 345 678',      // Poland
+    '+351': '912 345 678',     // Portugal
+    '+353': '85 123 4567',     // Ireland
+    '+32': '470 12 34 56',     // Belgium
+    '+43': '664 1234567',      // Austria
+    '+30': '691 234 5678',     // Greece
+    '+420': '601 123 456',     // Czech Republic
+    '+36': '20 123 4567',      // Hungary
+    '+40': '712 345 678',      // Romania
+    '+359': '87 123 4567',     // Bulgaria
+    '+385': '91 234 5678',     // Croatia
+    '+64': '21 123 4567',      // New Zealand
+    '+65': '8123 4567',        // Singapore
+    '+60': '12-345 6789',      // Malaysia
+    '+63': '917 123 4567',     // Philippines
+    '+66': '81 234 5678',      // Thailand
+    '+84': '91 234 5678',      // Vietnam
+    '+62': '812-3456-7890',    // Indonesia
+    '+20': '100 123 4567',     // Egypt
+    '+234': '802 123 4567',    // Nigeria
+    '+254': '712 345678',      // Kenya
+    '+971': '50 123 4567',     // UAE
+    '+966': '50 123 4567',     // Saudi Arabia
+    '+972': '50-123-4567',     // Israel
+    '+90': '532 123 4567',     // Turkey
+    '+52': '55 1234 5678',     // Mexico
+    '+54': '11 2345-6789',     // Argentina
+    '+56': '9 1234 5678',      // Chile
+    '+57': '321 1234567',      // Colombia
+    '+51': '987 654 321'       // Peru
+  };
+
+  // Form validation to enable/disable submit button
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('applicationForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const countryCodeSelect = document.getElementById('countryCode');
+    const phoneInput = document.getElementById('phone');
+    
+    // Update phone placeholder based on country code
+    function updatePhonePlaceholder() {
+      const selectedCode = countryCodeSelect.value;
+      const format = phoneFormats[selectedCode] || 'Enter phone number';
+      phoneInput.placeholder = format;
+    }
+    
+    // Listen for country code changes
+    countryCodeSelect.addEventListener('change', updatePhonePlaceholder);
+    
+    // Set initial placeholder
+    updatePhonePlaceholder();
+    
+    function validateForm() {
+      // Get all required fields
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const countryCode = document.getElementById('countryCode').value;
+      const phone = document.getElementById('phone').value.trim();
+      const currentJobTitle = document.getElementById('currentJobTitle').value.trim();
+      const yearsOfExperience = document.getElementById('yearsOfExperience').value;
+      const cv = document.getElementById('cv').files.length > 0;
+      const coverLetter = document.getElementById('coverLetter').value.trim();
+      const acceptTerms = document.querySelector('input[name="acceptTerms"]').checked;
+      
+      // Validate email format
+      const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      
+      // Validate cover letter length (minimum 100 characters)
+      const coverLetterValid = coverLetter.length >= 100;
+      
+      // Enable submit button only if all required fields are valid
+      const allValid = firstName && lastName && emailValid && countryCode && phone && 
+                       currentJobTitle && yearsOfExperience && cv && 
+                       coverLetterValid && acceptTerms;
+      
+      submitBtn.disabled = !allValid;
+    }
+    
+    // Add event listeners to all form inputs
+    const inputs = form.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+      input.addEventListener('input', validateForm);
+      input.addEventListener('change', validateForm);
+    });
+    
+    // Initial validation on page load
+    validateForm();
+  });
+</script>
+
 {% endblock %}

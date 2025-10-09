@@ -45,13 +45,18 @@ function transformJobRole(backendJob: BackendJobRole): JobRole {
 
 // Transform backend job details response to frontend format
 function transformJobRoleDetails(backendJob: BackendJobRoleDetails): JobRoleDetails {
+  // Validate required fields
+  if (!backendJob || !backendJob.jobRoleId) {
+    throw new Error('Invalid job role data: missing jobRoleId');
+  }
+
   const baseJob: JobRole = {
     id: backendJob.jobRoleId.toString(),
-    name: backendJob.roleName,
-    location: backendJob.location,
-    capability: backendJob.capabilityName,
-    band: backendJob.bandName,
-    closingDate: new Date(backendJob.closingDate),
+    name: backendJob.roleName || 'Unknown Role',
+    location: backendJob.location || 'Unknown Location',
+    capability: backendJob.capabilityName || 'Unknown Capability',
+    band: backendJob.bandName || 'Unknown Band',
+    closingDate: backendJob.closingDate ? new Date(backendJob.closingDate) : new Date(),
   };
 
   const details: JobRoleDetails = { ...baseJob };
@@ -93,9 +98,29 @@ export const api = {
 
   // Get single job role by ID with full details
   getJobById: async (id: string): Promise<JobRoleDetails> => {
-    const response = await apiClient.get<BackendJobRoleDetails>(`/jobs/${id}`);
-    // Transform backend format to frontend format
-    return transformJobRoleDetails(response.data);
+    try {
+      const response = await apiClient.get<BackendJobRoleDetails[] | BackendJobRoleDetails>(
+        `/jobs/${id}`
+      );
+
+      // Check if response data exists
+      if (!response.data) {
+        throw new Error(`No data received for job ID: ${id}`);
+      }
+
+      // Handle both array and single object responses
+      const jobData = Array.isArray(response.data) ? response.data[0] : response.data;
+
+      if (!jobData) {
+        throw new Error(`Job with ID ${id} not found`);
+      }
+
+      // Transform backend format to frontend format
+      return transformJobRoleDetails(jobData);
+    } catch (error) {
+      console.error(`Error fetching job ${id}:`, error);
+      throw error;
+    }
   },
 
   // Update a job role
