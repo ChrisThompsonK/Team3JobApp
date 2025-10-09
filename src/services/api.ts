@@ -51,7 +51,7 @@ interface BackendBand {
 function transformJobRole(backendJob: BackendJobRole): JobRole {
   // Debug: Log the backend response to understand its structure
   console.log('Transforming backend job role:', JSON.stringify(backendJob, null, 2));
-  
+
   // Validate required fields
   if (!backendJob.jobRoleId) {
     console.error('Missing jobRoleId in backend response:', backendJob);
@@ -87,7 +87,7 @@ function transformJobRole(backendJob: BackendJobRole): JobRole {
 function transformJobRoleDetails(backendJob: BackendJobRoleDetails): JobRoleDetails {
   // Debug: Log the backend response to understand its structure
   console.log('Transforming backend job details:', JSON.stringify(backendJob, null, 2));
-  
+
   const baseJob: JobRole = {
     id: backendJob.jobRoleId.toString(),
     name: backendJob.roleName,
@@ -102,16 +102,17 @@ function transformJobRoleDetails(backendJob: BackendJobRoleDetails): JobRoleDeta
   if (backendJob.description) details.description = backendJob.description;
   if (backendJob.responsibilities) details.responsibilities = backendJob.responsibilities;
   if (backendJob.jobSpecUrl) details.jobSpecUrl = backendJob.jobSpecUrl;
-  
+
   // Handle status - could be status or statusName from backend
   if (backendJob.status) {
     details.status = backendJob.status as 'Open' | 'Closing Soon' | 'Closed';
   } else if (backendJob.statusName) {
     details.status = backendJob.statusName as 'Open' | 'Closing Soon' | 'Closed';
   }
-  
+
   // Handle openPositions - check multiple possible field names
-  const openPositionsValue = backendJob.openPositions ?? backendJob.open_positions ?? backendJob.numberOfPositions;
+  const openPositionsValue =
+    backendJob.openPositions ?? backendJob.open_positions ?? backendJob.numberOfPositions;
   if (openPositionsValue !== undefined && openPositionsValue !== null) {
     details.openPositions = openPositionsValue;
   }
@@ -222,12 +223,12 @@ export const api = {
       const response = await apiClient.post<BackendJobRoleDetails>('/jobs/job', jobData);
       console.log('Backend response status:', response.status);
       console.log('Backend response data:', JSON.stringify(response.data, null, 2));
-      
+
       // Validate the response has the expected structure
       if (!response.data) {
         throw new Error('Backend returned empty response');
       }
-      
+
       return transformJobRoleDetails(response.data);
     } catch (error) {
       console.error('Error in createJob API call:', error);
