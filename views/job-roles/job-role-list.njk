@@ -29,25 +29,17 @@
 
   <!-- Filter Panel -->
   <div class="bg-white rounded-xl shadow-xl border border-gray-100 p-8 mb-8">
-    <div class="flex justify-between items-center mb-6">
-      <div>
+    <div class="flex flex-col items-center mb-6">
+      <div class="text-center mb-4">
         <h2 class="text-3xl font-bold text-gray-800 mb-2">Filter Job Roles</h2>
         <p class="text-gray-600">Refine your search to find the perfect opportunity</p>
       </div>
-      <div class="flex gap-3">
-        <button onclick="applyFilters()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"></path>
-          </svg>
-          <span>Apply Filters</span>
-        </button>
-        <button onclick="clearFilters()" style="background-color: #ef4444 !important; color: white !important;" class="hover:bg-red-600 text-white font-bold px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2">
-          <svg class="w-5 h-5" style="color: white !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-          <span style="color: white !important; font-weight: bold !important;">Clear All</span>
-        </button>
-      </div>
+      <button onclick="clearFilters()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+        <span>Clear All</span>
+      </button>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

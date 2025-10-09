@@ -35,10 +35,28 @@ export class RealJobRoleService implements JobRoleService {
   }
 
   /**
-   * Create a new job role (not yet implemented in backend)
+   * Create a new job role using the backend API
    */
-  async createJobRole(_jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails> {
-    throw new Error('Create job role not yet implemented for real API');
+  async createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails> {
+    // Transform the frontend format to backend format
+    const closingDateStr = jobRoleData.closingDate.toISOString().split('T')[0];
+    if (!closingDateStr) {
+      throw new Error('Invalid closing date');
+    }
+
+    const backendJobData = {
+      roleName: jobRoleData.name,
+      location: jobRoleData.location,
+      capability: jobRoleData.capability,
+      band: jobRoleData.band,
+      closingDate: closingDateStr, // Format as YYYY-MM-DD
+      description: jobRoleData.description,
+      responsibilities: jobRoleData.responsibilities,
+      jobSpecUrl: jobRoleData.jobSpecUrl,
+      openPositions: jobRoleData.openPositions,
+    };
+
+    return api.createJob(backendJobData);
   }
 
   /**

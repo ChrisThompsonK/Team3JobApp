@@ -99,6 +99,22 @@ export const api = {
     return transformJobRoleDetails(response.data);
   },
 
+  // Create a new job role
+  createJob: async (jobData: {
+    roleName: string;
+    location: string;
+    capability: string;
+    band: string;
+    closingDate: string;
+    description?: string | undefined;
+    responsibilities?: string | undefined;
+    jobSpecUrl?: string | undefined;
+    openPositions?: number | undefined;
+  }): Promise<JobRoleDetails> => {
+    const response = await apiClient.post<BackendJobRoleDetails>('/jobs', jobData);
+    return transformJobRoleDetails(response.data);
+  },
+
   // Update a job role
   updateJob: async (
     id: string,
