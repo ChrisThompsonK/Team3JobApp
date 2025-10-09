@@ -122,10 +122,10 @@ export class JobRoleService {
   }
 
   /**
-   * Delete a job role (not yet implemented in backend)
+   * Delete a job role from the backend database
    */
-  async deleteJobRole(_id: string): Promise<boolean> {
-    throw new Error('Delete job role not yet implemented for real API');
+  async deleteJobRole(id: string): Promise<boolean> {
+    return api.deleteJob(id);
   }
 
   /**

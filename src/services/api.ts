@@ -7,7 +7,7 @@ import type {
   UpdateJobRoleRequest,
 } from '../models/job-roles.js';
 
-const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001';
+const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001/api';
 
 // Create axios instance with default config
 const apiClient = axios.create({
@@ -19,12 +19,14 @@ const apiClient = axios.create({
 
 // Backend API response type (now includes names from joined tables)
 interface BackendJobRole {
-  jobRoleId: number;
-  roleName: string;
+  id: number;
+  name: string;
   location: string;
   capabilityName: string;
   bandName: string;
   closingDate: string;
+  capabilityId?: number;
+  bandId?: number;
 }
 
 // Backend API response type for job details (includes all fields)
@@ -39,8 +41,8 @@ interface BackendJobRoleDetails extends BackendJobRole {
 // Transform backend response to frontend format
 function transformJobRole(backendJob: BackendJobRole): JobRole {
   return {
-    id: backendJob.jobRoleId.toString(),
-    name: backendJob.roleName,
+    id: backendJob.id.toString(),
+    name: backendJob.name,
     location: backendJob.location,
     capability: backendJob.capabilityName,
     band: backendJob.bandName,
@@ -51,13 +53,13 @@ function transformJobRole(backendJob: BackendJobRole): JobRole {
 // Transform backend job details response to frontend format
 function transformJobRoleDetails(backendJob: BackendJobRoleDetails): JobRoleDetails {
   // Validate required fields
-  if (!backendJob || !backendJob.jobRoleId) {
-    throw new Error('Invalid job role data: missing jobRoleId');
+  if (!backendJob || !backendJob.id) {
+    throw new Error('Invalid job role data: missing id');
   }
 
   const baseJob: JobRole = {
-    id: backendJob.jobRoleId.toString(),
-    name: backendJob.roleName || 'Unknown Role',
+    id: backendJob.id.toString(),
+    name: backendJob.name || 'Unknown Role',
     location: backendJob.location || 'Unknown Location',
     capability: backendJob.capabilityName || 'Unknown Capability',
     band: backendJob.bandName || 'Unknown Band',
@@ -162,5 +164,18 @@ export const api = {
     const bands = [...new Set(jobs.map((job) => job.band))].sort();
 
     return { locations, capabilities, bands };
+  },
+
+  // Delete a job role
+  deleteJob: async (id: string): Promise<boolean> => {
+    try {
+      await apiClient.delete(`/job/${id}`);
+      return true;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return false;
+      }
+      throw error;
+    }
   },
 };
