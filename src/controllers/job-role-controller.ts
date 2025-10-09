@@ -1,10 +1,14 @@
 import type { Request, Response } from 'express';
-import type { JobRole, NewJobRole } from '../models/job-roles.js';
+import type { JobApplicationData, JobRole, NewJobRole } from '../models/job-roles.js';
 import { api } from '../services/api.js';
 import type { JobRoleService } from '../services/job-role-service.js';
+import type { JobApplicationValidator } from '../validators/index.js';
 
 export class JobRoleController {
-  constructor(private readonly jobRoleService: JobRoleService) {}
+  constructor(
+    private readonly jobRoleService: JobRoleService,
+    private readonly applicationValidator: JobApplicationValidator
+  ) {}
 
   async getAllJobRoles(req: Request, res: Response): Promise<void> {
     try {
@@ -86,6 +90,13 @@ export class JobRoleController {
         return;
       }
 
+      // Validate that ID is a positive integer
+      const numericId = Number.parseInt(id, 10);
+      if (Number.isNaN(numericId) || numericId <= 0 || !Number.isInteger(numericId)) {
+        res.status(400).send('Invalid job role ID. ID must be a positive integer.');
+        return;
+      }
+
       // Fetch job role details directly from the backend API
       const jobRole = await api.getJobById(id);
 
@@ -109,10 +120,18 @@ export class JobRoleController {
 
   async getJobRoleDetails(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
+    const { applicationSubmitted } = req.query;
 
     try {
       if (!id) {
         res.status(400).send('Job role ID is required');
+        return;
+      }
+
+      // Validate that ID is a positive integer
+      const numericId = Number.parseInt(id, 10);
+      if (Number.isNaN(numericId) || numericId <= 0 || !Number.isInteger(numericId)) {
+        res.status(400).send('Invalid job role ID. ID must be a positive integer.');
         return;
       }
 
@@ -122,6 +141,7 @@ export class JobRoleController {
       res.render('job-roles/detail', {
         title: `${jobRoleDetails.name} - Job Details`,
         jobRole: jobRoleDetails,
+        applicationSubmitted: applicationSubmitted === 'true',
       });
     } catch (error) {
       console.error('Error fetching job role details:', error);
@@ -146,15 +166,25 @@ export class JobRoleController {
         return;
       }
 
+      // Validate that ID is a positive integer
+      const numericId = Number.parseInt(id, 10);
+      if (Number.isNaN(numericId) || numericId <= 0 || !Number.isInteger(numericId)) {
+        res.status(400).send('Invalid job role ID. ID must be a positive integer.');
+        return;
+      }
+
       // Fetch job role details directly from the backend API
       const jobRoleDetails = await api.getJobById(id);
 
-      // For now, redirect to the existing detail page
-      // You can create a separate application form view later
-      res.render('job-roles/detail', {
+      if (!jobRoleDetails) {
+        res.status(404).send(`Job role with ID ${id} not found`);
+        return;
+      }
+
+      // Render the application form
+      res.render('job-roles/apply', {
         title: `Apply for ${jobRoleDetails.name}`,
         jobRole: jobRoleDetails,
-        isApplicationPage: true,
       });
     } catch (error) {
       console.error('Error fetching job role for application:', error);
@@ -167,6 +197,47 @@ export class JobRoleController {
         }
       }
       res.status(500).send('Error loading job application page');
+    }
+  }
+
+  async submitJobRoleApplication(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+
+    try {
+      if (!id) {
+        res.status(400).send('Job role ID is required');
+        return;
+      }
+
+      // Validate that ID is a positive integer
+      const numericId = Number.parseInt(id, 10);
+      if (Number.isNaN(numericId) || numericId <= 0 || !Number.isInteger(numericId)) {
+        res.status(400).send('Invalid job role ID. ID must be a positive integer.');
+        return;
+      }
+
+      // Get form data
+      const applicationData = req.body as JobApplicationData;
+
+      // Validate application data
+      const validationResult = this.applicationValidator.validate(applicationData);
+      if (!validationResult.isValid) {
+        res.status(400).send(validationResult.errors.join(', '));
+        return;
+      }
+
+      // TODO: In a real application, you would:
+      // 1. Upload the CV file to storage
+      // 2. Save the application to a database
+      // 3. Send confirmation email to applicant
+      // 4. Notify HR team
+
+      // For now, redirect to a success page or back to job details with a success message
+      // You can create a success page later
+      res.redirect(`/jobs/${id}/details?applicationSubmitted=true`);
+    } catch (error) {
+      console.error('Error submitting job application:', error);
+      res.status(500).send('Error submitting application. Please try again.');
     }
   }
 
@@ -302,6 +373,13 @@ export class JobRoleController {
         return;
       }
 
+      // Validate that ID is a positive integer
+      const numericId = Number.parseInt(id, 10);
+      if (Number.isNaN(numericId) || numericId <= 0 || !Number.isInteger(numericId)) {
+        res.status(400).send('Invalid job role ID. ID must be a positive integer.');
+        return;
+      }
+
       const success = await this.jobRoleService.deleteJobRole(id);
 
       if (!success) {
@@ -323,6 +401,13 @@ export class JobRoleController {
 
       if (!id) {
         res.status(400).send('Job role ID is required');
+        return;
+      }
+
+      // Validate that ID is a positive integer
+      const numericId = Number.parseInt(id, 10);
+      if (Number.isNaN(numericId) || numericId <= 0 || !Number.isInteger(numericId)) {
+        res.status(400).send('Invalid job role ID. ID must be a positive integer.');
         return;
       }
 
@@ -392,6 +477,13 @@ export class JobRoleController {
 
       if (!id) {
         res.status(400).send('Job role ID is required');
+        return;
+      }
+
+      // Validate that ID is a positive integer
+      const numericId = Number.parseInt(id, 10);
+      if (Number.isNaN(numericId) || numericId <= 0 || !Number.isInteger(numericId)) {
+        res.status(400).send('Invalid job role ID. ID must be a positive integer.');
         return;
       }
 

@@ -63,3 +63,17 @@ export interface Band {
   id: number;
   name: string;
 }
+
+export interface JobApplicationData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  countryCode?: string;
+  currentJobTitle: string;
+  yearsOfExperience: string;
+  linkedinUrl?: string;
+  coverLetter: string;
+  additionalComments?: string;
+  acceptTerms: boolean;
+}

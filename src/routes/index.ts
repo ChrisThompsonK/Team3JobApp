@@ -2,10 +2,12 @@ import { Router } from 'express';
 import { HealthController, HomeController } from '../controllers/index.js';
 import { JobRoleController } from '../controllers/job-role-controller.js';
 import { jobRoleService } from '../services/job-role-service.js';
+import { JobApplicationValidator } from '../validators/index.js';
 
 const router = Router();
 
-const jobRoleController = new JobRoleController(jobRoleService);
+const applicationValidator = new JobApplicationValidator();
+const jobRoleController = new JobRoleController(jobRoleService, applicationValidator);
 /**
  * Home Routes
  */
@@ -34,6 +36,7 @@ router.get('/jobs/:id/edit', jobRoleController.showEditJobRoleForm.bind(jobRoleC
 router.post('/jobs/:id/edit', jobRoleController.updateJobRole.bind(jobRoleController));
 router.get('/jobs/:id/details', jobRoleController.getJobRoleDetails.bind(jobRoleController));
 router.get('/jobs/:id/apply', jobRoleController.getJobRoleApplication.bind(jobRoleController));
+router.post('/jobs/:id/apply', jobRoleController.submitJobRoleApplication.bind(jobRoleController));
 router.post('/jobs/:id/delete', jobRoleController.deleteJobRole.bind(jobRoleController));
 router.delete('/jobs/:id', jobRoleController.deleteJobRole.bind(jobRoleController));
 

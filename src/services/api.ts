@@ -17,6 +17,7 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
 export const api = {
   // Root endpoint
   getRoot: async (): Promise<unknown> => {
