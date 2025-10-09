@@ -23,7 +23,7 @@ export class RealJobRoleService implements JobRoleService {
   async getJobRoleById(id: string | number): Promise<JobRole | null> {
     try {
       return await api.getJobById(id);
-    } catch (error) {
+    } catch (_error) {
       return null;
     }
   }
@@ -34,7 +34,7 @@ export class RealJobRoleService implements JobRoleService {
   async getJobRoleDetailsById(id: string | number): Promise<JobRoleDetails | null> {
     try {
       return await api.getJobById(id);
-    } catch (error) {
+    } catch (_error) {
       return null;
     }
   }
