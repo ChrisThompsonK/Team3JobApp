@@ -1,4 +1,9 @@
-import type { JobRole, JobRoleDetails } from '../models/job-roles.js';
+import type {
+  CreateJobRoleRequest as BackendCreateJobRoleRequest,
+  JobRole,
+  JobRoleDetails,
+} from '../models/job-roles.js';
+import { api } from './api.js';
 
 export interface CreateJobRoleRequest {
   name: string;
@@ -25,367 +30,115 @@ export interface UpdateJobRoleRequest {
   status?: 'Open' | 'Closing Soon' | 'Closed';
 }
 
-export interface JobRoleService {
-  getAllJobRoles(): Promise<JobRole[]>;
-  getJobRoleById(id: string): Promise<JobRole | null>;
-  getJobRoleDetailsById(id: string): Promise<JobRoleDetails | null>;
-  createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails>;
-  updateJobRole(id: string, jobRoleData: UpdateJobRoleRequest): Promise<JobRoleDetails | null>;
-  deleteJobRole(id: string): Promise<boolean>;
-  generateJobRolesReportCsv(): Promise<string>;
-}
-
-export class MockJobRoleService implements JobRoleService {
-  private readonly sampleJobRoles: JobRoleDetails[] = [
-    {
-      id: '1',
-      name: 'Software Engineer',
-      location: 'Belfast',
-      capability: 'Engineering',
-      band: 'Associate',
-      closingDate: new Date('2024-12-15'),
-      description:
-        'We are looking for a passionate Software Engineer to join our dynamic team in Belfast. You will be working on cutting-edge applications and contributing to innovative solutions that make a real impact.',
-      responsibilities: [
-        'Design, develop, and maintain high-quality software applications',
-        'Collaborate with cross-functional teams to deliver features',
-        'Participate in code reviews and maintain coding standards',
-        'Troubleshoot and debug applications',
-        'Stay up-to-date with emerging technologies and industry trends',
-      ],
-      jobSpecUrl: 'https://sharepoint.company.com/sites/hr/jobspecs/software-engineer-1.pdf',
-      status: 'Open',
-      openPositions: 3,
-    },
-    {
-      id: '2',
-      name: 'Senior Software Engineer',
-      location: 'London',
-      capability: 'Engineering',
-      band: 'Senior Associate',
-      closingDate: new Date('2024-11-30'),
-      description:
-        'Join our London team as a Senior Software Engineer and take the lead on complex technical challenges while mentoring junior developers.',
-      responsibilities: [
-        'Lead the design and architecture of software systems',
-        'Mentor junior developers and conduct technical interviews',
-        'Drive technical decisions and best practices',
-        'Collaborate with product teams to deliver scalable solutions',
-        'Contribute to the technical strategy and roadmap',
-      ],
-      jobSpecUrl: 'https://sharepoint.company.com/sites/hr/jobspecs/senior-software-engineer-2.pdf',
-      status: 'Closing Soon',
-      openPositions: 2,
-    },
-    {
-      id: '3',
-      name: 'Product Manager',
-      location: 'Manchester',
-      capability: 'Product',
-      band: 'Senior Associate',
-      closingDate: new Date('2024-12-01'),
-      description:
-        'Drive product strategy and execution for our core platform products. Work closely with engineering, design, and business stakeholders.',
-      responsibilities: [
-        'Define and execute product roadmaps',
-        'Conduct market research and competitive analysis',
-        'Work with engineering teams to deliver features',
-        'Analyze product metrics and user feedback',
-        'Collaborate with stakeholders across the organization',
-      ],
-      jobSpecUrl: 'https://sharepoint.company.com/sites/hr/jobspecs/product-manager-3.pdf',
-      status: 'Open',
-      openPositions: 1,
-    },
-    {
-      id: '4',
-      name: 'UX Designer',
-      location: 'Birmingham',
-      capability: 'Design',
-      band: 'Associate',
-      closingDate: new Date('2024-11-25'),
-      description:
-        'Create exceptional user experiences for our digital products. You will be responsible for user research, wireframing, and prototyping.',
-      responsibilities: [
-        'Conduct user research and usability testing',
-        'Create wireframes, prototypes, and design specifications',
-        'Collaborate with product and engineering teams',
-        'Maintain and evolve design systems',
-        'Present design concepts to stakeholders',
-      ],
-      jobSpecUrl: 'https://sharepoint.company.com/sites/hr/jobspecs/ux-designer-4.pdf',
-      status: 'Closing Soon',
-      openPositions: 1,
-    },
-    {
-      id: '5',
-      name: 'Data Scientist',
-      location: 'Edinburgh',
-      capability: 'Data & Analytics',
-      band: 'Senior Associate',
-      closingDate: new Date('2024-12-10'),
-      description:
-        'Join our data team to extract insights from large datasets and build predictive models that drive business decisions.',
-      responsibilities: [
-        'Analyze large datasets to identify trends and patterns',
-        'Build and deploy machine learning models',
-        'Create data visualizations and reports',
-        'Collaborate with business teams to define analytics requirements',
-        'Ensure data quality and governance standards',
-      ],
-      jobSpecUrl: 'https://sharepoint.company.com/sites/hr/jobspecs/data-scientist-5.pdf',
-      status: 'Open',
-      openPositions: 2,
-    },
-    {
-      id: '6',
-      name: 'DevOps Engineer',
-      location: 'Belfast',
-      capability: 'Engineering',
-      band: 'Associate',
-      closingDate: new Date('2024-12-05'),
-      description:
-        'Build and maintain our cloud infrastructure and deployment pipelines. Help teams deliver software faster and more reliably.',
-      responsibilities: [
-        'Design and implement CI/CD pipelines',
-        'Manage cloud infrastructure and monitoring',
-        'Automate deployment and scaling processes',
-        'Ensure security and compliance standards',
-        'Support development teams with infrastructure needs',
-      ],
-      jobSpecUrl: 'https://sharepoint.company.com/sites/hr/jobspecs/devops-engineer-6.pdf',
-      status: 'Open',
-      openPositions: 2,
-    },
-    {
-      id: '7',
-      name: 'Principal Software Engineer',
-      location: 'London',
-      capability: 'Engineering',
-      band: 'Principal',
-      closingDate: new Date('2024-12-20'),
-      description:
-        'Lead technical strategy and architecture decisions across multiple teams. Drive innovation and technical excellence.',
-      responsibilities: [
-        'Define technical strategy and architecture standards',
-        'Lead complex technical initiatives',
-        'Mentor senior engineers and technical leads',
-        'Drive adoption of best practices and new technologies',
-        'Collaborate with leadership on technical vision',
-      ],
-      jobSpecUrl: 'https://sharepoint.company.com/sites/hr/jobspecs/principal-engineer-7.pdf',
-      status: 'Open',
-      openPositions: 1,
-    },
-    {
-      id: '8',
-      name: 'Business Analyst',
-      location: 'Leeds',
-      capability: 'Business Analysis',
-      band: 'Associate',
-      closingDate: new Date('2024-11-28'),
-      description:
-        'Bridge the gap between business needs and technical solutions. Analyze requirements and drive process improvements.',
-      responsibilities: [
-        'Gather and analyze business requirements',
-        'Create detailed documentation and specifications',
-        'Facilitate workshops and stakeholder meetings',
-        'Support testing and user acceptance activities',
-        'Identify process improvement opportunities',
-      ],
-      jobSpecUrl: 'https://sharepoint.company.com/sites/hr/jobspecs/business-analyst-8.pdf',
-      status: 'Closing Soon',
-      openPositions: 1,
-    },
-    {
-      id: '9',
-      name: 'Scrum Master',
-      location: 'Glasgow',
-      capability: 'Delivery',
-      band: 'Senior Associate',
-      closingDate: new Date('2024-12-03'),
-      description:
-        'Facilitate agile ceremonies and remove impediments for development teams. Drive continuous improvement and agile adoption.',
-      responsibilities: [
-        'Facilitate scrum ceremonies and meetings',
-        'Coach teams on agile practices',
-        'Remove impediments and blockers',
-        'Track and report on team metrics',
-        'Drive continuous improvement initiatives',
-      ],
-      jobSpecUrl: 'https://sharepoint.company.com/sites/hr/jobspecs/scrum-master-9.pdf',
-      status: 'Open',
-      openPositions: 1,
-    },
-    {
-      id: '10',
-      name: 'Security Engineer',
-      location: 'London',
-      capability: 'Cyber Security',
-      band: 'Senior Associate',
-      closingDate: new Date('2024-12-12'),
-      description:
-        'Protect our systems and data by implementing security best practices and monitoring for threats.',
-      responsibilities: [
-        'Implement security controls and monitoring',
-        'Conduct security assessments and audits',
-        'Respond to security incidents and threats',
-        'Develop security policies and procedures',
-        'Train teams on security best practices',
-      ],
-      jobSpecUrl: 'https://sharepoint.company.com/sites/hr/jobspecs/security-engineer-10.pdf',
-      status: 'Open',
-      openPositions: 1,
-    },
-  ];
-
+/**
+ * Service for managing job roles via the backend API
+ */
+export class JobRoleService {
+  /**
+   * Get all job roles from the backend database
+   */
   async getAllJobRoles(): Promise<JobRole[]> {
-    // Simulate API delay
-    await this.delay(100);
-    return [...this.sampleJobRoles];
+    return api.getJobs();
   }
 
+  /**
+   * Get a single job role by ID from the backend database
+   */
   async getJobRoleById(id: string): Promise<JobRole | null> {
-    // Simulate API delay
-    await this.delay(50);
-    const jobRole = this.sampleJobRoles.find((role) => role.id === id);
-    return jobRole || null;
+    return api.getJobById(id);
   }
 
+  /**
+   * Get detailed job role information by ID from the backend database
+   */
   async getJobRoleDetailsById(id: string): Promise<JobRoleDetails | null> {
-    // Simulate API delay
-    await this.delay(50);
-    const jobRoleDetails = this.sampleJobRoles.find((role) => role.id === id);
-    return jobRoleDetails || null;
+    // For now, the API returns the same data for both
+    // If the backend has a different endpoint for details, update this
+    const jobRole = await api.getJobById(id);
+    return jobRole as JobRoleDetails | null;
   }
 
+  /**
+   * Create a new job role using the backend API
+   */
   async createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails> {
-    // Generate a new ID
-    const newId = (
-      Math.max(...this.sampleJobRoles.map((role) => parseInt(role.id, 10)), 0) + 1
-    ).toString();
+    // Transform the frontend format to backend format
+    const closingDateStr = jobRoleData.closingDate.toISOString().split('T')[0];
+    if (!closingDateStr) {
+      throw new Error('Invalid closing date');
+    }
 
-    // Parse responsibilities from string to array
-    const responsibilities = jobRoleData.responsibilities
-      ? jobRoleData.responsibilities.split('\n').filter((line) => line.trim().length > 0)
-      : [];
-
-    // Create the detailed job role
-    const newJobRoleDetails: JobRoleDetails = {
-      id: newId,
-      name: jobRoleData.name,
+    const backendJobData: BackendCreateJobRoleRequest = {
+      roleName: jobRoleData.name,
       location: jobRoleData.location,
       capability: jobRoleData.capability,
       band: jobRoleData.band,
-      closingDate: jobRoleData.closingDate,
-      status: 'Open' as const,
-      openPositions: jobRoleData.openPositions || 1,
+      closingDate: closingDateStr, // Format as YYYY-MM-DD
+      ...(jobRoleData.description && { description: jobRoleData.description }),
+      ...(jobRoleData.responsibilities && { responsibilities: jobRoleData.responsibilities }),
+      ...(jobRoleData.jobSpecUrl && { jobSpecUrl: jobRoleData.jobSpecUrl }),
+      ...(jobRoleData.openPositions && { openPositions: jobRoleData.openPositions }),
     };
 
-    // Add optional properties only if they exist
-    if (jobRoleData.description) {
-      newJobRoleDetails.description = jobRoleData.description;
-    }
-    if (responsibilities.length > 0) {
-      newJobRoleDetails.responsibilities = responsibilities;
-    }
-    if (jobRoleData.jobSpecUrl) {
-      newJobRoleDetails.jobSpecUrl = jobRoleData.jobSpecUrl;
-    }
-
-    // Add to our mock data
-    this.sampleJobRoles.push(newJobRoleDetails);
-
-    return newJobRoleDetails;
+    return api.createJob(backendJobData);
   }
 
-  async updateJobRole(
-    id: string,
-    jobRoleData: UpdateJobRoleRequest
-  ): Promise<JobRoleDetails | null> {
-    await this.delay(50);
-    const index = this.sampleJobRoles.findIndex((jobRole) => jobRole.id === id);
-    if (index === -1) {
-      return null;
+  /**
+   * Update a job role in the backend database
+   */
+  async updateJobRole(id: string, updates: UpdateJobRoleRequest): Promise<JobRoleDetails | null> {
+    // Transform the frontend format to backend format
+    const backendUpdates: Record<string, string | number> = {};
+
+    if (updates.name !== undefined) {
+      backendUpdates['roleName'] = updates.name;
     }
-
-    const existingJobRole = this.sampleJobRoles[index];
-    if (!existingJobRole) {
-      return null;
+    if (updates.location !== undefined) {
+      backendUpdates['location'] = updates.location;
     }
-
-    // Parse responsibilities from string to array if provided
-    let responsibilities = existingJobRole.responsibilities;
-    if (jobRoleData.responsibilities !== undefined) {
-      responsibilities = jobRoleData.responsibilities
-        ? jobRoleData.responsibilities.split('\n').filter((line) => line.trim().length > 0)
-        : undefined;
-    }
-
-    // Update the job role with new data
-    const updatedJobRole: JobRoleDetails = {
-      id: existingJobRole.id,
-      name: jobRoleData.name ?? existingJobRole.name,
-      location: jobRoleData.location ?? existingJobRole.location,
-      capability: jobRoleData.capability ?? existingJobRole.capability,
-      band: jobRoleData.band ?? existingJobRole.band,
-      closingDate: jobRoleData.closingDate ?? existingJobRole.closingDate,
-    };
-
-    // Add optional status and openPositions
-    if (jobRoleData.status !== undefined) {
-      updatedJobRole.status = jobRoleData.status;
-    } else if (existingJobRole.status) {
-      updatedJobRole.status = existingJobRole.status;
-    }
-
-    if (jobRoleData.openPositions !== undefined) {
-      updatedJobRole.openPositions = jobRoleData.openPositions;
-    } else if (existingJobRole.openPositions !== undefined) {
-      updatedJobRole.openPositions = existingJobRole.openPositions;
-    }
-
-    // Add optional fields only if they have values
-    if (jobRoleData.description !== undefined) {
-      if (jobRoleData.description) {
-        updatedJobRole.description = jobRoleData.description;
+    if (updates.closingDate !== undefined) {
+      // Convert Date to ISO string for the API
+      const dateStr = updates.closingDate.toISOString().split('T')[0];
+      if (dateStr !== undefined) {
+        backendUpdates['closingDate'] = dateStr;
       }
-    } else if (existingJobRole.description) {
-      updatedJobRole.description = existingJobRole.description;
     }
 
-    if (responsibilities) {
-      updatedJobRole.responsibilities = responsibilities;
-    }
+    // Note: capability and band are currently strings in UpdateJobRoleRequest
+    // but the backend expects IDs. You may need to add mapping logic here
+    // or update the form to pass IDs instead of names.
 
-    if (jobRoleData.jobSpecUrl !== undefined) {
-      if (jobRoleData.jobSpecUrl) {
-        updatedJobRole.jobSpecUrl = jobRoleData.jobSpecUrl;
+    const result = await api.updateJob(
+      id,
+      backendUpdates as {
+        roleName?: string;
+        location?: string;
+        capabilityId?: number;
+        bandId?: number;
+        closingDate?: string;
       }
-    } else if (existingJobRole.jobSpecUrl) {
-      updatedJobRole.jobSpecUrl = existingJobRole.jobSpecUrl;
-    }
-
-    this.sampleJobRoles[index] = updatedJobRole;
-    return updatedJobRole;
+    );
+    return result as JobRoleDetails | null;
   }
 
-  async deleteJobRole(id: string): Promise<boolean> {
-    const index = this.sampleJobRoles.findIndex((jobRole) => jobRole.id === id);
-    if (index === -1) {
-      return false;
-    }
-    this.sampleJobRoles.splice(index, 1);
-    return true;
+  /**
+   * Delete a job role (not yet implemented in backend)
+   */
+  async deleteJobRole(_id: string): Promise<boolean> {
+    throw new Error('Delete job role not yet implemented for real API');
   }
 
+  /**
+   * Generate CSV report from backend database data
+   */
   async generateJobRolesReportCsv(): Promise<string> {
+    // Get all job roles from the backend database
     const allJobRoles = await this.getAllJobRoles();
 
     // Create CSV headers
     const headers = ['ID', 'Job Name', 'Location', 'Capability', 'Band', 'Closing Date'];
 
-    // Create CSV rows
+    // Create CSV rows from real backend data
     const rows = allJobRoles.map((job) => [
       job.id,
       `"${job.name.replace(/"/g, '""')}"`, // Escape quotes in job names
@@ -400,16 +153,7 @@ export class MockJobRoleService implements JobRoleService {
 
     return csvContent;
   }
-
-  private delay(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
 }
 
-// Import RealJobRoleService
-import { RealJobRoleService } from './real-job-role-service.js';
-
 // Export a singleton instance for easy use
-// Switch between Mock and Real service based on environment
-const USE_REAL_API = process.env['USE_REAL_API'] === 'true' || true; // Set to true to use real API
-export const jobRoleService = USE_REAL_API ? new RealJobRoleService() : new MockJobRoleService();
+export const jobRoleService = new JobRoleService();
