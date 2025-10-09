@@ -1,6 +1,6 @@
 // frontend/src/services/api.ts
 import axios from 'axios';
-import type { JobRole, JobRoleDetails } from '../models/job-roles.js';
+import type { JobRole, JobRoleDetails, CreateJobRoleRequest, UpdateJobRoleRequest } from '../models/job-roles.js';
 
 const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001';
 
@@ -100,32 +100,13 @@ export const api = {
   },
 
   // Create a new job role
-  createJob: async (jobData: {
-    roleName: string;
-    location: string;
-    capability: string;
-    band: string;
-    closingDate: string;
-    description?: string | undefined;
-    responsibilities?: string | undefined;
-    jobSpecUrl?: string | undefined;
-    openPositions?: number | undefined;
-  }): Promise<JobRoleDetails> => {
+  createJob: async (jobData: CreateJobRoleRequest): Promise<JobRoleDetails> => {
     const response = await apiClient.post<BackendJobRoleDetails>('/jobs', jobData);
     return transformJobRoleDetails(response.data);
   },
 
   // Update a job role
-  updateJob: async (
-    id: string,
-    updates: {
-      roleName?: string;
-      location?: string;
-      capabilityId?: number;
-      bandId?: number;
-      closingDate?: string;
-    }
-  ): Promise<JobRole | null> => {
+  updateJob: async (id: string, updates: UpdateJobRoleRequest): Promise<JobRole | null> => {
     try {
       const response = await apiClient.put<BackendJobRole>(`/jobs/${id}`, updates);
       return transformJobRole(response.data);
