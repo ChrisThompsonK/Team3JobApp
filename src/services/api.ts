@@ -1,6 +1,12 @@
 // frontend/src/services/api.ts
 import axios from 'axios';
-import type { JobRole, JobRoleDetails } from '../models/job-roles.js';
+import type {
+  Band,
+  Capability,
+  JobRole,
+  JobRoleCreate,
+  JobRoleDetails,
+} from '../models/job-roles.js';
 
 const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001/api';
 
@@ -11,116 +17,6 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
-// Backend API response type (now includes names from joined tables)
-interface BackendJobRole {
-  jobRoleId: number;
-  roleName: string;
-  location: string;
-  capabilityId: number;
-  bandId: number;
-  capabilityName: string;
-  bandName: string;
-  closingDate: string;
-}
-
-// Backend API response type for job details (includes all fields)
-interface BackendJobRoleDetails extends BackendJobRole {
-  description?: string;
-  responsibilities?: string;
-  jobSpecUrl?: string;
-  status?: string;
-  statusName?: string;
-  openPositions?: number;
-  open_positions?: number; // Alternative snake_case naming
-  numberOfPositions?: number; // Alternative naming
-}
-
-// Backend API response types for capabilities and bands
-interface BackendCapability {
-  capabilityId: number;
-  capabilityName: string;
-}
-
-interface BackendBand {
-  bandId: number;
-  bandName: string;
-}
-
-// Transform backend response to frontend format
-function transformJobRole(backendJob: BackendJobRole): JobRole {
-  // Debug: Log the backend response to understand its structure
-  console.log('Transforming backend job role:', JSON.stringify(backendJob, null, 2));
-
-  // Validate required fields
-  if (!backendJob.jobRoleId) {
-    console.error('Missing jobRoleId in backend response:', backendJob);
-    throw new Error('Backend response missing jobRoleId');
-  }
-
-  if (!backendJob.roleName) {
-    console.error('Missing roleName in backend response:', backendJob);
-    throw new Error('Backend response missing roleName');
-  }
-
-  if (!backendJob.capabilityName) {
-    console.error('Missing capabilityName in backend response:', backendJob);
-    throw new Error('Backend response missing capabilityName');
-  }
-
-  if (!backendJob.bandName) {
-    console.error('Missing bandName in backend response:', backendJob);
-    throw new Error('Backend response missing bandName');
-  }
-
-  return {
-    id: backendJob.jobRoleId.toString(),
-    name: backendJob.roleName,
-    location: backendJob.location,
-    capability: backendJob.capabilityName,
-    band: backendJob.bandName,
-    closingDate: new Date(backendJob.closingDate),
-  };
-}
-
-// Transform backend job details response to frontend format
-function transformJobRoleDetails(backendJob: BackendJobRoleDetails): JobRoleDetails {
-  // Debug: Log the backend response to understand its structure
-  console.log('Transforming backend job details:', JSON.stringify(backendJob, null, 2));
-
-  const baseJob: JobRole = {
-    id: backendJob.jobRoleId.toString(),
-    name: backendJob.roleName,
-    location: backendJob.location,
-    capability: backendJob.capabilityName,
-    band: backendJob.bandName,
-    closingDate: new Date(backendJob.closingDate),
-  };
-
-  const details: JobRoleDetails = { ...baseJob };
-
-  if (backendJob.description) details.description = backendJob.description;
-  if (backendJob.responsibilities) details.responsibilities = backendJob.responsibilities;
-  if (backendJob.jobSpecUrl) details.jobSpecUrl = backendJob.jobSpecUrl;
-
-  // Handle status - could be status or statusName from backend
-  if (backendJob.status) {
-    details.status = backendJob.status as 'Open' | 'Closing Soon' | 'Closed';
-  } else if (backendJob.statusName) {
-    details.status = backendJob.statusName as 'Open' | 'Closing Soon' | 'Closed';
-  }
-
-  // Handle openPositions - check multiple possible field names
-  const openPositionsValue =
-    backendJob.openPositions ?? backendJob.open_positions ?? backendJob.numberOfPositions;
-  if (openPositionsValue !== undefined && openPositionsValue !== null) {
-    details.openPositions = openPositionsValue;
-  }
-
-  console.log('Transformed job details:', JSON.stringify(details, null, 2));
-  return details;
-}
-
 export const api = {
   // Root endpoint
   getRoot: async (): Promise<unknown> => {
@@ -141,34 +37,37 @@ export const api = {
   },
 
   // Jobs endpoint - returns array of job roles
-  // Note: Filtering is done on the frontend until backend supports query parameters
+  // No transformation needed - backend returns standardized format
   getJobs: async (): Promise<JobRole[]> => {
-    const response = await apiClient.get<BackendJobRole[]>('/jobs');
-    // Transform backend format to frontend format
-    return response.data.map(transformJobRole);
+    const response = await apiClient.get<JobRole[]>('/jobs');
+    return response.data;
   },
 
   // Get single job role by ID with full details
-  getJobById: async (id: string): Promise<JobRoleDetails> => {
-    const response = await apiClient.get<BackendJobRoleDetails>(`/jobs/${id}`);
-    // Transform backend format to frontend format
-    return transformJobRoleDetails(response.data);
+  getJobById: async (id: string | number): Promise<JobRoleDetails> => {
+    const response = await apiClient.get<JobRoleDetails>(`/jobs/${id}`);
+    return response.data;
   },
 
   // Update a job role
   updateJob: async (
-    id: string,
+    id: string | number,
     updates: {
-      roleName?: string;
+      name?: string;
       location?: string;
       capabilityId?: number;
       bandId?: number;
       closingDate?: string;
+      description?: string | null;
+      responsibilities?: string | null;
+      jobSpecUrl?: string | null;
+      status?: string;
+      openPositions?: number;
     }
-  ): Promise<JobRole | null> => {
+  ): Promise<JobRoleDetails | null> => {
     try {
-      const response = await apiClient.put<BackendJobRole>(`/jobs/${id}`, updates);
-      return transformJobRole(response.data);
+      const response = await apiClient.put<JobRoleDetails>(`/jobs/${id}`, updates);
+      return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
         return null;
@@ -187,40 +86,35 @@ export const api = {
     const jobs = await api.getJobs();
 
     const locations = [...new Set(jobs.map((job) => job.location))].sort();
-    const capabilities = [...new Set(jobs.map((job) => job.capability))].sort();
-    const bands = [...new Set(jobs.map((job) => job.band))].sort();
+    const capabilities = [
+      ...new Set(
+        jobs.map((job) => job.capabilityName).filter((name): name is string => name !== null)
+      ),
+    ].sort();
+    const bands = [
+      ...new Set(jobs.map((job) => job.bandName).filter((name): name is string => name !== null)),
+    ].sort();
 
     return { locations, capabilities, bands };
   },
 
   // Get all capabilities with their IDs
-  getCapabilities: async (): Promise<{ id: number; name: string }[]> => {
-    const response = await apiClient.get<BackendCapability[]>('/capabilities');
-    return response.data.map((cap) => ({ id: cap.capabilityId, name: cap.capabilityName }));
+  getCapabilities: async (): Promise<Capability[]> => {
+    const response = await apiClient.get<Capability[]>('/capabilities');
+    return response.data;
   },
 
   // Get all bands with their IDs
-  getBands: async (): Promise<{ id: number; name: string }[]> => {
-    const response = await apiClient.get<BackendBand[]>('/bands');
-    return response.data.map((band) => ({ id: band.bandId, name: band.bandName }));
+  getBands: async (): Promise<Band[]> => {
+    const response = await apiClient.get<Band[]>('/bands');
+    return response.data;
   },
 
   // Create a new job role
-  createJob: async (jobData: {
-    roleName: string;
-    location: string;
-    capabilityId: number;
-    bandId: number;
-    closingDate: string; // YYYY-MM-DD format
-    description?: string;
-    responsibilities?: string;
-    jobSpecUrl?: string;
-    statusId?: number;
-    openPositions?: number;
-  }): Promise<JobRoleDetails> => {
+  createJob: async (jobData: JobRoleCreate): Promise<JobRoleDetails> => {
     try {
       console.log('Sending job creation request:', JSON.stringify(jobData, null, 2));
-      const response = await apiClient.post<BackendJobRoleDetails>('/jobs/job', jobData);
+      const response = await apiClient.post<JobRoleDetails>('/jobs/job', jobData);
       console.log('Backend response status:', response.status);
       console.log('Backend response data:', JSON.stringify(response.data, null, 2));
 
@@ -229,7 +123,7 @@ export const api = {
         throw new Error('Backend returned empty response');
       }
 
-      return transformJobRoleDetails(response.data);
+      return response.data;
     } catch (error) {
       console.error('Error in createJob API call:', error);
       if (axios.isAxiosError(error)) {
