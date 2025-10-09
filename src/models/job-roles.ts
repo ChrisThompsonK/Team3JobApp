@@ -27,6 +27,26 @@ export interface NewJobRole {
   openPositions?: string;
 }
 
+export interface CreateJobRoleRequest {
+  roleName: string;
+  location: string;
+  capability: string;
+  band: string;
+  closingDate: string;
+  description?: string;
+  responsibilities?: string;
+  jobSpecUrl?: string;
+  openPositions?: number;
+}
+
+export interface UpdateJobRoleRequest {
+  roleName?: string;
+  location?: string;
+  capabilityId?: number;
+  bandId?: number;
+  closingDate?: string;
+}
+
 export interface JobApplicationData {
   firstName: string;
   lastName: string;

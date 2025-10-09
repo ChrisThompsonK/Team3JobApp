@@ -1,5 +1,5 @@
 // Example usage of the Job Role Service
-// This file demonstrates how to use the MockJobRoleService in your application
+// This file demonstrates how to use the JobRoleService in your application
 
 import { jobRoleService } from '../services/job-role-service.js';
 
