@@ -334,13 +334,10 @@ export class JobRoleController {
         parsedOpenPositions && !Number.isNaN(parsedOpenPositions) ? parsedOpenPositions : undefined;
 
       // Fetch capabilities and bands to map names to IDs
-      const [capabilities, bands] = await Promise.all([
-        api.getCapabilities(),
-        api.getBands(),
-      ]);
+      const [capabilities, bands] = await Promise.all([api.getCapabilities(), api.getBands()]);
 
-      const capability = capabilities.find(c => c.name === jobRoleData.capability);
-      const band = bands.find(b => b.name === jobRoleData.band);
+      const capability = capabilities.find((c) => c.name === jobRoleData.capability);
+      const band = bands.find((b) => b.name === jobRoleData.band);
 
       if (!capability) {
         res.status(400).send(`Invalid capability: ${jobRoleData.capability}`);
@@ -526,13 +523,10 @@ export class JobRoleController {
       }
 
       // Fetch capabilities and bands to map names to IDs
-      const [capabilities, bands] = await Promise.all([
-        api.getCapabilities(),
-        api.getBands(),
-      ]);
+      const [capabilities, bands] = await Promise.all([api.getCapabilities(), api.getBands()]);
 
-      const capability = capabilities.find(c => c.name === jobRoleData.capability);
-      const band = bands.find(b => b.name === jobRoleData.band);
+      const capability = capabilities.find((c) => c.name === jobRoleData.capability);
+      const band = bands.find((b) => b.name === jobRoleData.band);
 
       if (!capability) {
         res.status(400).send(`Invalid capability: ${jobRoleData.capability}`);
