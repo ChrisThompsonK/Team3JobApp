@@ -189,30 +189,36 @@ export class JobRoleController {
 
   async showNewJobRoleForm(_req: Request, res: Response): Promise<void> {
     try {
-      const locationOptions = [
-        'Belfast',
-        'London',
-        'Manchester',
-        'Birmingham',
-        'Edinburgh',
-        'Leeds',
-        'Glasgow',
-        'Remote',
-      ];
+      // Fetch dynamic data from the API
+      const [capabilities, bands, distinctValues] = await Promise.all([
+        api.getCapabilities(),
+        api.getBands(),
+        api.getDistinctValues(),
+      ]);
 
-      const capabilityOptions = [
-        'Engineering',
-        'Product',
-        'Design',
-        'Data & Analytics',
-        'Business Analysis',
-        'Delivery',
-        'Cyber Security',
-        'Quality Assurance',
-        'DevOps',
-      ];
+      // Use locations from existing jobs, or fallback to hardcoded list
+      const locationOptions =
+        distinctValues.locations.length > 0
+          ? distinctValues.locations
+          : [
+              'Belfast',
+              'London',
+              'Derry',
+              'Birmingham',
+              'Dublin',
+              'Gdansk',
+              'Helsinki',
+              'Paris',
+              'Wommelgem',
+              'Buenos Aires',
+              'Indianapolis',
+              'Toronto',
+              'Nova Scotia',
+            ];
 
-      const bandOptions = ['Graduate', 'Associate', 'Senior Associate', 'Principal', 'Director'];
+      // Use capability and band names from the backend
+      const capabilityOptions = capabilities.map((cap) => cap.name);
+      const bandOptions = bands.map((band) => band.name);
 
       res.render('job-roles/new', {
         title: 'Add New Job Role',
@@ -229,6 +235,9 @@ export class JobRoleController {
   async createJobRole(req: Request, res: Response): Promise<void> {
     try {
       const jobRoleData = req.body as NewJobRole;
+
+      // Log the received data for debugging
+      console.log('Received job role data from form:', JSON.stringify(jobRoleData, null, 2));
 
       // Validate required fields
       if (
@@ -247,6 +256,12 @@ export class JobRoleController {
       }
 
       // Create the job role
+      const parsedOpenPositions = jobRoleData.openPositions
+        ? parseInt(jobRoleData.openPositions, 10)
+        : undefined;
+      const openPositions =
+        parsedOpenPositions && !Number.isNaN(parsedOpenPositions) ? parsedOpenPositions : undefined;
+
       const newJobRole = await this.jobRoleService.createJobRole({
         name: jobRoleData.name.trim(),
         location: jobRoleData.location,
@@ -256,15 +271,24 @@ export class JobRoleController {
         description: jobRoleData.description?.trim() || undefined,
         responsibilities: jobRoleData.responsibilities?.trim() || undefined,
         jobSpecUrl: jobRoleData.jobSpecUrl?.trim() || undefined,
-        openPositions: jobRoleData.openPositions
-          ? parseInt(jobRoleData.openPositions, 10)
-          : undefined,
+        openPositions,
       });
 
       // Redirect to the new job role details page
       res.redirect(`/jobs/${newJobRole.id}/details`);
     } catch (error) {
       console.error('Error creating job role:', error);
+      // Log more details about the error
+      if (error instanceof Error) {
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      }
+      // Check if it's an axios error with response
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { status: number; data: unknown } };
+        console.error('API Response Status:', axiosError.response?.status);
+        console.error('API Response Data:', JSON.stringify(axiosError.response?.data, null, 2));
+      }
       res.status(500).send('Error creating job role');
     }
   }

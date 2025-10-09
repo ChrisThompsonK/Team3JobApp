@@ -35,10 +35,84 @@ export class RealJobRoleService implements JobRoleService {
   }
 
   /**
-   * Create a new job role (not yet implemented in backend)
+   * Create a new job role in the backend database
    */
-  async createJobRole(_jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails> {
-    throw new Error('Create job role not yet implemented for real API');
+  async createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails> {
+    // Fetch capabilities and bands to get IDs
+    const [capabilities, bands] = await Promise.all([api.getCapabilities(), api.getBands()]);
+
+    // Debug logging
+    console.log('Fetched capabilities from backend:', capabilities);
+    console.log('Fetched bands from backend:', bands);
+    console.log('Looking for capability:', jobRoleData.capability);
+    console.log('Looking for band:', jobRoleData.band);
+
+    // Find the matching IDs
+    const capability = capabilities.find(
+      (cap) => cap.name.toLowerCase() === jobRoleData.capability.toLowerCase()
+    );
+    const band = bands.find((b) => b.name.toLowerCase() === jobRoleData.band.toLowerCase());
+
+    if (!capability) {
+      throw new Error(`Capability '${jobRoleData.capability}' not found`);
+    }
+    if (!band) {
+      throw new Error(`Band '${jobRoleData.band}' not found`);
+    }
+
+    // Format closing date as YYYY-MM-DD
+    const closingDateStr = jobRoleData.closingDate.toISOString().split('T')[0];
+    if (!closingDateStr) {
+      throw new Error('Invalid closing date');
+    }
+
+    // Create the job role with backend-expected format
+    const createJobPayload: {
+      roleName: string;
+      location: string;
+      capabilityId: number;
+      bandId: number;
+      closingDate: string;
+      description?: string;
+      responsibilities?: string;
+      jobSpecUrl?: string;
+      statusId?: number;
+      openPositions?: number;
+    } = {
+      roleName: jobRoleData.name,
+      location: jobRoleData.location,
+      capabilityId: capability.id,
+      bandId: band.id,
+      closingDate: closingDateStr,
+      // Default the status to 'Open'.
+      // NOTE: This assumes the backend 'status' table has the 'Open' status with ID = 1.
+      // If your backend uses different IDs, update this value or fetch statuses from the API.
+      statusId: 1,
+    };
+
+    // Add optional fields only if they exist
+    if (jobRoleData.description) {
+      createJobPayload.description = jobRoleData.description;
+    }
+    if (jobRoleData.responsibilities) {
+      createJobPayload.responsibilities = jobRoleData.responsibilities;
+    }
+    if (jobRoleData.jobSpecUrl) {
+      createJobPayload.jobSpecUrl = jobRoleData.jobSpecUrl;
+    }
+    if (jobRoleData.openPositions !== undefined) {
+      createJobPayload.openPositions = jobRoleData.openPositions;
+    }
+
+    const newJob = await api.createJob(createJobPayload);
+
+    // Fetch the full details to return as JobRoleDetails
+    const jobDetails = await this.getJobRoleDetailsById(newJob.id);
+    if (!jobDetails) {
+      throw new Error('Failed to retrieve created job role details');
+    }
+
+    return jobDetails;
   }
 
   /**

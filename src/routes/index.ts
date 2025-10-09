@@ -19,15 +19,15 @@ router.get('/health', HealthController.index);
 
 /**
  * Job Role Routes
- * Note: Specific routes (like /jobs/new, /jobs/report) must come BEFORE parameterized routes (like /jobs/:id)
+ * Note: Specific routes (like /jobs/job, /jobs/report) must come BEFORE parameterized routes (like /jobs/:id)
  */
 // List all jobs
 router.get('/jobs', jobRoleController.getAllJobRoles.bind(jobRoleController));
 
 // Special routes that don't use :id parameter - MUST come before /jobs/:id routes
 router.get('/jobs/report', jobRoleController.generateJobRolesReport.bind(jobRoleController));
-router.get('/jobs/new', jobRoleController.showNewJobRoleForm.bind(jobRoleController));
-router.post('/jobs/new', jobRoleController.createJobRole.bind(jobRoleController));
+router.get('/jobs/job', jobRoleController.showNewJobRoleForm.bind(jobRoleController));
+router.post('/jobs/job', jobRoleController.createJobRole.bind(jobRoleController));
 
 // Parameterized routes - these use :id so they should come after specific routes
 router.get('/jobs/:id/edit', jobRoleController.showEditJobRoleForm.bind(jobRoleController));
