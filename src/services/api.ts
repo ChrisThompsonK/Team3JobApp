@@ -7,7 +7,7 @@ import type {
   UpdateJobRoleRequest,
 } from '../models/job-roles.js';
 
-const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001';
+const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001/api';
 
 // Create axios instance with default config
 const apiClient = axios.create({
@@ -28,6 +28,8 @@ interface BackendJobRole {
   capabilityName: string;
   bandName: string;
   closingDate: string;
+  capabilityId?: number;
+  bandId?: number;
 }
 
 // Backend API response type for job details (includes all fields)
@@ -175,6 +177,19 @@ export const api = {
     const bands = [...new Set(jobs.map((job) => job.band))].sort();
 
     return { locations, capabilities, bands };
+  },
+
+  // Delete a job role
+  deleteJob: async (id: string): Promise<boolean> => {
+    try {
+      await apiClient.delete(`/job/${id}`);
+      return true;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return false;
+      }
+      throw error;
+    }
   },
 
   // Get all capabilities (for creating/editing job roles)
