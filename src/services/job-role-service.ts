@@ -62,6 +62,23 @@ export class JobRoleService {
    * Create a new job role using the backend API
    */
   async createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails> {
+    // Fetch capabilities and bands from the backend to get IDs
+    const [capabilities, bands] = await Promise.all([api.getCapabilities(), api.getBands()]);
+
+    // Find the capability ID by name
+    const capability = capabilities.find(
+      (c) => c.name.toLowerCase() === jobRoleData.capability.toLowerCase()
+    );
+    if (!capability) {
+      throw new Error(`Capability '${jobRoleData.capability}' not found`);
+    }
+
+    // Find the band ID by name
+    const band = bands.find((b) => b.name.toLowerCase() === jobRoleData.band.toLowerCase());
+    if (!band) {
+      throw new Error(`Band '${jobRoleData.band}' not found`);
+    }
+
     // Transform the frontend format to backend format
     const closingDateStr = jobRoleData.closingDate.toISOString().split('T')[0];
     if (!closingDateStr) {
@@ -69,10 +86,10 @@ export class JobRoleService {
     }
 
     const backendJobData: BackendCreateJobRoleRequest = {
-      roleName: jobRoleData.name,
+      name: jobRoleData.name,
       location: jobRoleData.location,
-      capability: jobRoleData.capability,
-      band: jobRoleData.band,
+      capabilityId: capability.id,
+      bandId: band.id,
       closingDate: closingDateStr, // Format as YYYY-MM-DD
       ...(jobRoleData.description && { description: jobRoleData.description }),
       ...(jobRoleData.responsibilities && { responsibilities: jobRoleData.responsibilities }),

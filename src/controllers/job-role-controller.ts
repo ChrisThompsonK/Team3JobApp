@@ -317,6 +317,16 @@ export class JobRoleController {
         return;
       }
 
+      // Parse openPositions if provided
+      let openPositions: number | undefined;
+      if (jobRoleData.openPositions) {
+        openPositions = parseInt(jobRoleData.openPositions, 10);
+        if (isNaN(openPositions) || openPositions < 1) {
+          res.status(400).send('Open positions must be a positive number');
+          return;
+        }
+      }
+
       // Create the job role
       const newJobRole = await this.jobRoleService.createJobRole({
         name: jobRoleData.name.trim(),
@@ -327,9 +337,7 @@ export class JobRoleController {
         description: jobRoleData.description?.trim() || undefined,
         responsibilities: jobRoleData.responsibilities?.trim() || undefined,
         jobSpecUrl: jobRoleData.jobSpecUrl?.trim() || undefined,
-        openPositions: jobRoleData.openPositions
-          ? parseInt(jobRoleData.openPositions, 10)
-          : undefined,
+        openPositions,
       });
 
       // Redirect to the new job role details page

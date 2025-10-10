@@ -28,10 +28,10 @@ export interface NewJobRole {
 }
 
 export interface CreateJobRoleRequest {
-  roleName: string;
+  name: string;
   location: string;
-  capability: string;
-  band: string;
+  capabilityId: number;
+  bandId: number;
   closingDate: string;
   description?: string;
   responsibilities?: string;

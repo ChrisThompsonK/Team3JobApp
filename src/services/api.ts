@@ -18,9 +18,12 @@ const apiClient = axios.create({
 });
 
 // Backend API response type (now includes names from joined tables)
+// Can have either 'id' or 'jobRoleId' and either 'name' or 'roleName'
 interface BackendJobRole {
-  jobRoleId: number;
-  roleName: string;
+  id?: number;
+  jobRoleId?: number;
+  name?: string;
+  roleName?: string;
   location: string;
   capabilityName: string;
   bandName: string;
@@ -38,9 +41,16 @@ interface BackendJobRoleDetails extends BackendJobRole {
 
 // Transform backend response to frontend format
 function transformJobRole(backendJob: BackendJobRole): JobRole {
+  const id = backendJob.id || backendJob.jobRoleId;
+  const name = backendJob.name || backendJob.roleName;
+
+  if (!id) {
+    throw new Error('Invalid job role data: missing id');
+  }
+
   return {
-    id: backendJob.jobRoleId.toString(),
-    name: backendJob.roleName,
+    id: id.toString(),
+    name: name || 'Unknown Role',
     location: backendJob.location,
     capability: backendJob.capabilityName,
     band: backendJob.bandName,
@@ -50,14 +60,17 @@ function transformJobRole(backendJob: BackendJobRole): JobRole {
 
 // Transform backend job details response to frontend format
 function transformJobRoleDetails(backendJob: BackendJobRoleDetails): JobRoleDetails {
+  const id = backendJob.id || backendJob.jobRoleId;
+  const name = backendJob.name || backendJob.roleName;
+
   // Validate required fields
-  if (!backendJob || !backendJob.jobRoleId) {
-    throw new Error('Invalid job role data: missing jobRoleId');
+  if (!backendJob || !id) {
+    throw new Error('Invalid job role data: missing id');
   }
 
   const baseJob: JobRole = {
-    id: backendJob.jobRoleId.toString(),
-    name: backendJob.roleName || 'Unknown Role',
+    id: id.toString(),
+    name: name || 'Unknown Role',
     location: backendJob.location || 'Unknown Location',
     capability: backendJob.capabilityName || 'Unknown Capability',
     band: backendJob.bandName || 'Unknown Band',
@@ -131,7 +144,7 @@ export const api = {
 
   // Create a new job role
   createJob: async (jobData: CreateJobRoleRequest): Promise<JobRoleDetails> => {
-    const response = await apiClient.post<BackendJobRoleDetails>('/jobs', jobData);
+    const response = await apiClient.post<BackendJobRoleDetails>('/jobs/job', jobData);
     return transformJobRoleDetails(response.data);
   },
 
@@ -162,5 +175,17 @@ export const api = {
     const bands = [...new Set(jobs.map((job) => job.band))].sort();
 
     return { locations, capabilities, bands };
+  },
+
+  // Get all capabilities (for creating/editing job roles)
+  getCapabilities: async (): Promise<Array<{ id: number; name: string }>> => {
+    const response = await apiClient.get<Array<{ id: number; name: string }>>('/capabilities');
+    return response.data;
+  },
+
+  // Get all bands (for creating/editing job roles)
+  getBands: async (): Promise<Array<{ id: number; name: string }>> => {
+    const response = await apiClient.get<Array<{ id: number; name: string }>>('/bands');
+    return response.data;
   },
 };
