@@ -271,25 +271,14 @@ export class JobRoleController {
         'Remote',
       ];
 
-      const capabilityOptions = [
-        'Engineering',
-        'Product',
-        'Design',
-        'Data & Analytics',
-        'Business Analysis',
-        'Delivery',
-        'Cyber Security',
-        'Quality Assurance',
-        'DevOps',
-      ];
-
-      const bandOptions = ['Graduate', 'Associate', 'Senior Associate', 'Principal', 'Director'];
+      // Fetch capabilities and bands from the API
+      const [capabilities, bands] = await Promise.all([api.getCapabilities(), api.getBands()]);
 
       res.render('job-roles/new', {
         title: 'Add New Job Role',
         locationOptions,
-        capabilityOptions,
-        bandOptions,
+        capabilities,
+        bands,
       });
     } catch (error) {
       console.error('Error loading new job role form:', error);
@@ -305,31 +294,48 @@ export class JobRoleController {
       if (
         !jobRoleData.name ||
         !jobRoleData.location ||
-        !jobRoleData.capability ||
-        !jobRoleData.band ||
+        !jobRoleData.capabilityId ||
+        !jobRoleData.bandId ||
         !jobRoleData.closingDate
       ) {
         res
           .status(400)
           .send(
-            'Missing required fields: name, location, capability, band, and closingDate are required'
+            'Missing required fields: name, location, capabilityId, bandId, and closingDate are required'
           );
         return;
+      }
+
+      // Parse IDs
+      const capabilityId = parseInt(jobRoleData.capabilityId, 10);
+      const bandId = parseInt(jobRoleData.bandId, 10);
+
+      if (isNaN(capabilityId) || isNaN(bandId)) {
+        res.status(400).send('Invalid capability or band ID');
+        return;
+      }
+
+      // Parse openPositions if provided
+      let openPositions: number | undefined;
+      if (jobRoleData.openPositions) {
+        openPositions = parseInt(jobRoleData.openPositions, 10);
+        if (isNaN(openPositions) || openPositions < 1) {
+          res.status(400).send('Open positions must be a positive number');
+          return;
+        }
       }
 
       // Create the job role
       const newJobRole = await this.jobRoleService.createJobRole({
         name: jobRoleData.name.trim(),
         location: jobRoleData.location,
-        capability: jobRoleData.capability,
-        band: jobRoleData.band,
+        capabilityId,
+        bandId,
         closingDate: new Date(jobRoleData.closingDate),
         description: jobRoleData.description?.trim() || undefined,
         responsibilities: jobRoleData.responsibilities?.trim() || undefined,
         jobSpecUrl: jobRoleData.jobSpecUrl?.trim() || undefined,
-        openPositions: jobRoleData.openPositions
-          ? parseInt(jobRoleData.openPositions, 10)
-          : undefined,
+        openPositions,
       });
 
       // Redirect to the new job role details page
@@ -405,19 +411,8 @@ export class JobRoleController {
         'Remote',
       ];
 
-      const capabilityOptions = [
-        'Engineering',
-        'Product',
-        'Design',
-        'Data & Analytics',
-        'Business Analysis',
-        'Delivery',
-        'Cyber Security',
-        'Quality Assurance',
-        'DevOps',
-      ];
-
-      const bandOptions = ['Graduate', 'Associate', 'Senior Associate', 'Principal', 'Director'];
+      // Fetch capabilities and bands from the API
+      const [capabilities, bands] = await Promise.all([api.getCapabilities(), api.getBands()]);
 
       const statusOptions = ['Open', 'Closing Soon', 'Closed'];
 
@@ -437,8 +432,8 @@ export class JobRoleController {
           closingDate: closingDateFormatted,
         },
         locationOptions,
-        capabilityOptions,
-        bandOptions,
+        capabilities,
+        bands,
         statusOptions,
       });
     } catch (error) {
@@ -469,15 +464,24 @@ export class JobRoleController {
       if (
         !jobRoleData.name ||
         !jobRoleData.location ||
-        !jobRoleData.capability ||
-        !jobRoleData.band ||
+        !jobRoleData.capabilityId ||
+        !jobRoleData.bandId ||
         !jobRoleData.closingDate
       ) {
         res
           .status(400)
           .send(
-            'Missing required fields: name, location, capability, band, and closingDate are required'
+            'Missing required fields: name, location, capabilityId, bandId, and closingDate are required'
           );
+        return;
+      }
+
+      // Parse IDs
+      const capabilityId = parseInt(jobRoleData.capabilityId, 10);
+      const bandId = parseInt(jobRoleData.bandId, 10);
+
+      if (isNaN(capabilityId) || isNaN(bandId)) {
+        res.status(400).send('Invalid capability or band ID');
         return;
       }
 
@@ -485,8 +489,8 @@ export class JobRoleController {
       const updateData = {
         name: jobRoleData.name.trim(),
         location: jobRoleData.location,
-        capability: jobRoleData.capability,
-        band: jobRoleData.band,
+        capabilityId,
+        bandId,
         closingDate: new Date(jobRoleData.closingDate),
       };
 
