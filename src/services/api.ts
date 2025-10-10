@@ -179,7 +179,6 @@ export const api = {
     return { locations, capabilities, bands };
   },
 
-
   // Delete a job role
   deleteJob: async (id: string): Promise<boolean> => {
     try {
@@ -191,6 +190,7 @@ export const api = {
       }
       throw error;
     }
+  },
 
   // Get all capabilities (for creating/editing job roles)
   getCapabilities: async (): Promise<Array<{ id: number; name: string }>> => {
@@ -202,6 +202,5 @@ export const api = {
   getBands: async (): Promise<Array<{ id: number; name: string }>> => {
     const response = await apiClient.get<Array<{ id: number; name: string }>>('/bands');
     return response.data;
-
   },
 };

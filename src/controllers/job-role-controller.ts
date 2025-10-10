@@ -310,7 +310,7 @@ export class JobRoleController {
       const capabilityId = parseInt(jobRoleData.capabilityId, 10);
       const bandId = parseInt(jobRoleData.bandId, 10);
 
-      if (isNaN(capabilityId) || isNaN(bandId)) {
+      if (Number.isNaN(capabilityId) || Number.isNaN(bandId)) {
         res.status(400).send('Invalid capability or band ID');
         return;
       }
@@ -319,7 +319,7 @@ export class JobRoleController {
       let openPositions: number | undefined;
       if (jobRoleData.openPositions) {
         openPositions = parseInt(jobRoleData.openPositions, 10);
-        if (isNaN(openPositions) || openPositions < 1) {
+        if (Number.isNaN(openPositions) || openPositions < 1) {
           res.status(400).send('Open positions must be a positive number');
           return;
         }
@@ -480,7 +480,7 @@ export class JobRoleController {
       const capabilityId = parseInt(jobRoleData.capabilityId, 10);
       const bandId = parseInt(jobRoleData.bandId, 10);
 
-      if (isNaN(capabilityId) || isNaN(bandId)) {
+      if (Number.isNaN(capabilityId) || Number.isNaN(bandId)) {
         res.status(400).send('Invalid capability or band ID');
         return;
       }
