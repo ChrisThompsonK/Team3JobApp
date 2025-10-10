@@ -8,8 +8,8 @@ import { api } from './api.js';
 export interface CreateJobRoleRequest {
   name: string;
   location: string;
-  capability: string;
-  band: string;
+  capabilityId: number;
+  bandId: number;
   closingDate: Date;
   description?: string | undefined;
   responsibilities?: string | undefined;
@@ -20,8 +20,8 @@ export interface CreateJobRoleRequest {
 export interface UpdateJobRoleRequest {
   name?: string;
   location?: string;
-  capability?: string;
-  band?: string;
+  capabilityId?: number;
+  bandId?: number;
   closingDate?: Date;
   description?: string | undefined;
   responsibilities?: string | undefined;
@@ -62,23 +62,6 @@ export class JobRoleService {
    * Create a new job role using the backend API
    */
   async createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails> {
-    // Fetch capabilities and bands from the backend to get IDs
-    const [capabilities, bands] = await Promise.all([api.getCapabilities(), api.getBands()]);
-
-    // Find the capability ID by name
-    const capability = capabilities.find(
-      (c) => c.name.toLowerCase() === jobRoleData.capability.toLowerCase()
-    );
-    if (!capability) {
-      throw new Error(`Capability '${jobRoleData.capability}' not found`);
-    }
-
-    // Find the band ID by name
-    const band = bands.find((b) => b.name.toLowerCase() === jobRoleData.band.toLowerCase());
-    if (!band) {
-      throw new Error(`Band '${jobRoleData.band}' not found`);
-    }
-
     // Transform the frontend format to backend format
     const closingDateStr = jobRoleData.closingDate.toISOString().split('T')[0];
     if (!closingDateStr) {
@@ -88,8 +71,8 @@ export class JobRoleService {
     const backendJobData: BackendCreateJobRoleRequest = {
       name: jobRoleData.name,
       location: jobRoleData.location,
-      capabilityId: capability.id,
-      bandId: band.id,
+      capabilityId: jobRoleData.capabilityId,
+      bandId: jobRoleData.bandId,
       closingDate: closingDateStr, // Format as YYYY-MM-DD
       ...(jobRoleData.description && { description: jobRoleData.description }),
       ...(jobRoleData.responsibilities && { responsibilities: jobRoleData.responsibilities }),
@@ -113,6 +96,12 @@ export class JobRoleService {
     if (updates.location !== undefined) {
       backendUpdates['location'] = updates.location;
     }
+    if (updates.capabilityId !== undefined) {
+      backendUpdates['capabilityId'] = updates.capabilityId;
+    }
+    if (updates.bandId !== undefined) {
+      backendUpdates['bandId'] = updates.bandId;
+    }
     if (updates.closingDate !== undefined) {
       // Convert Date to ISO string for the API
       const dateStr = updates.closingDate.toISOString().split('T')[0];
@@ -120,10 +109,6 @@ export class JobRoleService {
         backendUpdates['closingDate'] = dateStr;
       }
     }
-
-    // Note: capability and band are currently strings in UpdateJobRoleRequest
-    // but the backend expects IDs. You may need to add mapping logic here
-    // or update the form to pass IDs instead of names.
 
     const result = await api.updateJob(
       id,

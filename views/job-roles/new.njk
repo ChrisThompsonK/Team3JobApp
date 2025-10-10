@@ -55,26 +55,26 @@
 
           <!-- Capability -->
           <div class="form-control">
-            <label class="label" for="capability">
+            <label class="label" for="capabilityId">
               <span class="label-text font-semibold">Capability *</span>
             </label>
-            <select id="capability" name="capability" class="select select-bordered select-primary w-full" required>
+            <select id="capabilityId" name="capabilityId" class="select select-bordered select-primary w-full" required>
               <option disabled selected>Select capability</option>
-              {% for capability in capabilityOptions %}
-              <option value="{{ capability }}">{{ capability }}</option>
+              {% for capability in capabilities %}
+              <option value="{{ capability.id }}">{{ capability.name }}</option>
               {% endfor %}
             </select>
           </div>
 
           <!-- Band -->
           <div class="form-control">
-            <label class="label" for="band">
+            <label class="label" for="bandId">
               <span class="label-text font-semibold">Band *</span>
             </label>
-            <select id="band" name="band" class="select select-bordered select-primary w-full" required>
+            <select id="bandId" name="bandId" class="select select-bordered select-primary w-full" required>
               <option disabled selected>Select band</option>
-              {% for band in bandOptions %}
-              <option value="{{ band }}">{{ band }}</option>
+              {% for band in bands %}
+              <option value="{{ band.id }}">{{ band.name }}</option>
               {% endfor %}
             </select>
           </div>

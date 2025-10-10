@@ -18,8 +18,8 @@ export interface JobRoleDetails extends JobRole {
 export interface NewJobRole {
   name: string;
   location: string;
-  capability: string;
-  band: string;
+  capabilityId: string; // Will be parsed to number
+  bandId: string; // Will be parsed to number
   closingDate: string;
   description?: string;
   responsibilities?: string;
