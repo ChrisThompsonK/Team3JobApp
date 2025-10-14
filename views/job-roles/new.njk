@@ -79,6 +79,19 @@
             </select>
           </div>
 
+          <!-- Status -->
+          <div class="form-control">
+            <label class="label" for="statusId">
+              <span class="label-text font-semibold">Status</span>
+            </label>
+            <select id="statusId" name="statusId" class="select select-bordered select-primary w-full">
+              <option disabled selected>Select status</option>
+              {% for status in statuses %}
+              <option value="{{ status.id }}">{{ status.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
           <!-- Closing Date -->
           <div class="form-control">
             <label class="label" for="closingDate">

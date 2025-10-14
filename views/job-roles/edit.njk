@@ -94,12 +94,12 @@
 
           <!-- Status -->
           <div class="form-control">
-            <label class="label" for="status">
+            <label class="label" for="statusId">
               <span class="label-text font-semibold">Status *</span>
             </label>
-            <select id="status" name="status" class="select select-bordered select-primary w-full" required>
-              {% for status in statusOptions %}
-              <option value="{{ status }}" {% if status == jobRole.status %}selected{% endif %}>{{ status }}</option>
+            <select id="statusId" name="statusId" class="select select-bordered select-primary w-full" required>
+              {% for status in statuses %}
+              <option value="{{ status.id }}" {% if status.name == jobRole.status %}selected{% endif %}>{{ status.name }}</option>
               {% endfor %}
             </select>
           </div>
