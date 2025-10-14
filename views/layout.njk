@@ -22,6 +22,22 @@
                     <li><a href="/" class="text-kainos-primary hover:text-kainos-accent">Home</a></li>
                     <li><a href="/jobs" class="text-kainos-primary hover:text-kainos-accent">Careers</a></li>
                     <li><a href="/health" class="text-kainos-primary hover:text-kainos-accent">System Health</a></li>
+                    {% if user %}
+                        <li><hr></li>
+                        <li><a href="/auth/profile" class="text-kainos-primary hover:text-kainos-accent">Profile</a></li>
+                        {% if user.role === 'admin' %}
+                            <li><a href="/jobs/new" class="text-kainos-primary hover:text-kainos-accent">Create Job</a></li>
+                        {% endif %}
+                        <li>
+                            <form method="POST" action="/auth/logout">
+                                <button type="submit" class="text-kainos-primary hover:text-kainos-accent">Sign Out</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><hr></li>
+                        <li><a href="/auth/login" class="text-kainos-primary hover:text-kainos-accent">Sign In</a></li>
+                        <li><a href="/auth/register" class="text-kainos-primary hover:text-kainos-accent">Sign Up</a></li>
+                    {% endif %}
                 </ul>
             </div>
             <a href="/" class="btn btn-ghost normal-case">
@@ -35,8 +51,41 @@
                 <li><a href="/health" class="text-kainos-primary hover:text-kainos-accent font-medium">System Health</a></li>
             </ul>
         </div>
-        <div class="navbar-end">
-            <a href="/jobs" class="btn btn-primary btn-sm">Find Jobs</a>
+        <div class="navbar-end gap-2">
+            {% if user %}
+                <!-- User is authenticated -->
+                {% if user.role === 'admin' %}
+                    <a href="/jobs/new" class="btn btn-secondary btn-sm">New Job</a>
+                {% endif %}
+                <div class="dropdown dropdown-end">
+                    <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                        <div class="w-8 rounded-full bg-neutral text-neutral-content flex items-center justify-center">
+                            <span class="text-xs font-bold">{{ user.email.charAt(0).toUpperCase() }}</span>
+                        </div>
+                    </div>
+                    <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                        <li class="menu-title">
+                            <span>{{ user.email }}</span>
+                            <div class="badge badge-xs {{ 'badge-secondary' if user.role === 'admin' else 'badge-primary' }}">
+                                {{ user.role }}
+                            </div>
+                        </li>
+                        <li><a href="/auth/profile">Profile</a></li>
+                        {% if user.role === 'admin' %}
+                            <li><a href="/jobs/new">Create Job</a></li>
+                        {% endif %}
+                        <li>
+                            <form method="POST" action="/auth/logout" class="w-full">
+                                <button type="submit" class="w-full text-left">Sign Out</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            {% else %}
+                <!-- User is not authenticated -->
+                <a href="/auth/login" class="btn btn-ghost btn-sm">Sign In</a>
+                <a href="/auth/register" class="btn btn-primary btn-sm">Sign Up</a>
+            {% endif %}
         </div>
     </div>
 

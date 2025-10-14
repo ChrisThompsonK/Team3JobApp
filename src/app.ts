@@ -1,8 +1,12 @@
 import express from 'express';
 import methodOverride from 'method-override';
+import cookieParser from 'cookie-parser';
 import nunjucks from 'nunjucks';
 import { config } from './config/index.js';
 import { errorHandler, notFoundHandler, requestLogger } from './middleware/index.js';
+import { authMiddleware } from './middleware/auth-middleware.js';
+import { runMigrations } from './db/index.js';
+import { adminSeedService } from './services/admin-seed-service.js';
 import routes from './routes/index.js';
 
 /**
@@ -26,10 +30,14 @@ export const createApp = (): express.Application => {
   app.use(requestLogger);
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser()); // Parse cookies for authentication
   app.use(methodOverride('_method')); // Enable DELETE/PUT requests from forms
 
   // Serve static files
   app.use(express.static(config.paths.public));
+
+  // Authentication middleware - must come after cookieParser
+  app.use(authMiddleware);
 
   // Routes
   app.use('/', routes);
@@ -47,6 +55,14 @@ export const createApp = (): express.Application => {
 export const startServer = async (app: express.Application): Promise<void> => {
   try {
     console.log(`🚀 ${config.app.name} is starting...`);
+
+    // Initialize database
+    console.log('📀 Initializing database...');
+    runMigrations();
+
+    // Ensure admin user exists
+    console.log('👤 Checking admin user...');
+    await adminSeedService.ensureAdminExists();
 
     const server = app.listen(config.server.port, () => {
       console.log(`✅ Server running on http://${config.server.host}:${config.server.port}`);

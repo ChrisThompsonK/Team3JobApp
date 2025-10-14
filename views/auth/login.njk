@@ -1,0 +1,73 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        Sign in to your account
+      </h2>
+    </div>
+    
+    {% if error %}
+    <div class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{ error }}</span>
+    </div>
+    {% endif %}
+
+    <form class="mt-8 space-y-6" action="/auth/login" method="POST">
+      <input type="hidden" name="returnUrl" value="{{ returnUrl or '/' }}">
+      
+      <div class="rounded-md shadow-sm space-y-4">
+        <div class="form-control">
+          <label class="label" for="email">
+            <span class="label-text">Email address</span>
+          </label>
+          <input 
+            id="email" 
+            name="email" 
+            type="email" 
+            autocomplete="email" 
+            required 
+            class="input input-bordered w-full"
+            placeholder="Enter your email"
+          >
+        </div>
+        
+        <div class="form-control">
+          <label class="label" for="password">
+            <span class="label-text">Password</span>
+          </label>
+          <input 
+            id="password" 
+            name="password" 
+            type="password" 
+            autocomplete="current-password" 
+            required 
+            class="input input-bordered w-full"
+            placeholder="Enter your password"
+          >
+        </div>
+      </div>
+
+      <div class="form-control mt-6">
+        <button type="submit" class="btn btn-primary w-full">
+          Sign In
+        </button>
+      </div>
+
+      <div class="text-center">
+        <p class="text-sm text-gray-600">
+          Don't have an account? 
+          <a href="/auth/register" class="link link-primary">
+            Sign up here
+          </a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

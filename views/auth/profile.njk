@@ -1,0 +1,46 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-2xl mx-auto">
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title text-2xl">User Profile</h2>
+        
+        <div class="space-y-4">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Email</span>
+            </label>
+            <input type="text" value="{{ user.email }}" class="input input-bordered" readonly>
+          </div>
+          
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Role</span>
+            </label>
+            <div class="badge badge-lg {{ 'badge-secondary' if user.role === 'admin' else 'badge-primary' }}">
+              {{ user.role | title }}
+            </div>
+          </div>
+          
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">User ID</span>
+            </label>
+            <input type="text" value="{{ user.id }}" class="input input-bordered" readonly>
+          </div>
+        </div>
+        
+        <div class="card-actions justify-end mt-6">
+          <form method="POST" action="/auth/logout">
+            <button type="submit" class="btn btn-outline btn-error">
+              Sign Out
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
