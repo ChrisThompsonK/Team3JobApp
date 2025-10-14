@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
-import { userRepository } from '../repositories/user-repository.js';
 import type { CreateUserData } from '../models/user.js';
+import { userRepository } from '../repositories/user-repository.js';
 
 export class AdminSeedService {
   async seedAdminUser(): Promise<void> {
@@ -15,19 +15,21 @@ export class AdminSeedService {
     try {
       // Check if admin user already exists
       const existingAdmin = await userRepository.findByEmail(adminEmail);
-      
+
       if (existingAdmin) {
         console.log('✅ Admin user already exists');
-        
+
         // Check if password is still the default and warn
         if (adminPassword === 'ChangeMe123!') {
-          console.warn('⚠️ WARNING: Admin is using default password! Please change it immediately for security.');
+          console.warn(
+            '⚠️ WARNING: Admin is using default password! Please change it immediately for security.'
+          );
         }
         return;
       }
 
       // Hash the password
-      const saltRounds = Number.parseInt(process.env['PASSWORD_HASH_ROUNDS'] || '12');
+      const saltRounds = Number.parseInt(process.env['PASSWORD_HASH_ROUNDS'] || '12', 10);
       const passwordHash = await bcrypt.hash(adminPassword, saltRounds);
 
       // Create admin user
@@ -35,7 +37,7 @@ export class AdminSeedService {
         email: adminEmail.toLowerCase(),
         passwordHash,
         role: 'admin',
-        isActive: true
+        isActive: true,
       };
 
       await userRepository.create(adminData);
@@ -43,11 +45,12 @@ export class AdminSeedService {
 
       // Warn if using default password
       if (adminPassword === 'ChangeMe123!') {
-        console.warn('⚠️ WARNING: Admin was created with default password! Please login and change it immediately.');
+        console.warn(
+          '⚠️ WARNING: Admin was created with default password! Please login and change it immediately.'
+        );
         console.warn('   Login URL: /auth/login');
-        console.warn('   Email: ' + adminEmail);
+        console.warn(`   Email: ${adminEmail}`);
       }
-
     } catch (error) {
       console.error('❌ Failed to seed admin user:', error);
       throw error;
@@ -58,7 +61,7 @@ export class AdminSeedService {
     try {
       // Count total users to see if this is a fresh installation
       const userCount = await userRepository.count();
-      
+
       if (userCount === 0) {
         console.log('📚 Fresh installation detected, seeding admin user...');
         await this.seedAdminUser();

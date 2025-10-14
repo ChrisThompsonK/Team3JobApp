@@ -1,13 +1,13 @@
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import methodOverride from 'method-override';
-import cookieParser from 'cookie-parser';
 import nunjucks from 'nunjucks';
 import { config } from './config/index.js';
-import { errorHandler, notFoundHandler, requestLogger } from './middleware/index.js';
-import { authMiddleware } from './middleware/auth-middleware.js';
 import { runMigrations } from './db/index.js';
-import { adminSeedService } from './services/admin-seed-service.js';
+import { authMiddleware } from './middleware/auth-middleware.js';
+import { errorHandler, notFoundHandler, requestLogger } from './middleware/index.js';
 import routes from './routes/index.js';
+import { adminSeedService } from './services/admin-seed-service.js';
 
 /**
  * Create and configure the Express application

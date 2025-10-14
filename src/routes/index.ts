@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { HealthController, HomeController } from '../controllers/index.js';
 import { JobRoleController } from '../controllers/job-role-controller.js';
+import { requireAdmin } from '../middleware/require-admin.js';
+import { requireAuth } from '../middleware/require-auth.js';
 import { jobRoleService } from '../services/job-role-service.js';
 import { JobApplicationValidator } from '../validators/index.js';
-import { requireAuth } from '../middleware/require-auth.js';
-import { requireAdmin } from '../middleware/require-admin.js';
 import { authRoutes } from './auth-routes.js';
 
 const router = Router();
@@ -35,17 +35,41 @@ router.use('/auth', authRoutes);
 router.get('/jobs', jobRoleController.getAllJobRoles.bind(jobRoleController));
 
 // Special routes that don't use :id parameter - MUST come before /jobs/:id routes
-router.get('/jobs/report', requireAdmin, jobRoleController.generateJobRolesReport.bind(jobRoleController));
+router.get(
+  '/jobs/report',
+  requireAdmin,
+  jobRoleController.generateJobRolesReport.bind(jobRoleController)
+);
 router.get('/jobs/new', requireAdmin, jobRoleController.showNewJobRoleForm.bind(jobRoleController));
 router.post('/jobs/new', requireAdmin, jobRoleController.createJobRole.bind(jobRoleController));
 
 // Parameterized routes - these use :id so they should come after specific routes
-router.get('/jobs/:id/edit', requireAdmin, jobRoleController.showEditJobRoleForm.bind(jobRoleController));
-router.post('/jobs/:id/edit', requireAdmin, jobRoleController.updateJobRole.bind(jobRoleController));
+router.get(
+  '/jobs/:id/edit',
+  requireAdmin,
+  jobRoleController.showEditJobRoleForm.bind(jobRoleController)
+);
+router.post(
+  '/jobs/:id/edit',
+  requireAdmin,
+  jobRoleController.updateJobRole.bind(jobRoleController)
+);
 router.get('/jobs/:id/details', jobRoleController.getJobRoleDetails.bind(jobRoleController));
-router.get('/jobs/:id/apply', requireAuth, jobRoleController.getJobRoleApplication.bind(jobRoleController));
-router.post('/jobs/:id/apply', requireAuth, jobRoleController.submitJobRoleApplication.bind(jobRoleController));
-router.post('/jobs/:id/delete', requireAdmin, jobRoleController.deleteJobRole.bind(jobRoleController));
+router.get(
+  '/jobs/:id/apply',
+  requireAuth,
+  jobRoleController.getJobRoleApplication.bind(jobRoleController)
+);
+router.post(
+  '/jobs/:id/apply',
+  requireAuth,
+  jobRoleController.submitJobRoleApplication.bind(jobRoleController)
+);
+router.post(
+  '/jobs/:id/delete',
+  requireAdmin,
+  jobRoleController.deleteJobRole.bind(jobRoleController)
+);
 router.delete('/jobs/:id', requireAdmin, jobRoleController.deleteJobRole.bind(jobRoleController));
 
 // Generic job by ID - MUST be last as it's the most general pattern

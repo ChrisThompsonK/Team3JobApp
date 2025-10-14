@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 export function requireAdmin(req: Request, res: Response, next: NextFunction): void {
   // First check if user is authenticated
@@ -17,9 +17,9 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction): v
   if (req.user.role !== 'admin') {
     if (req.method === 'GET') {
       // For web requests, render an error page
-      res.status(403).render('error', { 
-        message: 'Access Forbidden', 
-        details: 'You do not have permission to access this resource. Admin privileges required.' 
+      res.status(403).render('error', {
+        message: 'Access Forbidden',
+        details: 'You do not have permission to access this resource. Admin privileges required.',
       });
       return;
     } else {

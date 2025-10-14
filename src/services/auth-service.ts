@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
+import type { AuthUser, CreateUserData, LoginCredentials, RegisterData } from '../models/user.js';
 import { userRepository } from '../repositories/user-repository.js';
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from './token-service.js';
-import type { LoginCredentials, RegisterData, AuthUser, CreateUserData } from '../models/user.js';
 
-const SALT_ROUNDS = Number.parseInt(process.env['PASSWORD_HASH_ROUNDS'] || '12');
+const SALT_ROUNDS = Number.parseInt(process.env['PASSWORD_HASH_ROUNDS'] || '12', 10);
 
 export class AuthService {
   async register(registerData: RegisterData): Promise<AuthUser> {
@@ -32,7 +32,7 @@ export class AuthService {
       email: email.toLowerCase(),
       passwordHash,
       role: 'user', // Default role
-      isActive: true
+      isActive: true,
     };
 
     const newUser = await userRepository.create(userData);
@@ -40,11 +40,13 @@ export class AuthService {
     return {
       id: newUser.id,
       email: newUser.email,
-      role: newUser.role
+      role: newUser.role,
     };
   }
 
-  async login(credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: { accessToken: string; refreshToken: string } }> {
+  async login(
+    credentials: LoginCredentials
+  ): Promise<{ user: AuthUser; tokens: { accessToken: string; refreshToken: string } }> {
     const { email, password } = credentials;
 
     // Find user by email
@@ -71,7 +73,7 @@ export class AuthService {
     const authUser: AuthUser = {
       id: user.id,
       email: user.email,
-      role: user.role
+      role: user.role,
     };
 
     // Generate tokens
@@ -82,8 +84,8 @@ export class AuthService {
       user: authUser,
       tokens: {
         accessToken,
-        refreshToken
-      }
+        refreshToken,
+      },
     };
   }
 
@@ -91,7 +93,7 @@ export class AuthService {
     try {
       // Verify refresh token
       const payload = verifyRefreshToken(refreshToken);
-      
+
       // Find user to ensure they still exist and are active
       const user = await userRepository.findById(payload.sub);
       if (!user || !user.isActive) {
@@ -101,7 +103,7 @@ export class AuthService {
       const authUser: AuthUser = {
         id: user.id,
         email: user.email,
-        role: user.role
+        role: user.role,
       };
 
       // Generate new access token
@@ -112,9 +114,9 @@ export class AuthService {
 
       return {
         accessToken: newAccessToken,
-        refreshToken: newRefreshToken
+        refreshToken: newRefreshToken,
       };
-    } catch (error) {
+    } catch (_error) {
       throw new Error('Invalid refresh token');
     }
   }
@@ -144,11 +146,15 @@ export class AuthService {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
-  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
+  async changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string
+  ): Promise<void> {
     // Find user
     const user = await userRepository.findById(userId);
     if (!user) {

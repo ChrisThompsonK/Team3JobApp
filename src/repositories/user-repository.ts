@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { db } from '../db/index.js';
-import { users, type User, type InsertUser } from '../db/schema.js';
+import { type InsertUser, type User, users } from '../db/schema.js';
 import type { CreateUserData } from '../models/user.js';
 
 export class UserRepository {
@@ -17,33 +17,36 @@ export class UserRepository {
       ...userData,
       email: userData.email.toLowerCase(),
     };
-    
+
     return db.insert(users).values(newUser).returning().get();
   }
 
   async updateLastLogin(id: string): Promise<void> {
-    await db.update(users)
-      .set({ 
+    await db
+      .update(users)
+      .set({
         lastLoginAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       })
       .where(eq(users.id, id));
   }
 
   async updateRole(id: string, role: 'admin' | 'user'): Promise<void> {
-    await db.update(users)
-      .set({ 
+    await db
+      .update(users)
+      .set({
         role,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       })
       .where(eq(users.id, id));
   }
 
   async setActive(id: string, isActive: boolean): Promise<void> {
-    await db.update(users)
-      .set({ 
+    await db
+      .update(users)
+      .set({
         isActive,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       })
       .where(eq(users.id, id));
   }

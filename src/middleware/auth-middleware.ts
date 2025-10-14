@@ -1,6 +1,6 @@
-import type { Request, Response, NextFunction } from 'express';
-import { verifyAccessToken } from '../services/token-service.js';
+import type { NextFunction, Request, Response } from 'express';
 import type { AuthUser } from '../models/user.js';
+import { verifyAccessToken } from '../services/token-service.js';
 
 // Extend Request interface to include user
 declare global {
@@ -14,26 +14,26 @@ declare global {
 export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
   // Extract access token from cookies
   const token = req.cookies?.['access_token'];
-  
+
   if (!token) {
     // No token present, continue as anonymous user
-    return next();
+    next();
+    return;
   }
-
   try {
     // Verify and decode the token
     const payload = verifyAccessToken(token);
-    
+
     // Create user object from token payload
     const user: AuthUser = {
       id: payload.sub,
       email: '', // We'll need to fetch this from DB if needed
-      role: payload.role as 'admin' | 'user'
+      role: payload.role as 'admin' | 'user',
     };
 
     // Attach user to request object
     req.user = user;
-    
+
     // Also make user available to templates via res.locals
     res.locals['user'] = user;
   } catch (error) {
