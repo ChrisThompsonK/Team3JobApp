@@ -58,10 +58,11 @@
                     <a href="/jobs/new" class="btn btn-secondary btn-sm">New Job</a>
                 {% endif %}
                 <div class="dropdown dropdown-end">
-                    <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-                        <div class="w-8 rounded-full bg-neutral text-neutral-content flex items-center justify-center">
-                            <span class="text-xs font-bold">{{ user.email.charAt(0).toUpperCase() }}</span>
-                        </div>
+                    <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-2 hover:bg-base-200">
+                        <span class="text-sm font-medium">{{ user.email.charAt(0).toUpperCase() }}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
                     </div>
                     <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                         <li class="menu-title">
