@@ -20,7 +20,10 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "keywords": [
     "kainos",
@@ -35,7 +38,11 @@
   "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
+    "@types/bcrypt": "^6.0.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/cookie-parser": "^1.4.9",
     "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/method-override": "^3.0.0",
     "@types/node": "^20.11.17",
     "@types/nunjucks": "^3.2.6",
@@ -45,6 +52,7 @@
     "autoprefixer": "^10.4.21",
     "chokidar": "^3.6.0",
     "daisyui": "^5.1.26",
+    "drizzle-kit": "^0.31.5",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.18",
     "tsx": "^4.7.1",
@@ -55,9 +63,16 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.2",
     "axios": "^1.12.2",
+    "bcrypt": "^6.0.0",
+    "better-auth": "^1.3.27",
+    "better-sqlite3": "^12.4.1",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.6",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",
     "nunjucks": "^3.2.4",
     "uuid": "^13.0.0"
