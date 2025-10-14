@@ -273,9 +273,9 @@ export class JobRoleController {
 
       // Fetch capabilities, bands, and statuses from the API
       const [capabilities, bands, statuses] = await Promise.all([
-        api.getCapabilities(), 
+        api.getCapabilities(),
         api.getBands(),
-        api.getStatuses()
+        api.getStatuses(),
       ]);
 
       res.render('job-roles/new', {
@@ -425,9 +425,9 @@ export class JobRoleController {
 
       // Fetch capabilities, bands, and statuses from the API
       const [capabilities, bands, statuses] = await Promise.all([
-        api.getCapabilities(), 
+        api.getCapabilities(),
         api.getBands(),
-        api.getStatuses()
+        api.getStatuses(),
       ]);
 
       // Format responsibilities as string for textarea
