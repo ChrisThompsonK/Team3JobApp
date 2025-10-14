@@ -271,14 +271,19 @@ export class JobRoleController {
         'Remote',
       ];
 
-      // Fetch capabilities and bands from the API
-      const [capabilities, bands] = await Promise.all([api.getCapabilities(), api.getBands()]);
+      // Fetch capabilities, bands, and statuses from the API
+      const [capabilities, bands, statuses] = await Promise.all([
+        api.getCapabilities(), 
+        api.getBands(),
+        api.getStatuses()
+      ]);
 
       res.render('job-roles/new', {
         title: 'Add New Job Role',
         locationOptions,
         capabilities,
         bands,
+        statuses,
       });
     } catch (error) {
       console.error('Error loading new job role form:', error);
@@ -309,9 +314,15 @@ export class JobRoleController {
       // Parse IDs
       const capabilityId = parseInt(jobRoleData.capabilityId, 10);
       const bandId = parseInt(jobRoleData.bandId, 10);
+      const statusId = jobRoleData.statusId ? parseInt(jobRoleData.statusId, 10) : undefined;
 
       if (Number.isNaN(capabilityId) || Number.isNaN(bandId)) {
         res.status(400).send('Invalid capability or band ID');
+        return;
+      }
+
+      if (statusId !== undefined && Number.isNaN(statusId)) {
+        res.status(400).send('Invalid status ID');
         return;
       }
 
@@ -336,6 +347,7 @@ export class JobRoleController {
         responsibilities: jobRoleData.responsibilities?.trim() || undefined,
         jobSpecUrl: jobRoleData.jobSpecUrl?.trim() || undefined,
         openPositions,
+        ...(statusId && { statusId }),
       });
 
       // Redirect to the new job role details page
@@ -411,10 +423,12 @@ export class JobRoleController {
         'Remote',
       ];
 
-      // Fetch capabilities and bands from the API
-      const [capabilities, bands] = await Promise.all([api.getCapabilities(), api.getBands()]);
-
-      const statusOptions = ['Open', 'Closing Soon', 'Closed'];
+      // Fetch capabilities, bands, and statuses from the API
+      const [capabilities, bands, statuses] = await Promise.all([
+        api.getCapabilities(), 
+        api.getBands(),
+        api.getStatuses()
+      ]);
 
       // Format responsibilities as string for textarea
       const responsibilitiesText = Array.isArray(jobRole.responsibilities)
@@ -434,7 +448,7 @@ export class JobRoleController {
         locationOptions,
         capabilities,
         bands,
-        statusOptions,
+        statuses,
       });
     } catch (error) {
       console.error('Error loading edit job role form:', error);

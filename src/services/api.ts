@@ -4,6 +4,7 @@ import type {
   CreateJobRoleRequest,
   JobRole,
   JobRoleDetails,
+  Status,
   UpdateJobRoleRequest,
 } from '../models/job-roles.js';
 
@@ -27,9 +28,11 @@ interface BackendJobRole {
   location: string;
   capabilityName: string;
   bandName: string;
+  statusName: string; // Changed from status to statusName
   closingDate: string;
   capabilityId?: number;
   bandId?: number;
+  statusId?: number; // Added statusId
 }
 
 // Backend API response type for job details (includes all fields)
@@ -37,7 +40,6 @@ interface BackendJobRoleDetails extends BackendJobRole {
   description?: string;
   responsibilities?: string;
   jobSpecUrl?: string;
-  status?: string;
   openPositions?: number;
 }
 
@@ -56,6 +58,7 @@ function transformJobRole(backendJob: BackendJobRole): JobRole {
     location: backendJob.location,
     capability: backendJob.capabilityName,
     band: backendJob.bandName,
+    status: backendJob.statusName || 'Open', // Use statusName from backend
     closingDate: new Date(backendJob.closingDate),
   };
 }
@@ -76,6 +79,7 @@ function transformJobRoleDetails(backendJob: BackendJobRoleDetails): JobRoleDeta
     location: backendJob.location || 'Unknown Location',
     capability: backendJob.capabilityName || 'Unknown Capability',
     band: backendJob.bandName || 'Unknown Band',
+    status: backendJob.statusName || 'Open', // Use statusName from backend
     closingDate: backendJob.closingDate ? new Date(backendJob.closingDate) : new Date(),
   };
 
@@ -84,7 +88,6 @@ function transformJobRoleDetails(backendJob: BackendJobRoleDetails): JobRoleDeta
   if (backendJob.description) details.description = backendJob.description;
   if (backendJob.responsibilities) details.responsibilities = backendJob.responsibilities;
   if (backendJob.jobSpecUrl) details.jobSpecUrl = backendJob.jobSpecUrl;
-  if (backendJob.status) details.status = backendJob.status as 'Open' | 'Closing Soon' | 'Closed';
   if (backendJob.openPositions !== undefined) details.openPositions = backendJob.openPositions;
 
   return details;
@@ -201,6 +204,12 @@ export const api = {
   // Get all bands (for creating/editing job roles)
   getBands: async (): Promise<Array<{ id: number; name: string }>> => {
     const response = await apiClient.get<Array<{ id: number; name: string }>>('/bands');
+    return response.data;
+  },
+
+  // Get all statuses (for creating/editing job roles)
+  getStatuses: async (): Promise<Status[]> => {
+    const response = await apiClient.get<Status[]>('/statuses');
     return response.data;
   },
 };

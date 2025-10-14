@@ -10,6 +10,7 @@ export interface CreateJobRoleRequest {
   location: string;
   capabilityId: number;
   bandId: number;
+  statusId?: number; // Optional, defaults to "Open"
   closingDate: Date;
   description?: string | undefined;
   responsibilities?: string | undefined;
@@ -22,12 +23,12 @@ export interface UpdateJobRoleRequest {
   location?: string;
   capabilityId?: number;
   bandId?: number;
+  statusId?: number; // Changed from status text
   closingDate?: Date;
   description?: string | undefined;
   responsibilities?: string | undefined;
   jobSpecUrl?: string | undefined;
   openPositions?: number | undefined;
-  status?: 'Open' | 'Closing Soon' | 'Closed';
 }
 
 /**
@@ -74,6 +75,7 @@ export class JobRoleService {
       capabilityId: jobRoleData.capabilityId,
       bandId: jobRoleData.bandId,
       closingDate: closingDateStr, // Format as YYYY-MM-DD
+      ...(jobRoleData.statusId && { statusId: jobRoleData.statusId }), // Add statusId if provided
       ...(jobRoleData.description && { description: jobRoleData.description }),
       ...(jobRoleData.responsibilities && { responsibilities: jobRoleData.responsibilities }),
       ...(jobRoleData.jobSpecUrl && { jobSpecUrl: jobRoleData.jobSpecUrl }),
@@ -102,6 +104,9 @@ export class JobRoleService {
     if (updates.bandId !== undefined) {
       backendUpdates['bandId'] = updates.bandId;
     }
+    if (updates.statusId !== undefined) {
+      backendUpdates['statusId'] = updates.statusId;
+    }
     if (updates.closingDate !== undefined) {
       // Convert Date to ISO string for the API
       const dateStr = updates.closingDate.toISOString().split('T')[0];
@@ -117,6 +122,7 @@ export class JobRoleService {
         location?: string;
         capabilityId?: number;
         bandId?: number;
+        statusId?: number;
         closingDate?: string;
       }
     );
