@@ -13,13 +13,13 @@
       <p class="text-lg text-base-content/70 mt-2">Discover exciting career opportunities at Kainos</p>
     </div>
     <div class="flex flex-col sm:flex-row gap-2">
-      <a href="/jobs/new" class="btn btn-primary gap-2">
+      <a href="/jobs/new" class="btn-kainos shadow-lg hover:shadow-xl inline-flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
         </svg>
         Add New Job Role
       </a>
-      <a href="/jobs/report" class="btn btn-error gap-2">
+      <a href="/jobs/report" class="btn-kainos-outline shadow-lg hover:shadow-xl inline-flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
         </svg>
@@ -36,7 +36,7 @@
           <h2 class="card-title text-3xl text-kainos-primary">Filter Job Roles</h2>
           <p class="text-base-content/70">Refine your search to find the perfect opportunity (filters apply automatically)</p>
         </div>
-        <button onclick="clearFilters()" class="btn btn-error gap-2">
+        <button onclick="clearFilters()" class="btn-kainos-outline shadow-lg hover:shadow-xl inline-flex items-center gap-2">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
@@ -150,8 +150,8 @@
               <td>{{ job.capability }}</td>
               <td>{{ job.band }}</td>
               <td>
-                <a href="/jobs/{{ job.id }}/details" class="btn btn-primary btn-sm">
-                  View Details
+                <a href="/jobs/{{ job.id }}/details" class="btn-kainos shadow-md hover:shadow-lg inline-flex items-center gap-2 text-sm px-4 py-2">
+                  <span>View Details</span>
                 </a>
               </td>
             </tr>

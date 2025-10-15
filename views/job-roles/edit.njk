@@ -7,11 +7,11 @@
   <!-- Page Header -->
   <div class="flex flex-col lg:flex-row justify-between items-center mb-8 gap-4">
     <h1 class="text-4xl md:text-5xl font-bold kainos-text-gradient">{{ title }}</h1>
-    <a href="/jobs/{{ jobRole.id }}/details" class="btn btn-ghost gap-2">
+    <a href="/jobs/{{ jobRole.id }}/details" class="btn-kainos-outline shadow-lg hover:shadow-xl inline-flex items-center gap-2">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
       </svg>
-      Cancel
+      <span>Cancel</span>
     </a>
   </div>
 
@@ -182,17 +182,17 @@
         <!-- Form Actions inside card -->
         <div class="divider"></div>
         <div class="card-actions justify-end gap-3 mt-6">
-          <a href="/jobs/{{ jobRole.id }}/details" class="btn btn-ghost gap-2">
+          <a href="/jobs/{{ jobRole.id }}/details" class="btn-kainos-outline shadow-md hover:shadow-lg inline-flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
-            Cancel
+            <span>Cancel</span>
           </a>
-          <button type="submit" class="btn btn-primary gap-2">
+          <button type="submit" class="btn-kainos shadow-lg hover:shadow-xl inline-flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
             </svg>
-            Update Job Role
+            <span>Update Job Role</span>
           </button>
         </div>
       </form>

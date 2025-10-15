@@ -1,10 +1,10 @@
 {% extends "layout.njk" %}
 
 {% block content %}
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-kainos-light to-base-100 py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-md w-full space-y-8">
     <div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      <h2 class="mt-6 text-center text-4xl font-bold kainos-text-gradient">
         Sign in to your account
       </h2>
     </div>
@@ -54,15 +54,15 @@
       </div>
 
       <div class="form-control mt-6">
-        <button type="submit" class="btn btn-primary w-full">
-          Sign In
+        <button type="submit" class="btn-kainos shadow-lg hover:shadow-xl w-full inline-flex items-center justify-center gap-2">
+          <span>Sign In</span>
         </button>
       </div>
 
       <div class="text-center">
-        <p class="text-sm text-gray-600">
+        <p class="text-sm text-base-content/70">
           Don't have an account? 
-          <a href="/auth/register" class="link link-primary">
+          <a href="/auth/register" class="text-kainos-green hover:text-kainos-primary font-semibold transition-colors">
             Sign up here
           </a>
         </p>
