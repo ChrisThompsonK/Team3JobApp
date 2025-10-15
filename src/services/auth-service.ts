@@ -1,9 +1,8 @@
 import bcrypt from 'bcrypt';
+import { config } from '../config/index.js';
 import type { AuthUser, CreateUserData, LoginCredentials, RegisterData } from '../models/user.js';
 import { userRepository } from '../repositories/user-repository.js';
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from './token-service.js';
-
-const SALT_ROUNDS = Number.parseInt(process.env['PASSWORD_HASH_ROUNDS'] || '12', 10);
 
 export class AuthService {
   async register(registerData: RegisterData): Promise<AuthUser> {
@@ -14,8 +13,8 @@ export class AuthService {
       throw new Error('Passwords do not match');
     }
 
-    if (password.length < 8) {
-      throw new Error('Password must be at least 8 characters long');
+    if (password.length < config.auth.password.minLength) {
+      throw new Error(`Password must be at least ${config.auth.password.minLength} characters long`);
     }
 
     // Check if email already exists
@@ -25,7 +24,7 @@ export class AuthService {
     }
 
     // Hash password
-    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    const passwordHash = await bcrypt.hash(password, config.auth.password.saltRounds);
 
     // Create user
     const userData: CreateUserData = {
