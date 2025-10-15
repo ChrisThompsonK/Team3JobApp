@@ -14,7 +14,9 @@ export class AuthService {
     }
 
     if (password.length < config.auth.password.minLength) {
-      throw new Error(`Password must be at least ${config.auth.password.minLength} characters long`);
+      throw new Error(
+        `Password must be at least ${config.auth.password.minLength} characters long`
+      );
     }
 
     // Check if email already exists

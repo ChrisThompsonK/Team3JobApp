@@ -26,8 +26,8 @@ export function signAccessToken(user: AuthUser): string {
     ver: 1, // Version for future invalidation strategy
   };
 
-  return jwt.sign(payload, config.auth.jwt.accessSecret, { 
-    expiresIn: config.auth.jwt.accessTokenExpiry 
+  return jwt.sign(payload, config.auth.jwt.accessSecret, {
+    expiresIn: config.auth.jwt.accessTokenExpiry,
   });
 }
 
@@ -38,8 +38,8 @@ export function signRefreshToken(user: AuthUser): string {
     jti: `${user.id}_${Date.now()}`, // Simple jti for tracking
   };
 
-  return jwt.sign(payload, config.auth.jwt.refreshSecret, { 
-    expiresIn: config.auth.jwt.refreshTokenExpiry 
+  return jwt.sign(payload, config.auth.jwt.refreshSecret, {
+    expiresIn: config.auth.jwt.refreshTokenExpiry,
   });
 }
 

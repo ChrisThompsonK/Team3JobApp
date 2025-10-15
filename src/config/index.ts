@@ -10,7 +10,9 @@ const __dirname = path.dirname(__filename);
 function requireEnv(name: string): string {
   const value = process.env[name];
   if (!value) {
-    throw new Error(`FATAL: Required environment variable ${name} is not set. Application cannot start.`);
+    throw new Error(
+      `FATAL: Required environment variable ${name} is not set. Application cannot start.`
+    );
   }
   return value;
 }
@@ -80,13 +82,13 @@ export const config = {
       accessTokenExpiry: '15m',
       refreshTokenExpiry: '30d',
     },
-    
+
     // Password Hashing - REQUIRED, no defaults
     password: {
       saltRounds: Number.parseInt(requireEnv('PASSWORD_HASH_ROUNDS'), 10),
       minLength: 8,
     },
-    
+
     // Cookie Configuration
     cookie: {
       secure: process.env['NODE_ENV'] === 'production',
