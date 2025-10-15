@@ -212,4 +212,20 @@ export const api = {
     const response = await apiClient.get<Status[]>('/statuses');
     return response.data;
   },
+
+  // Submit a job application
+  submitApplication: async (applicationData: {
+    jobRoleId: number;
+    emailAddress: string;
+    phoneNumber: number;
+    coverLetter?: string;
+    notes?: string;
+  }): Promise<{
+    success: boolean;
+    applicationID?: number;
+    message?: string;
+  }> => {
+    const response = await apiClient.post('/applications', applicationData);
+    return response.data;
+  },
 };

@@ -226,15 +226,41 @@ export class JobRoleController {
         return;
       }
 
-      // TODO: In a real application, you would:
-      // 1. Upload the CV file to storage
-      // 2. Save the application to a database
-      // 3. Send confirmation email to applicant
-      // 4. Notify HR team
+      // Map frontend form data to backend API format
+      const phoneNumber = Number.parseInt(applicationData.phone.replace(/\D/g, ''), 10);
+      if (Number.isNaN(phoneNumber)) {
+        res.status(400).send('Invalid phone number format');
+        return;
+      }
 
-      // For now, redirect to a success page or back to job details with a success message
-      // You can create a success page later
-      res.redirect(`/jobs/${id}/details?applicationSubmitted=true`);
+      // Combine additional information into notes field
+      const notes = [
+        `Name: ${applicationData.firstName} ${applicationData.lastName}`,
+        `Current Job Title: ${applicationData.currentJobTitle}`,
+        `Years of Experience: ${applicationData.yearsOfExperience}`,
+        applicationData.linkedinUrl ? `LinkedIn: ${applicationData.linkedinUrl}` : '',
+        applicationData.additionalComments ? `Comments: ${applicationData.additionalComments}` : '',
+      ]
+        .filter((line) => line)
+        .join('\n');
+
+      // Submit application to backend API
+      const backendApplicationData = {
+        jobRoleId: numericId,
+        emailAddress: applicationData.email,
+        phoneNumber: phoneNumber,
+        coverLetter: applicationData.coverLetter,
+        notes: notes,
+      };
+
+      const result = await api.submitApplication(backendApplicationData);
+
+      if (result.success) {
+        // Redirect to success page with application ID
+        res.redirect(`/jobs/${id}/details?applicationSubmitted=true&applicationId=${result.applicationID}`);
+      } else {
+        res.status(400).send(result.message || 'Failed to submit application');
+      }
     } catch (error) {
       console.error('Error submitting job application:', error);
       res.status(500).send('Error submitting application. Please try again.');
