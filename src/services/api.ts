@@ -207,7 +207,7 @@ export const api = {
     return response.data;
   },
 
-  // Get all job availability statuses (for creating/editing job roles)
+  // Get all statuses (for creating/editing job roles)
   getStatuses: async (): Promise<JobAvailabilityStatus[]> => {
     const response = await apiClient.get<JobAvailabilityStatus[]>('/statuses');
     return response.data;
@@ -217,7 +217,7 @@ export const api = {
   submitApplication: async (applicationData: {
     jobRoleId: number;
     emailAddress: string;
-    phoneNumber: number;
+    phoneNumber: string;
     coverLetter?: string;
     notes?: string;
   }): Promise<{
@@ -226,6 +226,30 @@ export const api = {
     message?: string;
   }> => {
     const response = await apiClient.post('/applications', applicationData);
+    return response.data;
+  },
+
+  // Get user's job applications by email
+  getMyApplications: async (
+    email: string
+  ): Promise<
+    Array<{
+      applicationID: number;
+      jobRoleId: number;
+      phoneNumber: string;
+      emailAddress: string;
+      status: string;
+      coverLetter?: string | null;
+      notes?: string | null;
+      createdAt: string;
+      updatedAt: string;
+      jobRoleName?: string | null;
+      jobRoleLocation?: string | null;
+    }>
+  > => {
+    const response = await apiClient.get('/applications/my-applications', {
+      params: { email },
+    });
     return response.data;
   },
 };
