@@ -18,16 +18,6 @@ function requireEnv(name: string): string {
 }
 
 /**
- * Helper to extract base64 secrets
- */
-function getSecret(envSecret: string): string {
-  if (envSecret.startsWith('base64:')) {
-    return envSecret.substring(7); // Remove 'base64:' prefix
-  }
-  return envSecret;
-}
-
-/**
  * Application Configuration
  */
 export const config = {
@@ -77,8 +67,8 @@ export const config = {
   auth: {
     // JWT Secrets - REQUIRED, no defaults
     jwt: {
-      accessSecret: getSecret(requireEnv('JWT_ACCESS_SECRET')),
-      refreshSecret: getSecret(requireEnv('JWT_REFRESH_SECRET')),
+      accessSecret: requireEnv('JWT_ACCESS_SECRET'),
+      refreshSecret: requireEnv('JWT_REFRESH_SECRET'),
       accessTokenExpiry: '15m',
       refreshTokenExpiry: '30d',
     },
