@@ -1,9 +1,10 @@
 import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
+import { config } from '../config/index.js';
 import * as schema from './schema.js';
 
-const sqlite = new Database(process.env['DATABASE_URL'] || './app.db');
+const sqlite = new Database(config.database.url);
 export const db = drizzle(sqlite, { schema });
 
 // Run migrations on startup

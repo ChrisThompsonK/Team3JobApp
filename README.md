@@ -264,7 +264,65 @@ describe('MyModule', () => {
 
 ## 📝 Environment Variables
 
-- `PORT` - Server port (default: 3000)
+### ⚠️ Required Authentication Variables
+
+The following environment variables are **REQUIRED** for the application to start. If any are missing, the application will throw a `FATAL` error and exit immediately on startup. **No default values are used for security.**
+
+Create a `.env` file in the project root (copy from `.env.example`):
+
+```bash
+cp .env.example .env
+```
+
+#### **Required Variables**
+
+| Variable | Description | Example | Required |
+|----------|-------------|---------|----------|
+| `JWT_ACCESS_SECRET` | Secret key for signing access tokens | `your-long-random-string` or `base64:...` | ✅ Yes |
+| `JWT_REFRESH_SECRET` | Secret key for signing refresh tokens (must be different from access secret) | `your-other-long-random-string` or `base64:...` | ✅ Yes |
+| `PASSWORD_HASH_ROUNDS` | Number of bcrypt salt rounds for password hashing (10-12 recommended) | `12` | ✅ Yes |
+
+**Generate secure secrets:**
+```bash
+# Generate JWT secrets (recommended approach)
+node -e "console.log('JWT_ACCESS_SECRET=base64:' + require('crypto').randomBytes(64).toString('base64'))"
+node -e "console.log('JWT_REFRESH_SECRET=base64:' + require('crypto').randomBytes(64).toString('base64'))"
+```
+
+#### **Optional Variables**
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Server port | `3000` |
+| `HOST` | Server host | `localhost` |
+| `NODE_ENV` | Environment mode (`development`, `production`, `test`) | `development` |
+| `DATABASE_URL` | Database file path | `./app.db` |
+| `API_BASE_URL` | Backend API URL | `http://localhost:3001` |
+| `ADMIN_SEED_EMAIL` | Admin user email for initial setup | - |
+| `ADMIN_SEED_PASSWORD` | Admin user password for initial setup | - |
+
+### 🔐 Security Notes
+
+- **Never commit** `.env` files to version control (already in `.gitignore`)
+- Use **strong, randomly generated secrets** for JWT keys
+- Use **different secrets** for access and refresh tokens
+- In production, use `PASSWORD_HASH_ROUNDS=12` or higher
+- Change the `ADMIN_SEED_PASSWORD` immediately after first login
+- Set `NODE_ENV=production` in production environments
+
+### ✅ Validation
+
+Test that your environment variables are properly configured:
+
+```bash
+# This will fail if any required auth variables are missing
+npm run dev
+```
+
+The application will display a clear error message indicating which required variable is missing:
+```
+Error: FATAL: Required environment variable JWT_ACCESS_SECRET is not set. Application cannot start.
+```
 
 ## 🚨 **Troubleshooting**
 
