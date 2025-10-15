@@ -4,6 +4,30 @@
 
 {% block content %}
 <div class="container mx-auto px-4 py-8 max-w-6xl">
+  <!-- Success Alert - Prominent and Readable -->
+  {% if applicationSubmitted %}
+  <div id="successAlert" role="alert" class="alert bg-kainos-light border-4 border-kainos-green shadow-2xl mb-8 p-6 rounded-xl">
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-kainos-green shrink-0 h-12 w-12" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <div class="flex-1">
+      <h3 class="font-bold text-2xl mb-2 text-kainos-primary">🎉 Application Submitted Successfully!</h3>
+      <div class="text-base text-kainos-dark">
+        <p class="mb-2">Your application has been received and saved to our database.</p>
+        {% if applicationId %}
+        <p class="font-semibold text-kainos-green text-lg">Application ID: {{ applicationId }}</p>
+        {% endif %}
+        <p class="text-sm mt-2 text-gray-600">We'll review your application and get back to you soon.</p>
+      </div>
+    </div>
+    <button onclick="dismissSuccessAlert()" class="btn btn-sm btn-circle btn-ghost hover:bg-kainos-green hover:text-white text-kainos-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+      </svg>
+    </button>
+  </div>
+  {% endif %}
+
   <!-- Page Title -->
   <div class="text-center mb-8">
     <h1 class="text-5xl md:text-6xl font-bold kainos-text-gradient mb-4">Job Details</h1>
@@ -180,5 +204,37 @@ function confirmDelete(jobId, jobName) {
     form.submit();
   }
 }
+
+function dismissSuccessAlert() {
+  const alert = document.getElementById('successAlert');
+  if (alert) {
+    alert.style.transition = 'opacity 0.5s ease-out';
+    alert.style.opacity = '0';
+    setTimeout(() => {
+      alert.remove();
+    }, 500);
+  }
+}
+
+// Auto-dismiss success alert after 15 seconds and scroll to it on load
+{% if applicationSubmitted %}
+window.addEventListener('DOMContentLoaded', function() {
+  // Scroll to the success alert and make it prominent
+  const alert = document.getElementById('successAlert');
+  if (alert) {
+    // Small delay to ensure page is fully loaded
+    setTimeout(function() {
+      alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Add a subtle pulse animation
+      alert.style.animation = 'pulse 2s ease-in-out 3';
+    }, 100);
+    
+    // Auto-dismiss after 15 seconds
+    setTimeout(function() {
+      dismissSuccessAlert();
+    }, 15000);
+  }
+});
+{% endif %}
 </script>
 {% endblock %}

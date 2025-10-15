@@ -100,9 +100,15 @@ export class JobRoleController {
       // Fetch job role details directly from the backend API
       const jobRole = await api.getJobById(id);
 
+      // Check if application was just submitted (from query params)
+      const applicationSubmitted = req.query['applicationSubmitted'] === 'true';
+      const applicationId = req.query['applicationId'] as string | undefined;
+
       res.render('job-roles/detail', {
         title: jobRole.name,
         jobRole,
+        applicationSubmitted,
+        applicationId,
       });
     } catch (error) {
       console.error('Error fetching job role:', error);
