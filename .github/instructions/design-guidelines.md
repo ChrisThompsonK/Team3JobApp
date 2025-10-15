@@ -139,7 +139,7 @@ font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 
 ## Consistency Requirements
 
-### New Endpoints/Pages Must:
+### New Pages Must:
 1. ✅ Use Kainos color variables from CSS
 2. ✅ Apply `.kainos-text-gradient` to main headings
 3. ✅ Use `.btn-kainos` for primary action buttons
