@@ -2,9 +2,9 @@
 import axios from 'axios';
 import type {
   CreateJobRoleRequest,
+  JobAvailabilityStatus,
   JobRole,
   JobRoleDetails,
-  Status,
   UpdateJobRoleRequest,
 } from '../models/job-roles.js';
 
@@ -207,9 +207,9 @@ export const api = {
     return response.data;
   },
 
-  // Get all statuses (for creating/editing job roles)
-  getStatuses: async (): Promise<Status[]> => {
-    const response = await apiClient.get<Status[]>('/statuses');
+  // Get all job availability statuses (for creating/editing job roles)
+  getStatuses: async (): Promise<JobAvailabilityStatus[]> => {
+    const response = await apiClient.get<JobAvailabilityStatus[]>('/statuses');
     return response.data;
   },
 
