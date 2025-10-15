@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import type { AuthUser } from '../models/user.js';
+import { userRepository } from '../repositories/user-repository.js';
 import { verifyAccessToken } from '../services/token-service.js';
 
 // Extend Request interface to include user
@@ -11,7 +12,11 @@ declare global {
   }
 }
 
-export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
+export async function authMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   // Extract access token from cookies
   const token = req.cookies?.['access_token'];
 
@@ -24,12 +29,21 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction):
     // Verify and decode the token
     const payload = verifyAccessToken(token);
 
-    // Create user object from token payload
-    const user: AuthUser = {
-      id: payload.sub,
-      email: '', // We'll need to fetch this from DB if needed
-      role: payload.role as 'admin' | 'user',
-    };
+    // Try to fetch full user from DB so we have email and latest role
+    const dbUser = await userRepository.findById(payload.sub);
+
+    // Create user object
+    const user: AuthUser = dbUser
+      ? {
+          id: dbUser.id,
+          email: dbUser.email,
+          role: dbUser.role,
+        }
+      : {
+          id: payload.sub,
+          email: '',
+          role: payload.role as 'admin' | 'user',
+        };
 
     // Attach user to request object
     req.user = user;
