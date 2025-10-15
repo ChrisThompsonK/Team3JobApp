@@ -31,6 +31,16 @@ function applyFilters() {
     params.append('band', bandFilter);
   }
 
+  // Get sorting parameters
+  const sortByFilter = document.getElementById('sortByFilter')?.value;
+  const sortOrderFilter = document.getElementById('sortOrderFilter')?.value;
+  
+  // Only add sort parameters if sortBy is selected
+  if (sortByFilter) {
+    params.append('sortBy', sortByFilter);
+    params.append('sortOrder', sortOrderFilter || 'asc');
+  }
+
   // Redirect to filtered URL
   const queryString = params.toString();
   window.location.href = queryString ? `/jobs?${queryString}` : '/jobs';
@@ -75,7 +85,7 @@ function initializeFilters() {
   }
 
   // Add event listeners for dropdown changes
-  const dropdowns = ['locationFilter', 'capabilityFilter', 'bandFilter'];
+  const dropdowns = ['locationFilter', 'capabilityFilter', 'bandFilter', 'sortByFilter', 'sortOrderFilter'];
   dropdowns.forEach((dropdownId) => {
     const dropdown = document.getElementById(dropdownId);
     if (dropdown) {

@@ -111,6 +111,35 @@
           </select>
         </div>
       </div>
+
+      <div class="divider">Sort Options</div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Sort By Filter -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">Sort By</span>
+          </label>
+          <select id="sortByFilter" class="select select-bordered w-full">
+            <option value="">No Sorting</option>
+            <option value="name" {% if currentSort.sortBy == 'name' %}selected{% endif %}>Job Name</option>
+            <option value="location" {% if currentSort.sortBy == 'location' %}selected{% endif %}>Location</option>
+            <option value="capability" {% if currentSort.sortBy == 'capability' %}selected{% endif %}>Capability</option>
+            <option value="band" {% if currentSort.sortBy == 'band' %}selected{% endif %}>Band</option>
+          </select>
+        </div>
+
+        <!-- Sort Order Filter -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">Sort Order</span>
+          </label>
+          <select id="sortOrderFilter" class="select select-bordered w-full">
+            <option value="asc" {% if currentSort.sortOrder == 'asc' %}selected{% endif %}>Ascending (A-Z)</option>
+            <option value="desc" {% if currentSort.sortOrder == 'desc' %}selected{% endif %}>Descending (Z-A)</option>
+          </select>
+        </div>
+      </div>
     </div>
   </div>
 
