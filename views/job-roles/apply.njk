@@ -225,20 +225,19 @@
 
           <!-- CV Upload -->
           <div class="form-control bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <label class="label" for="cv">
-              <span class="label-text text-lg font-semibold">Upload CV/Resume *</span>
-            </label>
-            <input 
-              type="file" 
-              id="cv"
-              name="cv" 
-              accept=".pdf,.doc,.docx"
-              class="file-input file-input-bordered file-input-lg w-full focus:file-input-primary transition-colors duration-200" 
-              required
-            />
-            <label class="label">
-              <span class="label-text-alt text-sm opacity-70">Accepted formats: PDF, DOC, DOCX (Max 5MB)</span>
-            </label>
+              <label class="label" for="cv">
+                <span class="label-text text-lg font-semibold">Upload CV/Resume *</span>
+              </label>
+              <input 
+                type="file" 
+                id="cv"
+                accept=".pdf,.doc,.docx"
+                class="file-input file-input-bordered file-input-lg w-full focus:file-input-primary transition-colors duration-200" 
+                required
+              />
+              <label class="label">
+                <span class="label-text-alt text-sm opacity-70">Accepted formats: PDF, DOC, DOCX (Max 5MB)</span>
+              </label>
           </div>
 
           <!-- Cover Letter -->
@@ -254,7 +253,7 @@
               required
             ></textarea>
             <label class="label">
-              <span class="label-text-alt text-sm opacity-70">Minimum 100 characters</span>
+              <span class="label-text-alt text-sm opacity-70">Required</span>
             </label>
           </div>
         </div>
@@ -395,8 +394,8 @@
       // Validate email format
       const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
       
-      // Validate cover letter length (minimum 100 characters)
-      const coverLetterValid = coverLetter.length >= 100;
+  // Validate cover letter is not empty
+  const coverLetterValid = coverLetter.length > 0;
       
       // Enable submit button only if all required fields are valid
       const allValid = firstName && lastName && emailValid && countryCode && phone && 
