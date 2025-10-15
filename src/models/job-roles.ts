@@ -64,8 +64,8 @@ export interface JobApplicationData {
   acceptTerms: boolean;
 }
 
-// Status interface for the new status table
-export interface Status {
+// JobAvailabilityStatus interface for the job_availability_status table
+export interface JobAvailabilityStatus {
   id: number;
   name: string;
 }
