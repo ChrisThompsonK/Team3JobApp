@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import type { AuthUser } from '../models/user.js';
-import { verifyAccessToken } from '../services/token-service.js';
 import { userRepository } from '../repositories/user-repository.js';
+import { verifyAccessToken } from '../services/token-service.js';
 
 // Extend Request interface to include user
 declare global {
@@ -12,7 +12,11 @@ declare global {
   }
 }
 
-export async function authMiddleware(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function authMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   // Extract access token from cookies
   const token = req.cookies?.['access_token'];
 
