@@ -1,6 +1,5 @@
 import type {
   CreateJobRoleRequest as BackendCreateJobRoleRequest,
-  JobAvailabilityStatus,
   JobRole,
   JobRoleDetails,
 } from '../models/job-roles.js';
