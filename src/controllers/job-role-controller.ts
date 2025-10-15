@@ -13,7 +13,7 @@ export class JobRoleController {
   async getAllJobRoles(req: Request, res: Response): Promise<void> {
     try {
       // Extract filter parameters from query string
-      const { name, location, capability, band } = req.query;
+      const { name, location, capability, band, sortBy, sortOrder } = req.query;
 
       // Parse multiple values for checkboxes (location, capability, band can have multiple values)
       const nameFilter = name && typeof name === 'string' ? name : undefined;
@@ -31,8 +31,12 @@ export class JobRoleController {
         ? (Array.isArray(band) ? band : [band]).filter((b): b is string => typeof b === 'string')
         : [];
 
-      // Fetch all job roles from the API
-      let jobRoles: JobRole[] = await api.getJobs();
+      // Extract sorting parameters
+      const sortByParam = sortBy && typeof sortBy === 'string' ? sortBy : undefined;
+      const sortOrderParam = sortOrder && typeof sortOrder === 'string' ? sortOrder : undefined;
+
+      // Fetch all job roles from the API with sorting parameters
+      let jobRoles: JobRole[] = await api.getJobs(sortByParam, sortOrderParam);
 
       // Apply filters on the frontend side
       if (nameFilter) {
@@ -72,6 +76,10 @@ export class JobRoleController {
           location: locationFilters,
           capability: capabilityFilters,
           band: bandFilters,
+        },
+        currentSort: {
+          sortBy: sortByParam,
+          sortOrder: sortOrderParam,
         },
         distinctValues,
       });
