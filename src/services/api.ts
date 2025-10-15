@@ -121,7 +121,7 @@ export const api = {
       params.append('sortBy', sortBy);
       params.append('sortOrder', sortOrder);
     }
-    
+
     const url = params.toString() ? `/jobs?${params.toString()}` : '/jobs';
     const response = await apiClient.get<BackendJobRole[]>(url);
     // Transform backend format to frontend format
