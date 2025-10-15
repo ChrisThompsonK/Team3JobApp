@@ -257,7 +257,9 @@ export class JobRoleController {
 
       if (result.success) {
         // Redirect to success page with application ID
-        res.redirect(`/jobs/${id}/details?applicationSubmitted=true&applicationId=${result.applicationID}`);
+        res.redirect(
+          `/jobs/${id}/details?applicationSubmitted=true&applicationId=${result.applicationID}`
+        );
       } else {
         res.status(400).send(result.message || 'Failed to submit application');
       }
