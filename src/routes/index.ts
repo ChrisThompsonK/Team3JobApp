@@ -28,6 +28,15 @@ router.get('/health', HealthController.index);
 router.use('/auth', authRoutes);
 
 /**
+ * User Application Routes
+ */
+router.get(
+  '/my-applications',
+  requireAuth,
+  jobRoleController.getMyApplications.bind(jobRoleController)
+);
+
+/**
  * Job Role Routes
  * Note: Specific routes (like /jobs/new, /jobs/report) must come BEFORE parameterized routes (like /jobs/:id)
  */

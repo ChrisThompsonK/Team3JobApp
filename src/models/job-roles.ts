@@ -69,3 +69,16 @@ export interface JobAvailabilityStatus {
   id: number;
   name: string;
 }
+
+// User's job application information
+export interface UserJobApplication {
+  id: number;
+  jobRoleId: number;
+  roleName: string;
+  location: string;
+  capability: string;
+  band: string;
+  applicationStatus: 'In Progress' | 'Hired' | 'Rejected' | 'Under Review';
+  appliedDate: Date;
+  emailAddress: string;
+}
