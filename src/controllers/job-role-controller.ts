@@ -575,29 +575,17 @@ export class JobRoleController {
   }
 
   async getMyApplications(req: Request, res: Response): Promise<void> {
-    console.log('🎯 getMyApplications called');
     try {
       // Get user email from request
       const userEmail = req.user?.email;
 
-      console.log('🔍 User object:', JSON.stringify(req.user, null, 2));
-      console.log('📧 User email:', userEmail);
-
       if (!userEmail) {
-        console.log('⚠️ No email found, redirecting to login');
         res.redirect('/auth/login');
         return;
       }
 
-      console.log('📡 Fetching applications for email:', userEmail);
-      console.log(
-        '🔗 API endpoint:',
-        `${process.env['API_BASE_URL'] || 'http://localhost:3001/api'}/applications/my-applications?email=${userEmail}`
-      );
-
       // Fetch user's applications from backend
       const backendApplications = await api.getMyApplications(userEmail);
-      console.log('✅ Received', backendApplications.length, 'applications from backend');
 
       // Transform backend response to match template expectations
       const applications = backendApplications.map((app) => {
@@ -634,22 +622,7 @@ export class JobRoleController {
         user: req.user,
       });
     } catch (error) {
-      console.error('❌ Error fetching user applications:');
-      console.error('Error type:', typeof error);
-      console.error('Error:', error);
-
-      if (error instanceof Error) {
-        console.error('Error name:', error.name);
-        console.error('Error message:', error.message);
-        console.error('Error stack:', error.stack);
-      }
-
-      if (typeof error === 'object' && error !== null) {
-        console.error('Error keys:', Object.keys(error));
-        console.error('Full error object:', JSON.stringify(error, null, 2));
-      }
-
-      // Don't use res.status().render() - just throw the error and let error handler deal with it
+      console.error('Error fetching user applications:', error);
       throw error;
     }
   }
