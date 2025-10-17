@@ -611,7 +611,6 @@ export class JobRoleController {
           applicationStatus,
           appliedDate: new Date(app.createdAt),
           emailAddress: app.emailAddress,
-          status: app.status,
         };
       });
 
