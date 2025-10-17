@@ -623,7 +623,7 @@ export class JobRoleController {
       });
     } catch (error) {
       console.error('Error fetching user applications:', error);
-      throw error;
+      res.status(500).render('error', { message: 'Unable to load your applications' });
     }
   }
 }
