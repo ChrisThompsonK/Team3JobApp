@@ -45,7 +45,7 @@ export class JobRoleController {
 
       // Apply filters on the frontend side to the full dataset
       let filteredJobs = allJobRoles;
-      
+
       if (nameFilter) {
         const searchTerm = nameFilter.toLowerCase();
         filteredJobs = filteredJobs.filter((job) => job.name.toLowerCase().includes(searchTerm));

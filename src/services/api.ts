@@ -114,7 +114,12 @@ export const api = {
 
   // Jobs endpoint - returns array of job roles
   // Note: Filtering is done on the frontend until backend supports query parameters
-  getJobs: async (sortBy?: string, sortOrder?: string, limit?: number, offset?: number): Promise<JobRole[]> => {
+  getJobs: async (
+    sortBy?: string,
+    sortOrder?: string,
+    limit?: number,
+    offset?: number
+  ): Promise<JobRole[]> => {
     // Build query parameters for sorting and pagination
     const params = new URLSearchParams();
     if (sortBy && sortOrder) {
