@@ -59,7 +59,11 @@
                 {% endif %}
                 <div class="dropdown dropdown-end">
                     <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-2 hover:bg-base-200">
-                        <span class="text-sm font-medium">{{ user.email.charAt(0).toUpperCase() }}</span>
+                        <div class="avatar">
+                            <div class="w-8 h-8 rounded-full {{ 'bg-warning' if user.role === 'admin' else 'bg-primary' }} flex items-center justify-center min-w-8 min-h-8" style="aspect-ratio: 1; border-radius: 50%;">
+                                <span class="text-white text-sm font-medium">{{ user.email.charAt(0).toUpperCase() }}</span>
+                            </div>
+                        </div>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
