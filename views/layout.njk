@@ -28,11 +28,6 @@
                         {% if user.role === 'admin' %}
                             <li><a href="/jobs/new" class="text-kainos-primary hover:text-kainos-accent">Create Job</a></li>
                         {% endif %}
-                        <li>
-                            <form method="POST" action="/auth/logout">
-                                <button type="submit" class="text-kainos-primary hover:text-kainos-accent">Sign Out</button>
-                            </form>
-                        </li>
                     {% else %}
                         <li><hr></li>
                         <li><a href="/auth/login" class="text-kainos-primary hover:text-kainos-accent">Sign In</a></li>
@@ -88,11 +83,6 @@
                         {% if user.role === 'admin' %}
                             <li><a href="/jobs/new">Create Job</a></li>
                         {% endif %}
-                        <li>
-                            <form method="POST" action="/auth/logout" class="w-full">
-                                <button type="submit" class="w-full text-left">Sign Out</button>
-                            </form>
-                        </li>
                     </ul>
                 </div>
             {% else %}
@@ -102,6 +92,36 @@
             {% endif %}
         </div>
     </div>
+
+    <script>
+        // Handle logout form submission in dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoutForm = document.getElementById('logout-form');
+            const logoutFormMobile = document.getElementById('logout-form-mobile');
+            
+            if (logoutForm) {
+                const button = logoutForm.querySelector('button[type="submit"]');
+                if (button) {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        logoutForm.submit();
+                    });
+                }
+            }
+            
+            if (logoutFormMobile) {
+                const button = logoutFormMobile.querySelector('button[type="submit"]');
+                if (button) {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        logoutFormMobile.submit();
+                    });
+                }
+            }
+        });
+    </script>
 
     <!-- Main Content -->
     <main class="flex-1">

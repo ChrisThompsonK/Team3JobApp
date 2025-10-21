@@ -17,7 +17,22 @@ export class JobRoleController {
 
       // Parse pagination parameters
       const pageNumber = page && typeof page === 'string' ? parseInt(page, 10) : 1;
-      const pageLimit = limit && typeof limit === 'string' ? parseInt(limit, 10) : 10;
+      
+      // Validate and constrain the limit parameter to prevent abuse
+      // Users cannot set arbitrary limits via URL manipulation
+      const MIN_LIMIT = 5;
+      const MAX_LIMIT = 50;
+      const DEFAULT_LIMIT = 10;
+      let pageLimit = DEFAULT_LIMIT;
+      
+      if (limit && typeof limit === 'string') {
+        const parsedLimit = parseInt(limit, 10);
+        // Ensure limit is a valid number and within acceptable bounds
+        if (!isNaN(parsedLimit) && parsedLimit >= MIN_LIMIT && parsedLimit <= MAX_LIMIT) {
+          pageLimit = parsedLimit;
+        }
+      }
+      
       const offset = (pageNumber - 1) * pageLimit;
 
       // Parse multiple values for checkboxes (location, capability, band can have multiple values)
