@@ -8,7 +8,7 @@ import type {
   UpdateJobRoleRequest,
 } from '../models/job-roles.js';
 
-const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001/api';
+const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001';
 
 // Create axios instance with default config
 const apiClient = axios.create({
@@ -100,9 +100,9 @@ export const api = {
     return response.data;
   },
 
-  // Greeting endpoint
+  // Note: Backend doesn't have a greeting endpoint, using root instead
   getGreeting: async (): Promise<unknown> => {
-    const response = await apiClient.get('/greeting');
+    const response = await apiClient.get('/');
     return response.data;
   },
 
@@ -198,7 +198,7 @@ export const api = {
   // Delete a job role
   deleteJob: async (id: string): Promise<boolean> => {
     try {
-      await apiClient.delete(`/job/${id}`);
+      await apiClient.delete(`/jobs/${id}`);
       return true;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
