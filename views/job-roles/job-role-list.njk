@@ -12,6 +12,7 @@
       <h1 class="text-5xl font-bold kainos-text-gradient">{{ title }}</h1>
       <p class="text-lg text-base-content/70 mt-2">Discover exciting career opportunities at Kainos</p>
     </div>
+    {% if user and user.role === 'admin' %}
     <div class="flex flex-col sm:flex-row gap-2">
       <a href="/jobs/new" class="btn-kainos shadow-lg hover:shadow-xl inline-flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -26,6 +27,7 @@
         Report
       </a>
     </div>
+    {% endif %}
   </div>
 
   <!-- Filter Panel with DaisyUI Card -->
