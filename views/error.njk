@@ -41,13 +41,11 @@
             {% elif statusCode >= 500 %}
             <li>Try refreshing the page</li>
             <li>Wait a moment and try again</li>
-            <li><a href="/health">Check system health</a></li>
             <li>Contact support with Request ID: <code>{{ requestId }}</code></li>
             {% else %}
             <li>Check your request and try again</li>
             <li><a href="/">← Go back to Home</a></li>
             {% endif %}
-            <li><a href="/health">Check system health</a></li>
         </ul>
     </div>
 {% endblock %}

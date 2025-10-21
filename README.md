@@ -178,7 +178,6 @@ npm run build           # Build TypeScript with optimizations
 
 ### **Frontend Routes**
 - `GET /` - Home page with job listings
-- `GET /health` - Health check page (HTML)
 - `GET /job-roles` - Job roles listing page
 
 ### **Static Assets**
