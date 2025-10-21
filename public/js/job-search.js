@@ -18,6 +18,7 @@ function searchJobs() {
 
 /**
  * Redirects to the jobs page with selected capability filter
+ * Called from HTML: onclick="searchJobsByCapability()" in index.njk
  */
 function searchJobsByCapability() {
   const selectedCapability = document.getElementById('jobCapabilitySelect').value;
@@ -56,8 +57,3 @@ function initializeJobSearch() {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeJobSearch);
-
-// Export functions for potential future use (browser environment)
-if (typeof window !== 'undefined') {
-  window.jobSearch = { searchJobs, searchJobsByCapability, initializeJobSearch };
-}
