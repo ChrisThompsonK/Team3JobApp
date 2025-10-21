@@ -34,11 +34,11 @@ function handleSearchKeyPress(event) {
 function initializeJobSearch() {
   // Get search input element
   const searchInput = document.getElementById('jobSearchInput');
-  
+
   if (searchInput) {
     // Allow Enter key to trigger search
     searchInput.addEventListener('keypress', handleSearchKeyPress);
-    
+
     // Optional: Add input validation or auto-suggestions here
     searchInput.addEventListener('input', (e) => {
       const value = e.target.value;
@@ -49,7 +49,7 @@ function initializeJobSearch() {
         e.target.setCustomValidity('');
       }
     });
-    
+
     // Focus on search input when page loads
     searchInput.focus();
   }
