@@ -41,6 +41,10 @@ function applyFilters() {
     params.append('sortOrder', sortOrderFilter || 'asc');
   }
 
+  // Reset to page 1 when filters change, keep default limit of 10
+  params.append('page', '1');
+  params.append('limit', '10');
+
   // Redirect to filtered URL
   const queryString = params.toString();
   window.location.href = queryString ? `/jobs?${queryString}` : '/jobs';
@@ -49,7 +53,7 @@ function applyFilters() {
 /**
  * Clear all filters and reload the page
  */
-function _clearFilters() {
+function clearFilters() {
   window.location.href = '/jobs';
 }
 
