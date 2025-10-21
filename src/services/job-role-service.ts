@@ -38,8 +38,8 @@ export class JobRoleService {
   /**
    * Get all job roles from the backend database
    */
-  async getAllJobRoles(): Promise<JobRole[]> {
-    return api.getJobs();
+  async getAllJobRoles(limit?: number, offset?: number): Promise<JobRole[]> {
+    return api.getJobs(undefined, undefined, limit, offset);
   }
 
   /**
