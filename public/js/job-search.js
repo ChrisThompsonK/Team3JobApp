@@ -57,7 +57,7 @@ function initializeJobSearch() {
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeJobSearch);
 
-// Export functions for potential future use
-if (module?.exports) {
-  module.exports = { searchJobs, searchJobsByCapability, initializeJobSearch };
+// Export functions for potential future use (browser environment)
+if (typeof window !== 'undefined') {
+  window.jobSearch = { searchJobs, searchJobsByCapability, initializeJobSearch };
 }
