@@ -17,7 +17,9 @@ function searchJobs() {
 }
 
 /**
- * Handle search on Enter key press
+
+ * Redirects to the jobs page with selected capability filter
+ * Called from HTML: onclick="searchJobsByCapability()" in index.njk
  */
 function handleSearchKeyPress(event) {
   if (event.key === 'Enter') {
@@ -55,8 +57,3 @@ function initializeJobSearch() {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeJobSearch);
-
-// Export functions for potential future use
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { searchJobs, initializeJobSearch };
-}
