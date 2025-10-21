@@ -13,7 +13,12 @@ export class JobRoleController {
   async getAllJobRoles(req: Request, res: Response): Promise<void> {
     try {
       // Extract filter parameters from query string
-      const { name, location, capability, band } = req.query;
+      const { name, location, capability, band, sortBy, sortOrder, page, limit } = req.query;
+
+      // Parse pagination parameters
+      const pageNumber = page && typeof page === 'string' ? parseInt(page, 10) : 1;
+      const pageLimit = limit && typeof limit === 'string' ? parseInt(limit, 10) : 10;
+      const offset = (pageNumber - 1) * pageLimit;
 
       // Parse multiple values for checkboxes (location, capability, band can have multiple values)
       const nameFilter = name && typeof name === 'string' ? name : undefined;
@@ -31,32 +36,47 @@ export class JobRoleController {
         ? (Array.isArray(band) ? band : [band]).filter((b): b is string => typeof b === 'string')
         : [];
 
-      // Fetch all job roles from the API
-      let jobRoles: JobRole[] = await api.getJobs();
+      // Extract sorting parameters
+      const sortByParam = sortBy && typeof sortBy === 'string' ? sortBy : undefined;
+      const sortOrderParam = sortOrder && typeof sortOrder === 'string' ? sortOrder : undefined;
 
-      // Apply filters on the frontend side
+      // Get all job roles for filtering on frontend
+      const allJobRoles: JobRole[] = await api.getJobs(sortByParam, sortOrderParam);
+
+      // Apply filters on the frontend side to the full dataset
+      let filteredJobs = allJobRoles;
+
       if (nameFilter) {
         const searchTerm = nameFilter.toLowerCase();
-        jobRoles = jobRoles.filter((job) => job.name.toLowerCase().includes(searchTerm));
+        filteredJobs = filteredJobs.filter((job) => job.name.toLowerCase().includes(searchTerm));
       }
 
       if (locationFilters.length > 0) {
-        jobRoles = jobRoles.filter((job) =>
+        filteredJobs = filteredJobs.filter((job) =>
           locationFilters.some((loc) => job.location.toLowerCase() === loc.toLowerCase())
         );
       }
 
       if (capabilityFilters.length > 0) {
-        jobRoles = jobRoles.filter((job) =>
+        filteredJobs = filteredJobs.filter((job) =>
           capabilityFilters.some((cap) => job.capability.toLowerCase() === cap.toLowerCase())
         );
       }
 
       if (bandFilters.length > 0) {
-        jobRoles = jobRoles.filter((job) =>
+        filteredJobs = filteredJobs.filter((job) =>
           bandFilters.some((b) => job.band.toLowerCase() === b.toLowerCase())
         );
       }
+
+      // Apply pagination to filtered results
+      const totalFilteredJobs = filteredJobs.length;
+      const paginatedJobs = filteredJobs.slice(offset, offset + pageLimit);
+
+      // Calculate pagination info
+      const totalPages = Math.ceil(totalFilteredJobs / pageLimit);
+      const hasNextPage = pageNumber < totalPages;
+      const hasPrevPage = pageNumber > 1;
 
       // Get distinct values for filter dropdowns from all jobs
       const distinctValues = await api.getDistinctValues();
@@ -66,12 +86,24 @@ export class JobRoleController {
 
       res.render('job-roles/job-role-list', {
         title,
-        jobRoles,
+        jobRoles: paginatedJobs,
         currentFilters: {
           name: nameFilter,
           location: locationFilters,
           capability: capabilityFilters,
           band: bandFilters,
+        },
+        currentSort: {
+          sortBy: sortByParam,
+          sortOrder: sortOrderParam,
+        },
+        pagination: {
+          currentPage: pageNumber,
+          totalPages,
+          limit: pageLimit,
+          totalResults: totalFilteredJobs,
+          hasNextPage,
+          hasPrevPage,
         },
         distinctValues,
       });

@@ -1,17 +1,7 @@
 import type { Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { config } from '../config/index.js';
 import type { AuthUser } from '../models/user.js';
-
-// Helper to extract base64 secrets
-function getSecret(envSecret: string): string {
-  if (envSecret.startsWith('base64:')) {
-    return envSecret.substring(7); // Remove 'base64:' prefix
-  }
-  return envSecret;
-}
-
-const accessSecret = getSecret(process.env['JWT_ACCESS_SECRET'] || 'fallback-secret-access');
-const refreshSecret = getSecret(process.env['JWT_REFRESH_SECRET'] || 'fallback-secret-refresh');
 
 export interface AccessTokenPayload {
   sub: string;
@@ -36,7 +26,9 @@ export function signAccessToken(user: AuthUser): string {
     ver: 1, // Version for future invalidation strategy
   };
 
-  return jwt.sign(payload, accessSecret, { expiresIn: '15m' });
+  return jwt.sign(payload, config.auth.jwt.accessSecret, {
+    expiresIn: config.auth.jwt.accessTokenExpiry,
+  });
 }
 
 export function signRefreshToken(user: AuthUser): string {
@@ -46,54 +38,54 @@ export function signRefreshToken(user: AuthUser): string {
     jti: `${user.id}_${Date.now()}`, // Simple jti for tracking
   };
 
-  return jwt.sign(payload, refreshSecret, { expiresIn: '30d' });
+  return jwt.sign(payload, config.auth.jwt.refreshSecret, {
+    expiresIn: config.auth.jwt.refreshTokenExpiry,
+  });
 }
 
 export function verifyAccessToken(token: string): AccessTokenPayload {
-  return jwt.verify(token, accessSecret) as AccessTokenPayload;
+  return jwt.verify(token, config.auth.jwt.accessSecret) as AccessTokenPayload;
 }
 
 export function verifyRefreshToken(token: string): RefreshTokenPayload {
-  return jwt.verify(token, refreshSecret) as RefreshTokenPayload;
+  return jwt.verify(token, config.auth.jwt.refreshSecret) as RefreshTokenPayload;
 }
 
 export function setAuthCookies(
   res: Response,
   tokens: { accessToken: string; refreshToken: string }
 ): void {
-  const isProduction = process.env['NODE_ENV'] === 'production';
-
   // Access token cookie (short-lived)
   res.cookie('access_token', tokens.accessToken, {
-    httpOnly: true,
-    secure: isProduction,
+    httpOnly: config.auth.cookie.httpOnly,
+    secure: config.auth.cookie.secure,
     sameSite: 'lax',
-    maxAge: 15 * 60 * 1000, // 15 minutes in milliseconds
+    maxAge: config.auth.cookie.accessTokenMaxAge,
     path: '/',
   });
 
   // Refresh token cookie (long-lived)
   res.cookie('refresh_token', tokens.refreshToken, {
-    httpOnly: true,
-    secure: isProduction,
+    httpOnly: config.auth.cookie.httpOnly,
+    secure: config.auth.cookie.secure,
     sameSite: 'strict',
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
+    maxAge: config.auth.cookie.refreshTokenMaxAge,
     path: '/',
   });
 }
 
 export function clearAuthCookies(res: Response): void {
   res.cookie('access_token', '', {
-    httpOnly: true,
-    secure: process.env['NODE_ENV'] === 'production',
+    httpOnly: config.auth.cookie.httpOnly,
+    secure: config.auth.cookie.secure,
     sameSite: 'lax',
     expires: new Date(0),
     path: '/',
   });
 
   res.cookie('refresh_token', '', {
-    httpOnly: true,
-    secure: process.env['NODE_ENV'] === 'production',
+    httpOnly: config.auth.cookie.httpOnly,
+    secure: config.auth.cookie.secure,
     sameSite: 'strict',
     expires: new Date(0),
     path: '/',

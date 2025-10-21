@@ -5,6 +5,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /**
+ * Validates that a required environment variable is set
+ */
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(
+      `FATAL: Required environment variable ${name} is not set. Application cannot start.`
+    );
+  }
+  return value;
+}
+
+/**
  * Application Configuration
  */
 export const config = {
@@ -43,5 +56,35 @@ export const config = {
     name: 'Team 3 Job Application Frontend',
     version: process.env['npm_package_version'] || '1.0.0',
     description: 'Team 3 Job Application Frontend',
+  },
+
+  // Database Configuration
+  database: {
+    url: process.env['DATABASE_URL'] || './app.db',
+  },
+
+  // Authentication Configuration - ALL REQUIRED
+  auth: {
+    // JWT Secrets - REQUIRED, no defaults
+    jwt: {
+      accessSecret: requireEnv('JWT_ACCESS_SECRET'),
+      refreshSecret: requireEnv('JWT_REFRESH_SECRET'),
+      accessTokenExpiry: '15m',
+      refreshTokenExpiry: '30d',
+    },
+
+    // Password Hashing - REQUIRED, no defaults
+    password: {
+      saltRounds: Number.parseInt(requireEnv('PASSWORD_HASH_ROUNDS'), 10),
+      minLength: 8,
+    },
+
+    // Cookie Configuration
+    cookie: {
+      secure: process.env['NODE_ENV'] === 'production',
+      httpOnly: true,
+      accessTokenMaxAge: 15 * 60 * 1000, // 15 minutes in milliseconds
+      refreshTokenMaxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
+    },
   },
 } as const;

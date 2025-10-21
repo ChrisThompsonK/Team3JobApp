@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { config } from '../config/index.js';
 import type { CreateUserData } from '../models/user.js';
 import { userRepository } from '../repositories/user-repository.js';
 
@@ -28,9 +29,8 @@ export class AdminSeedService {
         return;
       }
 
-      // Hash the password
-      const saltRounds = Number.parseInt(process.env['PASSWORD_HASH_ROUNDS'] || '12', 10);
-      const passwordHash = await bcrypt.hash(adminPassword, saltRounds);
+      // Hash the password using config
+      const passwordHash = await bcrypt.hash(adminPassword, config.auth.password.saltRounds);
 
       // Create admin user
       const adminData: CreateUserData = {

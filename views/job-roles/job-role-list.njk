@@ -36,7 +36,7 @@
           <h2 class="card-title text-3xl text-kainos-primary">Filter Job Roles</h2>
           <p class="text-base-content/70">Refine your search to find the perfect opportunity (filters apply automatically)</p>
         </div>
-        <button onclick="clearFilters()" class="btn-kainos-outline shadow-lg hover:shadow-xl inline-flex items-center gap-2">
+        <button onclick="_clearFilters()" class="btn-kainos-outline shadow-lg hover:shadow-xl inline-flex items-center gap-2">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
@@ -111,6 +111,35 @@
           </select>
         </div>
       </div>
+
+      <div class="divider">Sort Options</div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Sort By Filter -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">Sort By</span>
+          </label>
+          <select id="sortByFilter" class="select select-bordered w-full">
+            <option value="">No Sorting</option>
+            <option value="name" {% if currentSort.sortBy == 'name' %}selected{% endif %}>Job Name</option>
+            <option value="location" {% if currentSort.sortBy == 'location' %}selected{% endif %}>Location</option>
+            <option value="capability" {% if currentSort.sortBy == 'capability' %}selected{% endif %}>Capability</option>
+            <option value="band" {% if currentSort.sortBy == 'band' %}selected{% endif %}>Band</option>
+          </select>
+        </div>
+
+        <!-- Sort Order Filter -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">Sort Order</span>
+          </label>
+          <select id="sortOrderFilter" class="select select-bordered w-full">
+            <option value="asc" {% if currentSort.sortOrder == 'asc' %}selected{% endif %}>Ascending (A-Z)</option>
+            <option value="desc" {% if currentSort.sortOrder == 'desc' %}selected{% endif %}>Descending (Z-A)</option>
+          </select>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -123,8 +152,8 @@
         </svg>
       </div>
       <div class="stat-title">Available Positions</div>
-      <div class="stat-value text-primary">{{ jobRoles.length }}</div>
-      <div class="stat-desc">Ready to launch your career</div>
+      <div class="stat-value text-primary">{{ pagination.totalResults }}</div>
+      <div class="stat-desc">Showing {{ jobRoles.length }} of {{ pagination.totalResults }} results (Page {{ pagination.currentPage }} of {{ pagination.totalPages }})</div>
     </div>
   </div>
 
@@ -160,6 +189,51 @@
         </table>
       </div>
     </div>
+
+    <!-- Pagination Controls -->
+    {% if pagination.totalPages > 1 %}
+    <div class="flex justify-center items-center gap-4 mt-6">
+      <div class="join">
+        {% if pagination.hasPrevPage %}
+        <a href="?page={{ pagination.currentPage - 1 }}&limit={{ pagination.limit }}{% if currentFilters.name %}&name={{ currentFilters.name }}{% endif %}{% for loc in currentFilters.location %}&location={{ loc }}{% endfor %}{% for cap in currentFilters.capability %}&capability={{ cap }}{% endfor %}{% for b in currentFilters.band %}&band={{ b }}{% endfor %}{% if currentSort.sortBy %}&sortBy={{ currentSort.sortBy }}&sortOrder={{ currentSort.sortOrder }}{% endif %}" 
+           class="join-item btn btn-outline">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Previous
+        </a>
+        {% else %}
+        <button class="join-item btn btn-outline btn-disabled" disabled>
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Previous
+        </button>
+        {% endif %}
+
+        <button class="join-item btn btn-outline no-animation">
+          Page {{ pagination.currentPage }} of {{ pagination.totalPages }}
+        </button>
+
+        {% if pagination.hasNextPage %}
+        <a href="?page={{ pagination.currentPage + 1 }}&limit={{ pagination.limit }}{% if currentFilters.name %}&name={{ currentFilters.name }}{% endif %}{% for loc in currentFilters.location %}&location={{ loc }}{% endfor %}{% for cap in currentFilters.capability %}&capability={{ cap }}{% endfor %}{% for b in currentFilters.band %}&band={{ b }}{% endfor %}{% if currentSort.sortBy %}&sortBy={{ currentSort.sortBy }}&sortOrder={{ currentSort.sortOrder }}{% endif %}" 
+           class="join-item btn btn-outline">
+          Next
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
+        {% else %}
+        <button class="join-item btn btn-outline btn-disabled" disabled>
+          Next
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
   {% else %}
     <div role="alert" class="alert alert-info">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
