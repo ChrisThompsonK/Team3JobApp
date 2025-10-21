@@ -76,7 +76,7 @@ export const config = {
     // Password Hashing - REQUIRED, no defaults
     password: {
       saltRounds: Number.parseInt(requireEnv('PASSWORD_HASH_ROUNDS'), 10),
-      minLength: 8,
+      minLength: 9,
     },
 
     // Cookie Configuration

@@ -45,12 +45,12 @@
             type="password" 
             autocomplete="new-password" 
             required 
-            minlength="8"
+            minlength="9"
             class="input input-bordered w-full"
             placeholder="Enter your password"
           >
           <label class="label">
-            <span class="label-text-alt">Must be at least 8 characters</span>
+            <span class="label-text-alt">Must be more than 8 characters with uppercase, lowercase, and special character</span>
           </label>
         </div>
         
@@ -64,7 +64,7 @@
             type="password" 
             autocomplete="new-password" 
             required 
-            minlength="8"
+            minlength="9"
             class="input input-bordered w-full"
             placeholder="Confirm your password"
           >
@@ -90,7 +90,52 @@
 </div>
 
 <script>
-// Client-side password confirmation validation
+// Client-side password validation
+function validatePassword(password) {
+  const errors = [];
+  
+  if (password.length <= 8) {
+    errors.push('Password must be more than 8 characters long');
+  }
+  
+  if (!/[A-Z]/.test(password)) {
+    errors.push('Password must contain at least one uppercase letter');
+  }
+  
+  if (!/[a-z]/.test(password)) {
+    errors.push('Password must contain at least one lowercase letter');
+  }
+  
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    errors.push('Password must contain at least one special character');
+  }
+  
+  return errors;
+}
+
+// Real-time password validation
+document.getElementById('password').addEventListener('input', function() {
+  const password = this.value;
+  const errors = validatePassword(password);
+  
+  if (errors.length > 0) {
+    this.setCustomValidity(errors.join('. '));
+  } else {
+    this.setCustomValidity('');
+  }
+  
+  // Also check password confirmation if it has a value
+  const confirmPassword = document.getElementById('confirmPassword');
+  if (confirmPassword.value) {
+    if (password !== confirmPassword.value) {
+      confirmPassword.setCustomValidity('Passwords do not match');
+    } else {
+      confirmPassword.setCustomValidity('');
+    }
+  }
+});
+
+// Password confirmation validation
 document.getElementById('confirmPassword').addEventListener('input', function() {
   const password = document.getElementById('password').value;
   const confirmPassword = this.value;

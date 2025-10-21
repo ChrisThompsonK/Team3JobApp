@@ -13,10 +13,10 @@ export class AuthService {
       throw new Error('Passwords do not match');
     }
 
-    if (password.length < config.auth.password.minLength) {
-      throw new Error(
-        `Password must be at least ${config.auth.password.minLength} characters long`
-      );
+    // Validate password strength
+    const passwordValidation = await this.validatePassword(password);
+    if (!passwordValidation.isValid) {
+      throw new Error(passwordValidation.errors.join('. '));
     }
 
     // Check if email already exists
@@ -125,8 +125,8 @@ export class AuthService {
   async validatePassword(password: string): Promise<{ isValid: boolean; errors: string[] }> {
     const errors: string[] = [];
 
-    if (password.length < 8) {
-      errors.push('Password must be at least 8 characters long');
+    if (password.length <= 8) {
+      errors.push('Password must be more than 8 characters long');
     }
 
     if (!/[A-Z]/.test(password)) {
@@ -135,10 +135,6 @@ export class AuthService {
 
     if (!/[a-z]/.test(password)) {
       errors.push('Password must contain at least one lowercase letter');
-    }
-
-    if (!/\d/.test(password)) {
-      errors.push('Password must contain at least one number');
     }
 
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
