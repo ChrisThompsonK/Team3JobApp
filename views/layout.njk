@@ -93,36 +93,6 @@
         </div>
     </div>
 
-    <script>
-        // Handle logout form submission in dropdown
-        document.addEventListener('DOMContentLoaded', function() {
-            const logoutForm = document.getElementById('logout-form');
-            const logoutFormMobile = document.getElementById('logout-form-mobile');
-            
-            if (logoutForm) {
-                const button = logoutForm.querySelector('button[type="submit"]');
-                if (button) {
-                    button.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        logoutForm.submit();
-                    });
-                }
-            }
-            
-            if (logoutFormMobile) {
-                const button = logoutFormMobile.querySelector('button[type="submit"]');
-                if (button) {
-                    button.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        logoutFormMobile.submit();
-                    });
-                }
-            }
-        });
-    </script>
-
     <!-- Main Content -->
     <main class="flex-1">
         <div class="container mx-auto max-w-7xl p-4 md:p-8">

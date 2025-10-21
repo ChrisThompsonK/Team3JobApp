@@ -28,7 +28,7 @@ export class JobRoleController {
       if (limit && typeof limit === 'string') {
         const parsedLimit = parseInt(limit, 10);
         // Ensure limit is a valid number and within acceptable bounds
-        if (!isNaN(parsedLimit) && parsedLimit >= MIN_LIMIT && parsedLimit <= MAX_LIMIT) {
+        if (!Number.isNaN(parsedLimit) && parsedLimit >= MIN_LIMIT && parsedLimit <= MAX_LIMIT) {
           pageLimit = parsedLimit;
         }
       }
