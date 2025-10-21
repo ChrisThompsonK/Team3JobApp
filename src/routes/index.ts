@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { HealthController, HomeController } from '../controllers/index.js';
+import { HomeController } from '../controllers/index.js';
 import { JobRoleController } from '../controllers/job-role-controller.js';
 import { requireAdmin } from '../middleware/require-admin.js';
 import { requireAuth } from '../middleware/require-auth.js';
@@ -16,11 +16,6 @@ const jobRoleController = new JobRoleController(jobRoleService, applicationValid
  */
 router.get('/', HomeController.index);
 router.get('/daisyui-test', HomeController.daisyuiTest);
-
-/**
- * Health Routes
- */
-router.get('/health', HealthController.index);
 
 /**
  * Authentication Routes

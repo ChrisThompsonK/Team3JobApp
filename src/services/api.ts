@@ -100,12 +100,6 @@ export const api = {
     return response.data;
   },
 
-  // Health check endpoint
-  getHealth: async (): Promise<unknown> => {
-    const response = await apiClient.get('/health');
-    return response.data;
-  },
-
   // Greeting endpoint
   getGreeting: async (): Promise<unknown> => {
     const response = await apiClient.get('/greeting');
