@@ -3,13 +3,13 @@
  */
 
 /**
- * Redirects to the jobs page with optional search query
+ * Redirects to the jobs page with search query
  */
 function searchJobs() {
   const searchTerm = document.getElementById('jobSearchInput')?.value.trim();
   if (searchTerm) {
     // Redirect to jobs page with search query
-    window.location.href = `/jobs?search=${encodeURIComponent(searchTerm)}`;
+    window.location.href = `/jobs?name=${encodeURIComponent(searchTerm)}`;
   } else {
     // If no search term, just go to jobs page
     window.location.href = '/jobs';
@@ -17,16 +17,12 @@ function searchJobs() {
 }
 
 /**
- * Redirects to the jobs page with selected capability filter
+ * Handle search on Enter key press
  */
-function searchJobsByCapability() {
-  const selectedCapability = document.getElementById('jobCapabilitySelect').value;
-  if (selectedCapability) {
-    // Redirect to jobs page with capability filter
-    window.location.href = `/jobs?capability=${encodeURIComponent(selectedCapability)}`;
-  } else {
-    // If no capability selected, just go to jobs page
-    window.location.href = '/jobs';
+function handleSearchKeyPress(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    searchJobs();
   }
 }
 
@@ -34,23 +30,26 @@ function searchJobsByCapability() {
  * Initialize job search functionality
  */
 function initializeJobSearch() {
-  // Allow Enter key to trigger search (for legacy text input)
+  // Get search input element
   const searchInput = document.getElementById('jobSearchInput');
+  
   if (searchInput) {
-    searchInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        searchJobs();
+    // Allow Enter key to trigger search
+    searchInput.addEventListener('keypress', handleSearchKeyPress);
+    
+    // Optional: Add input validation or auto-suggestions here
+    searchInput.addEventListener('input', (e) => {
+      const value = e.target.value;
+      // Could add real-time validation or suggestions here
+      if (value.length > 50) {
+        e.target.setCustomValidity('Search term too long (max 50 characters)');
+      } else {
+        e.target.setCustomValidity('');
       }
     });
-  }
-
-  // Handle capability dropdown change
-  const capabilitySelect = document.getElementById('jobCapabilitySelect');
-  if (capabilitySelect) {
-    capabilitySelect.addEventListener('change', () => {
-      // Optional: Auto-filter on selection change
-      // searchJobsByCapability();
-    });
+    
+    // Focus on search input when page loads
+    searchInput.focus();
   }
 }
 
@@ -58,6 +57,6 @@ function initializeJobSearch() {
 document.addEventListener('DOMContentLoaded', initializeJobSearch);
 
 // Export functions for potential future use
-if (module?.exports) {
-  module.exports = { searchJobs, searchJobsByCapability, initializeJobSearch };
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { searchJobs, initializeJobSearch };
 }

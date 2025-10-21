@@ -35,34 +35,30 @@
                 
                 <div class="divider"></div>
                 
-                <!-- Capability Dropdown with DaisyUI -->
+                <!-- Job Search Input with DaisyUI -->
                 <div class="form-control w-full">
                     <label class="label">
-                        <span class="label-text font-semibold">Select Capability</span>
+                        <span class="label-text font-semibold">Search for Jobs</span>
                     </label>
-                    <select 
-                        class="select select-bordered select-primary w-full" 
-                        id="jobCapabilitySelect"
-                    >
-                        <option value="">All Capabilities</option>
-                        <option value="Engineering">Engineering</option>
-                        <option value="Product">Product</option>
-                        <option value="Design">Design</option>
-                        <option value="Data & Analytics">Data & Analytics</option>
-                        <option value="Business Analysis">Business Analysis</option>
-                        <option value="Delivery">Delivery</option>
-                        <option value="Cyber Security">Cyber Security</option>
-                        <option value="Quality Assurance">Quality Assurance</option>
-                        <option value="DevOps">DevOps</option>
-                    </select>
+                    <label class="input input-bordered input-primary flex items-center gap-2 w-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <input 
+                            type="text" 
+                            id="jobSearchInput" 
+                            placeholder="Search by job title, keywords..." 
+                            class="grow"
+                        />
+                    </label>
                 </div>
 
                 <div class="card-actions flex-col gap-2 mt-4">
-                    <button onclick="searchJobsByCapability()" class="btn-kainos shadow-lg hover:shadow-xl w-full inline-flex items-center justify-center gap-2">
+                    <button onclick="searchJobs()" class="btn-kainos shadow-lg hover:shadow-xl w-full inline-flex items-center justify-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
-                        <span>Filter Jobs by Capability</span>
+                        <span>Search</span>
                     </button>
                     <a href="/jobs" class="btn-kainos-outline shadow-lg hover:shadow-xl w-full inline-flex items-center justify-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
