@@ -132,15 +132,9 @@ export class JobRoleController {
       // Fetch job role details directly from the backend API
       const jobRole = await api.getJobById(id);
 
-      // Check if application was just submitted (from query params)
-      const applicationSubmitted = req.query['applicationSubmitted'] === 'true';
-      const applicationId = req.query['applicationId'] as string | undefined;
-
       res.render('job-roles/detail', {
         title: jobRole.name,
         jobRole,
-        applicationSubmitted,
-        applicationId,
       });
     } catch (error) {
       console.error('Error fetching job role:', error);
@@ -265,12 +259,6 @@ export class JobRoleController {
       }
 
       // Map frontend form data to backend API format
-      const phoneNumber = Number.parseInt(applicationData.phone.replace(/\D/g, ''), 10);
-      if (Number.isNaN(phoneNumber)) {
-        res.status(400).send('Invalid phone number format');
-        return;
-      }
-
       // Combine additional information into notes field
       const notes = [
         `Name: ${applicationData.firstName} ${applicationData.lastName}`,
@@ -286,7 +274,7 @@ export class JobRoleController {
       const backendApplicationData = {
         jobRoleId: numericId,
         emailAddress: applicationData.email,
-        phoneNumber: phoneNumber,
+        phoneNumber: applicationData.phone,
         coverLetter: applicationData.coverLetter,
         notes: notes,
       };
@@ -615,6 +603,58 @@ export class JobRoleController {
     } catch (error) {
       console.error('Error updating job role:', error);
       res.status(500).send('Error updating job role');
+    }
+  }
+
+  async getMyApplications(req: Request, res: Response): Promise<void> {
+    try {
+      // Get user email from request
+      const userEmail = req.user?.email;
+
+      if (!userEmail) {
+        res.redirect('/auth/login');
+        return;
+      }
+
+      // Fetch user's applications from backend
+      const backendApplications = await api.getMyApplications(userEmail);
+
+      // Transform backend response to match template expectations
+      const applications = backendApplications.map((app) => {
+        // Map backend status to frontend status display
+        let applicationStatus: string;
+        if (app.status === 'Accepted') {
+          applicationStatus = 'Hired';
+        } else if (app.status === 'Rejected') {
+          applicationStatus = 'Rejected';
+        } else if (app.status === 'Reviewed') {
+          applicationStatus = 'Under Review';
+        } else {
+          applicationStatus = 'In Progress'; // Pending
+        }
+
+        return {
+          id: app.applicationID,
+          jobRoleId: app.jobRoleId,
+          roleName: app.jobRoleName || 'Position Not Available',
+          location: app.jobRoleLocation || 'Location Not Specified',
+          capability: 'Not Available', // Backend doesn't provide this in my-applications endpoint
+          band: 'Not Available', // Backend doesn't provide this in my-applications endpoint
+          applicationStatus,
+          appliedDate: new Date(app.createdAt),
+          emailAddress: app.emailAddress,
+        };
+      });
+
+      // Render the my-applications page
+      res.render('job-roles/my-applications', {
+        title: 'My Job Applications',
+        applications,
+        user: req.user,
+      });
+    } catch (error) {
+      console.error('Error fetching user applications:', error);
+      res.status(500).render('error', { message: 'Unable to load your applications' });
     }
   }
 }
