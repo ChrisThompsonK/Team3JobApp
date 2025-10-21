@@ -60,7 +60,7 @@
                 <div class="dropdown dropdown-end">
                     <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-2 hover:bg-base-200">
                         <div class="avatar placeholder">
-                            <div class="w-8 h-8 rounded-full text-white flex items-center justify-center" style="background-color: {% if user.role === 'admin' %}#ec4899{% else %}#2B4C7E{% endif %}">
+                            <div class="w-8 h-8 rounded-full text-white flex items-center justify-center" style="background-color: {% if user.role === 'admin' %}#ec4899{% else %}#2B4C7E{% endif %}; border-radius: 50%;">
                                 <span class="text-sm font-medium">{{ user.email.charAt(0).toUpperCase() }}</span>
                             </div>
                         </div>
