@@ -71,7 +71,7 @@ describe('AuthService Password Validation', () => {
     });
 
     it('should reject passwords that are too long', async () => {
-      const longPassword = 'A'.repeat(129) + 'b1!'; // 132 characters
+      const longPassword = `${'A'.repeat(129)}b1!`; // 132 characters
       const result = await authService.validatePassword(longPassword);
 
       expect(result.isValid).toBe(false);
