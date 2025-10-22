@@ -126,7 +126,7 @@ export class AuthService {
     const errors: string[] = [];
 
     if (password.length < 9) {
-      errors.push('Password must be at least 9 characters long');
+      errors.push('Password must be more than 8 characters long');
     }
 
     if (!/[A-Z]/.test(password)) {
