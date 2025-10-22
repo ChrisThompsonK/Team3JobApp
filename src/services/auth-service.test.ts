@@ -45,9 +45,9 @@ describe('AuthService Password Validation', () => {
         'MyStrongP@ssw0rd',
         'SecureAcct#9',
         'Complex&Pass123',
-        'Test!ng@Account1'
+        'Test!ng@Account1',
       ];
-      
+
       for (const password of validPasswords) {
         const result = await authService.validatePassword(password);
         expect(result.isValid).toBe(true);
@@ -62,7 +62,7 @@ describe('AuthService Password Validation', () => {
         'Test123456!', // Contains sequential numbers
         'Aaabbbccc9!', // Repeated characters
       ];
-      
+
       for (const password of weakPasswords) {
         const result = await authService.validatePassword(password);
         expect(result.isValid).toBe(false);
@@ -73,10 +73,11 @@ describe('AuthService Password Validation', () => {
     it('should reject passwords that are too long', async () => {
       const longPassword = 'A'.repeat(129) + 'b1!'; // 132 characters
       const result = await authService.validatePassword(longPassword);
-      
+
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('Password must be less than 128 characters long');
-    });    it('should return multiple errors for passwords with multiple issues', async () => {
+    });
+    it('should return multiple errors for passwords with multiple issues', async () => {
       const password = 'weak'; // Short, no uppercase, no special char
       const result = await authService.validatePassword(password);
 

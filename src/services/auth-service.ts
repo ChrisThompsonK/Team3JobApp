@@ -10,7 +10,7 @@ export class AuthService {
 
     // Sanitize input - trim whitespace and validate basic format
     const sanitizedEmail = email?.trim().toLowerCase();
-    
+
     // Basic input validation
     if (!sanitizedEmail || !password || !confirmPassword) {
       throw new Error('All fields are required');
