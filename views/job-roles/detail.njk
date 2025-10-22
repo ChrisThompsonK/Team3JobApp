@@ -28,6 +28,47 @@
   </div>
   {% endif %}
 
+  <!-- Hire Success Alert -->
+  {% if hired %}
+  <div id="hireAlert" role="alert" class="alert bg-green-50 border-4 border-green-500 shadow-2xl mb-8 p-6 rounded-xl">
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-green-600 shrink-0 h-12 w-12" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <div class="flex-1">
+      <h3 class="font-bold text-2xl mb-2 text-green-700">🎉 Applicant Hired Successfully!</h3>
+      <div class="text-base text-green-600">
+        <p class="mb-2">The applicant has been hired and their status has been updated.</p>
+        <p class="text-sm mt-2">The number of open positions has been reduced by 1.</p>
+      </div>
+    </div>
+    <button onclick="dismissAlert('hireAlert')" class="btn btn-sm btn-circle btn-ghost hover:bg-green-500 hover:text-white text-green-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+      </svg>
+    </button>
+  </div>
+  {% endif %}
+
+  <!-- Reject Success Alert -->
+  {% if rejected %}
+  <div id="rejectAlert" role="alert" class="alert bg-orange-50 border-4 border-orange-500 shadow-2xl mb-8 p-6 rounded-xl">
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-orange-600 shrink-0 h-12 w-12" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+    </svg>
+    <div class="flex-1">
+      <h3 class="font-bold text-2xl mb-2 text-orange-700">Application Rejected</h3>
+      <div class="text-base text-orange-600">
+        <p class="mb-2">The applicant has been rejected and their status has been updated.</p>
+      </div>
+    </div>
+    <button onclick="dismissAlert('rejectAlert')" class="btn btn-sm btn-circle btn-ghost hover:bg-orange-500 hover:text-white text-orange-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+      </svg>
+    </button>
+  </div>
+  {% endif %}
+
   <!-- Page Title -->
   <div class="text-center mb-8">
     <h1 class="text-5xl md:text-6xl font-bold kainos-text-gradient mb-4">Job Details</h1>
@@ -150,6 +191,110 @@
       {% endif %}
     </div>
   </div>
+
+  <!-- Admin Applications Section -->
+  {% if user and user.role === 'admin' and applications %}
+  <div class="card bg-base-100 shadow-2xl border-t-4 border-kainos-primary mt-8">
+    <div class="card-body">
+      <h3 class="text-3xl font-semibold text-kainos-primary mb-6 flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        Applications ({{ applications.length }})
+      </h3>
+      
+      {% if applications.length > 0 %}
+      <div class="overflow-x-auto">
+        <table class="table table-zebra w-full">
+          <thead>
+            <tr class="bg-kainos-light">
+              <th class="text-kainos-primary font-semibold">Applicant</th>
+              <th class="text-kainos-primary font-semibold">Email</th>
+              <th class="text-kainos-primary font-semibold">Phone</th>
+              <th class="text-kainos-primary font-semibold">Status</th>
+              <th class="text-kainos-primary font-semibold">Applied Date</th>
+              <th class="text-kainos-primary font-semibold">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for application in applications %}
+            <tr class="hover:bg-kainos-light/50">
+              <td>
+                {% if application.cvUrl %}
+                <a href="{{ application.cvUrl }}" target="_blank" rel="noopener noreferrer" class="text-kainos-primary hover:text-kainos-green font-semibold underline decoration-2 underline-offset-2 hover:decoration-kainos-green transition-colors">
+                  {{ application.displayName }}
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+                {% else %}
+                <span class="font-semibold text-gray-700">{{ application.displayName }}</span>
+                {% endif %}
+              </td>
+              <td class="text-sm text-gray-600">{{ application.emailAddress }}</td>
+              <td class="text-sm text-gray-600">{{ application.phoneNumber }}</td>
+              <td>
+                <div class="badge badge-lg px-3 py-2 font-semibold
+                  {% if application.status == 'Accepted' or application.status == 'Hired' %}
+                    bg-kainos-green text-white border-kainos-green
+                  {% elif application.status == 'Rejected' %}
+                    bg-red-500 text-white border-red-500
+                  {% elif application.status == 'Reviewed' %}
+                    bg-yellow-500 text-white border-yellow-500
+                  {% else %}
+                    bg-kainos-primary text-white border-kainos-primary
+                  {% endif %}">
+                  {% if application.status == 'Accepted' %}
+                    Hired
+                  {% elif application.status == 'Pending' %}
+                    In Progress
+                  {% else %}
+                    {{ application.status }}
+                  {% endif %}
+                </div>
+              </td>
+              <td class="text-sm text-gray-600">
+                {{ application.formattedDate or 'N/A' }}
+              </td>
+              <td>
+                {% if application.status == 'Pending' or application.status == 'In Progress' %}
+                <div class="flex gap-2">
+                  <button onclick="confirmHire('{{ jobRole.id }}', '{{ application.applicationID }}', '{{ application.displayName }}')" 
+                          class="btn btn-sm bg-kainos-green hover:bg-green-600 text-white border-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Hire
+                  </button>
+                  <button onclick="confirmReject('{{ jobRole.id }}', '{{ application.applicationID }}', '{{ application.displayName }}')" 
+                          class="btn btn-sm bg-red-500 hover:bg-red-600 text-white border-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    Reject
+                  </button>
+                </div>
+                {% else %}
+                <span class="text-gray-400 text-sm">No actions available</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="text-center py-8">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <p class="text-gray-500 text-lg">No applications received yet</p>
+        <p class="text-gray-400 text-sm">Applications will appear here when candidates apply for this position</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
 </div>
 
 <!-- Action Buttons with Kainos styling -->
@@ -194,8 +339,12 @@
   </a>
 </div>
 
-<!-- Hidden form for DELETE request -->
+<!-- Hidden forms for actions -->
 <form id="deleteForm" method="POST" style="display: none;">
+</form>
+<form id="hireForm" method="POST" style="display: none;">
+</form>
+<form id="rejectForm" method="POST" style="display: none;">
 </form>
 
 <script>
@@ -203,6 +352,22 @@ function confirmDelete(jobId, jobName) {
   if (confirm(`Are you sure you want to delete the job role "${jobName}"? This action cannot be undone.`)) {
     const form = document.getElementById('deleteForm');
     form.action = `/jobs/${jobId}/delete`;
+    form.submit();
+  }
+}
+
+function confirmHire(jobId, applicationId, applicantName) {
+  if (confirm(`Are you sure you want to hire ${applicantName}? This will:\n\n• Update their application status to "Hired"\n• Reduce the number of open positions by 1\n\nThis action cannot be undone.`)) {
+    const form = document.getElementById('hireForm');
+    form.action = `/jobs/${jobId}/hire/${applicationId}`;
+    form.submit();
+  }
+}
+
+function confirmReject(jobId, applicationId, applicantName) {
+  if (confirm(`Are you sure you want to reject ${applicantName}?\n\nThis will update their application status to "Rejected" and cannot be undone.`)) {
+    const form = document.getElementById('rejectForm');
+    form.action = `/jobs/${jobId}/reject/${applicationId}`;
     form.submit();
   }
 }
@@ -218,25 +383,63 @@ function dismissSuccessAlert() {
   }
 }
 
-// Auto-dismiss success alert after 15 seconds and scroll to it on load
-{% if applicationSubmitted %}
-window.addEventListener('DOMContentLoaded', function() {
-  // Scroll to the success alert and make it prominent
-  const alert = document.getElementById('successAlert');
+function dismissAlert(alertId) {
+  const alert = document.getElementById(alertId);
   if (alert) {
-    // Small delay to ensure page is fully loaded
+    alert.style.transition = 'opacity 0.5s ease-out';
+    alert.style.opacity = '0';
+    setTimeout(() => {
+      alert.remove();
+    }, 500);
+  }
+}
+
+// Auto-dismiss alerts after 15 seconds and scroll to them on load
+window.addEventListener('DOMContentLoaded', function() {
+  {% if applicationSubmitted %}
+  // Handle application submitted alert
+  const successAlert = document.getElementById('successAlert');
+  if (successAlert) {
     setTimeout(function() {
-      alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      // Add a subtle pulse animation
-      alert.style.animation = 'pulse 2s ease-in-out 3';
+      successAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      successAlert.style.animation = 'pulse 2s ease-in-out 3';
     }, 100);
     
-    // Auto-dismiss after 15 seconds
     setTimeout(function() {
       dismissSuccessAlert();
     }, 15000);
   }
+  {% endif %}
+
+  {% if hired %}
+  // Handle hire success alert
+  const hireAlert = document.getElementById('hireAlert');
+  if (hireAlert) {
+    setTimeout(function() {
+      hireAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      hireAlert.style.animation = 'pulse 2s ease-in-out 3';
+    }, 100);
+    
+    setTimeout(function() {
+      dismissAlert('hireAlert');
+    }, 10000);
+  }
+  {% endif %}
+
+  {% if rejected %}
+  // Handle reject success alert
+  const rejectAlert = document.getElementById('rejectAlert');
+  if (rejectAlert) {
+    setTimeout(function() {
+      rejectAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      rejectAlert.style.animation = 'pulse 2s ease-in-out 3';
+    }, 100);
+    
+    setTimeout(function() {
+      dismissAlert('rejectAlert');
+    }, 10000);
+  }
+  {% endif %}
 });
-{% endif %}
 </script>
 {% endblock %}
