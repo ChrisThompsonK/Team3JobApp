@@ -8,19 +8,33 @@ export class AuthService {
   async register(registerData: RegisterData): Promise<AuthUser> {
     const { email, password, confirmPassword } = registerData;
 
-    // Validate input
+    // Sanitize input - trim whitespace and validate basic format
+    const sanitizedEmail = email?.trim().toLowerCase();
+
+    // Basic input validation
+    if (!sanitizedEmail || !password || !confirmPassword) {
+      throw new Error('All fields are required');
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(sanitizedEmail)) {
+      throw new Error('Please enter a valid email address');
+    }
+
+    // Password confirmation check
     if (password !== confirmPassword) {
       throw new Error('Passwords do not match');
     }
 
-    if (password.length < config.auth.password.minLength) {
-      throw new Error(
-        `Password must be at least ${config.auth.password.minLength} characters long`
-      );
+    // Validate password strength
+    const passwordValidation = await this.validatePassword(password);
+    if (!passwordValidation.isValid) {
+      throw new Error(passwordValidation.errors.join('. '));
     }
 
     // Check if email already exists
-    const existingUser = await userRepository.findByEmail(email);
+    const existingUser = await userRepository.findByEmail(sanitizedEmail);
     if (existingUser) {
       throw new Error('Email already registered');
     }
@@ -30,7 +44,7 @@ export class AuthService {
 
     // Create user
     const userData: CreateUserData = {
-      email: email.toLowerCase(),
+      email: sanitizedEmail,
       passwordHash,
       role: 'user', // Default role
       isActive: true,
@@ -125,22 +139,27 @@ export class AuthService {
   async validatePassword(password: string): Promise<{ isValid: boolean; errors: string[] }> {
     const errors: string[] = [];
 
-    if (password.length < 8) {
-      errors.push('Password must be at least 8 characters long');
+    // Check minimum length
+    if (password.length < 9) {
+      errors.push('Password must be more than 8 characters long');
     }
 
+    // Check maximum length to prevent DoS attacks
+    if (password.length > 128) {
+      errors.push('Password must be less than 128 characters long');
+    }
+
+    // Check for uppercase letter
     if (!/[A-Z]/.test(password)) {
       errors.push('Password must contain at least one uppercase letter');
     }
 
+    // Check for lowercase letter
     if (!/[a-z]/.test(password)) {
       errors.push('Password must contain at least one lowercase letter');
     }
 
-    if (!/\d/.test(password)) {
-      errors.push('Password must contain at least one number');
-    }
-
+    // Check for special character
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
       errors.push('Password must contain at least one special character');
     }

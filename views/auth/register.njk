@@ -45,12 +45,11 @@
             type="password" 
             autocomplete="new-password" 
             required 
-            minlength="8"
             class="input input-bordered w-full"
             placeholder="Enter your password"
           >
           <label class="label">
-            <span class="label-text-alt">Must be at least 8 characters</span>
+            <span class="label-text-alt">Requirements: More than 8 characters, uppercase letter, lowercase letter, special character</span>
           </label>
         </div>
         
@@ -64,7 +63,6 @@
             type="password" 
             autocomplete="new-password" 
             required 
-            minlength="8"
             class="input input-bordered w-full"
             placeholder="Confirm your password"
           >
@@ -90,15 +88,27 @@
 </div>
 
 <script>
-// Client-side password confirmation validation
+// Simple password confirmation validation (client-side for UX only)
 document.getElementById('confirmPassword').addEventListener('input', function() {
   const password = document.getElementById('password').value;
   const confirmPassword = this.value;
   
-  if (password !== confirmPassword) {
+  if (password && confirmPassword && password !== confirmPassword) {
     this.setCustomValidity('Passwords do not match');
   } else {
     this.setCustomValidity('');
+  }
+});
+
+// Clear custom validity when password field changes
+document.getElementById('password').addEventListener('input', function() {
+  const confirmPassword = document.getElementById('confirmPassword');
+  if (confirmPassword.value) {
+    if (this.value !== confirmPassword.value) {
+      confirmPassword.setCustomValidity('Passwords do not match');
+    } else {
+      confirmPassword.setCustomValidity('');
+    }
   }
 });
 </script>
