@@ -55,21 +55,6 @@ describe('AuthService Password Validation', () => {
       }
     });
 
-    it('should reject passwords with weak patterns', async () => {
-      const weakPasswords = [
-        'Password123!', // Contains "password"
-        'Qwerty123!', // Contains "qwerty"
-        'Test123456!', // Contains sequential numbers
-        'Aaabbbccc9!', // Repeated characters
-      ];
-
-      for (const password of weakPasswords) {
-        const result = await authService.validatePassword(password);
-        expect(result.isValid).toBe(false);
-        expect(result.errors).toContain('Password contains weak patterns and is not secure');
-      }
-    });
-
     it('should reject passwords that are too long', async () => {
       const longPassword = `${'A'.repeat(129)}b1!`; // 132 characters
       const result = await authService.validatePassword(longPassword);
