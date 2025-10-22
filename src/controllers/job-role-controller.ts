@@ -207,12 +207,12 @@ export class JobRoleController {
         try {
           const rawApplications = await api.getJobApplications(id);
           // Format the dates for display and create display names
-          applications = rawApplications.map(app => ({
+          applications = rawApplications.map((app) => ({
             ...app,
-            formattedDate: new Date(app.createdAt).toLocaleDateString('en-GB', { 
-              day: '2-digit', 
-              month: 'short', 
-              year: 'numeric' 
+            formattedDate: new Date(app.createdAt).toLocaleDateString('en-GB', {
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric',
             }),
             displayName: app.applicantName || app.emailAddress.split('@')[0] || 'Unknown User',
           }));
@@ -726,13 +726,21 @@ export class JobRoleController {
       // Validate that IDs are positive integers
       const numericJobRoleId = Number.parseInt(jobRoleId, 10);
       const numericApplicationId = Number.parseInt(applicationId, 10);
-      
-      if (Number.isNaN(numericJobRoleId) || numericJobRoleId <= 0 || !Number.isInteger(numericJobRoleId)) {
+
+      if (
+        Number.isNaN(numericJobRoleId) ||
+        numericJobRoleId <= 0 ||
+        !Number.isInteger(numericJobRoleId)
+      ) {
         res.status(400).send('Invalid job role ID. ID must be a positive integer.');
         return;
       }
 
-      if (Number.isNaN(numericApplicationId) || numericApplicationId <= 0 || !Number.isInteger(numericApplicationId)) {
+      if (
+        Number.isNaN(numericApplicationId) ||
+        numericApplicationId <= 0 ||
+        !Number.isInteger(numericApplicationId)
+      ) {
         res.status(400).send('Invalid application ID. ID must be a positive integer.');
         return;
       }
@@ -762,13 +770,21 @@ export class JobRoleController {
       // Validate that IDs are positive integers
       const numericJobRoleId = Number.parseInt(jobRoleId, 10);
       const numericApplicationId = Number.parseInt(applicationId, 10);
-      
-      if (Number.isNaN(numericJobRoleId) || numericJobRoleId <= 0 || !Number.isInteger(numericJobRoleId)) {
+
+      if (
+        Number.isNaN(numericJobRoleId) ||
+        numericJobRoleId <= 0 ||
+        !Number.isInteger(numericJobRoleId)
+      ) {
         res.status(400).send('Invalid job role ID. ID must be a positive integer.');
         return;
       }
 
-      if (Number.isNaN(numericApplicationId) || numericApplicationId <= 0 || !Number.isInteger(numericApplicationId)) {
+      if (
+        Number.isNaN(numericApplicationId) ||
+        numericApplicationId <= 0 ||
+        !Number.isInteger(numericApplicationId)
+      ) {
         res.status(400).send('Invalid application ID. ID must be a positive integer.');
         return;
       }
