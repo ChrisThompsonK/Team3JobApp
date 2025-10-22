@@ -23,11 +23,11 @@ export const createAuthenticatedApiClient = (accessToken?: string) => {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
-  
+
   if (accessToken) {
     headers['Authorization'] = `Bearer ${accessToken}`;
   }
-  
+
   return axios.create({
     baseURL: API_BASE_URL,
     headers,
@@ -177,14 +177,21 @@ export const api = {
   },
 
   // Create a new job role
-  createJob: async (jobData: CreateJobRoleRequest, accessToken?: string): Promise<JobRoleDetails> => {
+  createJob: async (
+    jobData: CreateJobRoleRequest,
+    accessToken?: string
+  ): Promise<JobRoleDetails> => {
     const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
     const response = await client.post<BackendJobRoleDetails>('/jobs/job', jobData);
     return transformJobRoleDetails(response.data);
   },
 
   // Update a job role
-  updateJob: async (id: string, updates: UpdateJobRoleRequest, accessToken?: string): Promise<JobRole | null> => {
+  updateJob: async (
+    id: string,
+    updates: UpdateJobRoleRequest,
+    accessToken?: string
+  ): Promise<JobRole | null> => {
     try {
       const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
       const response = await client.put<BackendJobRole>(`/jobs/${id}`, updates);

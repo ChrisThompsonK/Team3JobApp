@@ -50,7 +50,10 @@ export class JobRoleService {
   /**
    * Create a new job role using the backend API
    */
-  async createJobRole(jobRoleData: CreateJobRoleRequest, accessToken?: string): Promise<JobRoleDetails> {
+  async createJobRole(
+    jobRoleData: CreateJobRoleRequest,
+    accessToken?: string
+  ): Promise<JobRoleDetails> {
     // Transform the frontend format to backend format
     const closingDateStr = jobRoleData.closingDate.toISOString().split('T')[0];
     if (!closingDateStr) {
@@ -76,7 +79,11 @@ export class JobRoleService {
   /**
    * Update a job role in the backend database
    */
-  async updateJobRole(id: string, updates: UpdateJobRoleRequest, accessToken?: string): Promise<JobRoleDetails | null> {
+  async updateJobRole(
+    id: string,
+    updates: UpdateJobRoleRequest,
+    accessToken?: string
+  ): Promise<JobRoleDetails | null> {
     // The updates already match the backend format, no transformation needed
     const result = await api.updateJob(id, updates, accessToken);
     return result as JobRoleDetails | null;

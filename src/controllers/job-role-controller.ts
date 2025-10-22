@@ -409,18 +409,21 @@ export class JobRoleController {
       const accessToken = req.cookies?.['access_token'];
 
       // Create the job role
-      const newJobRole = await this.jobRoleService.createJobRole({
-        name: jobRoleData.name.trim(),
-        location: jobRoleData.location,
-        capabilityId,
-        bandId,
-        closingDate: new Date(jobRoleData.closingDate),
-        description: jobRoleData.description?.trim() || undefined,
-        responsibilities: jobRoleData.responsibilities?.trim() || undefined,
-        jobSpecUrl: jobRoleData.jobSpecUrl?.trim() || undefined,
-        openPositions,
-        ...(statusId && { statusId }),
-      }, accessToken);
+      const newJobRole = await this.jobRoleService.createJobRole(
+        {
+          name: jobRoleData.name.trim(),
+          location: jobRoleData.location,
+          capabilityId,
+          bandId,
+          closingDate: new Date(jobRoleData.closingDate),
+          description: jobRoleData.description?.trim() || undefined,
+          responsibilities: jobRoleData.responsibilities?.trim() || undefined,
+          jobSpecUrl: jobRoleData.jobSpecUrl?.trim() || undefined,
+          openPositions,
+          ...(statusId && { statusId }),
+        },
+        accessToken
+      );
 
       // Redirect to the new job role details page
       res.redirect(`/jobs/${newJobRole.id}/details`);
@@ -613,10 +616,14 @@ export class JobRoleController {
       const accessToken = req.cookies?.['access_token'];
 
       // Update the job role
-      const updatedJobRole = await this.jobRoleService.updateJobRole(id, {
-        ...updateData,
-        ...optionalData,
-      }, accessToken);
+      const updatedJobRole = await this.jobRoleService.updateJobRole(
+        id,
+        {
+          ...updateData,
+          ...optionalData,
+        },
+        accessToken
+      );
 
       if (!updatedJobRole) {
         res.status(404).send(`Job role with ID ${id} not found`);
