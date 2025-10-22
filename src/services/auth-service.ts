@@ -160,7 +160,7 @@ export class AuthService {
     }
 
     // Check for special character
-    if (!/[!@#$%^&*(),.?":{}|><]/.test(password)) {
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
       errors.push('Password must contain at least one special character');
     }
 
