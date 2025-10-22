@@ -125,8 +125,8 @@ export class AuthService {
   async validatePassword(password: string): Promise<{ isValid: boolean; errors: string[] }> {
     const errors: string[] = [];
 
-    if (password.length <= 8) {
-      errors.push('Password must be more than 8 characters long');
+    if (password.length < 9) {
+      errors.push('Password must be at least 9 characters long');
     }
 
     if (!/[A-Z]/.test(password)) {
