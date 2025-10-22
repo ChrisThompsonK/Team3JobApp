@@ -2,6 +2,7 @@ import type {
   CreateJobRoleRequest as BackendCreateJobRoleRequest,
   JobRole,
   JobRoleDetails,
+  UpdateJobRoleRequest,
 } from '../models/job-roles.js';
 import { api } from './api.js';
 
@@ -12,19 +13,6 @@ export interface CreateJobRoleRequest {
   bandId: number;
   statusId?: number; // Optional, defaults to "Open"
   closingDate: Date;
-  description?: string | undefined;
-  responsibilities?: string | undefined;
-  jobSpecUrl?: string | undefined;
-  openPositions?: number | undefined;
-}
-
-export interface UpdateJobRoleRequest {
-  name?: string;
-  location?: string;
-  capabilityId?: number;
-  bandId?: number;
-  statusId?: number; // Changed from status text
-  closingDate?: Date;
   description?: string | undefined;
   responsibilities?: string | undefined;
   jobSpecUrl?: string | undefined;
@@ -62,7 +50,10 @@ export class JobRoleService {
   /**
    * Create a new job role using the backend API
    */
-  async createJobRole(jobRoleData: CreateJobRoleRequest): Promise<JobRoleDetails> {
+  async createJobRole(
+    jobRoleData: CreateJobRoleRequest,
+    accessToken?: string
+  ): Promise<JobRoleDetails> {
     // Transform the frontend format to backend format
     const closingDateStr = jobRoleData.closingDate.toISOString().split('T')[0];
     if (!closingDateStr) {
@@ -82,58 +73,27 @@ export class JobRoleService {
       ...(jobRoleData.openPositions && { openPositions: jobRoleData.openPositions }),
     };
 
-    return api.createJob(backendJobData);
+    return api.createJob(backendJobData, accessToken);
   }
 
   /**
    * Update a job role in the backend database
    */
-  async updateJobRole(id: string, updates: UpdateJobRoleRequest): Promise<JobRoleDetails | null> {
-    // Transform the frontend format to backend format
-    const backendUpdates: Record<string, string | number> = {};
-
-    if (updates.name !== undefined) {
-      backendUpdates['roleName'] = updates.name;
-    }
-    if (updates.location !== undefined) {
-      backendUpdates['location'] = updates.location;
-    }
-    if (updates.capabilityId !== undefined) {
-      backendUpdates['capabilityId'] = updates.capabilityId;
-    }
-    if (updates.bandId !== undefined) {
-      backendUpdates['bandId'] = updates.bandId;
-    }
-    if (updates.statusId !== undefined) {
-      backendUpdates['statusId'] = updates.statusId;
-    }
-    if (updates.closingDate !== undefined) {
-      // Convert Date to ISO string for the API
-      const dateStr = updates.closingDate.toISOString().split('T')[0];
-      if (dateStr !== undefined) {
-        backendUpdates['closingDate'] = dateStr;
-      }
-    }
-
-    const result = await api.updateJob(
-      id,
-      backendUpdates as {
-        roleName?: string;
-        location?: string;
-        capabilityId?: number;
-        bandId?: number;
-        statusId?: number;
-        closingDate?: string;
-      }
-    );
+  async updateJobRole(
+    id: string,
+    updates: UpdateJobRoleRequest,
+    accessToken?: string
+  ): Promise<JobRoleDetails | null> {
+    // The updates already match the backend format, no transformation needed
+    const result = await api.updateJob(id, updates, accessToken);
     return result as JobRoleDetails | null;
   }
 
   /**
    * Delete a job role from the backend database
    */
-  async deleteJobRole(id: string): Promise<boolean> {
-    return api.deleteJob(id);
+  async deleteJobRole(id: string, accessToken?: string): Promise<boolean> {
+    return api.deleteJob(id, accessToken);
   }
 
   /**
