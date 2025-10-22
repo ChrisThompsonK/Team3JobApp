@@ -69,6 +69,7 @@
                             </div>
                         </li>
                         <li><a href="/auth/profile">Profile</a></li>
+                        {% if user.role !== 'admin' %}
                         <li>
                             <a href="/my-applications">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -78,6 +79,7 @@
                                 My Applications
                             </a>
                         </li>
+                        {% endif %}
                         {% if user.role === 'admin' %}
                             <li><a href="/jobs/new">Create Job</a></li>
                         {% endif %}

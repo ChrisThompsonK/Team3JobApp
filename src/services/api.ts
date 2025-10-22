@@ -291,4 +291,55 @@ export const api = {
     });
     return response.data;
   },
+
+  // Get applications for a specific job role (admin only)
+  getJobApplications: async (
+    jobRoleId: string
+  ): Promise<
+    Array<{
+      applicationID: number;
+      jobRoleId: number;
+      phoneNumber: string;
+      emailAddress: string;
+      status: string;
+      coverLetter?: string | null;
+      notes?: string | null;
+      createdAt: string;
+      updatedAt: string;
+      applicantName?: string;
+      cvUrl?: string;
+      userId?: string;
+    }>
+  > => {
+    const response = await apiClient.get(`/applications/job/${jobRoleId}`);
+    return response.data;
+  },
+
+  // Hire an applicant (admin only)
+  hireApplicant: async (
+    jobRoleId: string,
+    applicationId: string
+  ): Promise<{
+    success: boolean;
+    message?: string;
+  }> => {
+    const response = await apiClient.post(`/applications/${applicationId}/hire`, {
+      jobRoleId: parseInt(jobRoleId, 10),
+    });
+    return response.data;
+  },
+
+  // Reject an applicant (admin only)
+  rejectApplicant: async (
+    jobRoleId: string,
+    applicationId: string
+  ): Promise<{
+    success: boolean;
+    message?: string;
+  }> => {
+    const response = await apiClient.post(`/applications/${applicationId}/reject`, {
+      jobRoleId: parseInt(jobRoleId, 10),
+    });
+    return response.data;
+  },
 };

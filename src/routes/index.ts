@@ -76,6 +76,18 @@ router.post(
 );
 router.delete('/jobs/:id', requireAdmin, jobRoleController.deleteJobRole.bind(jobRoleController));
 
+// Admin application management routes
+router.post(
+  '/jobs/:id/hire/:applicationId',
+  requireAdmin,
+  jobRoleController.hireApplicant.bind(jobRoleController)
+);
+router.post(
+  '/jobs/:id/reject/:applicationId',
+  requireAdmin,
+  jobRoleController.rejectApplicant.bind(jobRoleController)
+);
+
 // Generic job by ID - MUST be last as it's the most general pattern
 router.get('/jobs/:id', jobRoleController.getJobRoleById.bind(jobRoleController));
 

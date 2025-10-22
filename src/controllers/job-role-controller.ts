@@ -167,7 +167,7 @@ export class JobRoleController {
 
   async getJobRoleDetails(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
-    const { applicationSubmitted } = req.query;
+    const { applicationSubmitted, hired, rejected } = req.query;
 
     try {
       if (!id) {
@@ -185,10 +185,51 @@ export class JobRoleController {
       // Fetch job role details directly from the backend API
       const jobRoleDetails = await api.getJobById(id);
 
+      // If user is admin, also fetch applications for this job role
+      let applications: Array<{
+        applicationID: number;
+        jobRoleId: number;
+        phoneNumber: string;
+        emailAddress: string;
+        status: string;
+        coverLetter?: string | null;
+        notes?: string | null;
+        createdAt: string;
+        updatedAt: string;
+        applicantName?: string;
+        cvUrl?: string;
+        userId?: string;
+        formattedDate?: string;
+        displayName: string;
+      }> = [];
+
+      if (req.user?.role === 'admin') {
+        try {
+          const rawApplications = await api.getJobApplications(id);
+          // Format the dates for display and create display names
+          applications = rawApplications.map((app) => ({
+            ...app,
+            formattedDate: new Date(app.createdAt).toLocaleDateString('en-GB', {
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric',
+            }),
+            displayName: app.applicantName || app.emailAddress.split('@')[0] || 'Unknown User',
+          }));
+        } catch (applicationError) {
+          console.error('Error fetching applications:', applicationError);
+          // Don't fail the whole page if applications can't be loaded
+        }
+      }
+
       res.render('job-roles/detail', {
         title: `${jobRoleDetails.name} - Job Details`,
         jobRole: jobRoleDetails,
+        applications,
+        user: req.user,
         applicationSubmitted: applicationSubmitted === 'true',
+        hired: hired === 'true',
+        rejected: rejected === 'true',
       });
     } catch (error) {
       console.error('Error fetching job role details:', error);
@@ -687,6 +728,94 @@ export class JobRoleController {
     } catch (error) {
       console.error('Error fetching user applications:', error);
       res.status(500).render('error', { message: 'Unable to load your applications' });
+    }
+  }
+
+  async hireApplicant(req: Request, res: Response): Promise<void> {
+    const { id: jobRoleId, applicationId } = req.params;
+
+    try {
+      if (!jobRoleId || !applicationId) {
+        res.status(400).send('Job role ID and application ID are required');
+        return;
+      }
+
+      // Validate that IDs are positive integers
+      const numericJobRoleId = Number.parseInt(jobRoleId, 10);
+      const numericApplicationId = Number.parseInt(applicationId, 10);
+
+      if (
+        Number.isNaN(numericJobRoleId) ||
+        numericJobRoleId <= 0 ||
+        !Number.isInteger(numericJobRoleId)
+      ) {
+        res.status(400).send('Invalid job role ID. ID must be a positive integer.');
+        return;
+      }
+
+      if (
+        Number.isNaN(numericApplicationId) ||
+        numericApplicationId <= 0 ||
+        !Number.isInteger(numericApplicationId)
+      ) {
+        res.status(400).send('Invalid application ID. ID must be a positive integer.');
+        return;
+      }
+
+      const result = await api.hireApplicant(jobRoleId, applicationId);
+
+      if (result.success) {
+        res.redirect(`/jobs/${jobRoleId}/details?hired=true`);
+      } else {
+        res.status(400).send(result.message || 'Failed to hire applicant');
+      }
+    } catch (error) {
+      console.error('Error hiring applicant:', error);
+      res.status(500).send('Error processing hire request');
+    }
+  }
+
+  async rejectApplicant(req: Request, res: Response): Promise<void> {
+    const { id: jobRoleId, applicationId } = req.params;
+
+    try {
+      if (!jobRoleId || !applicationId) {
+        res.status(400).send('Job role ID and application ID are required');
+        return;
+      }
+
+      // Validate that IDs are positive integers
+      const numericJobRoleId = Number.parseInt(jobRoleId, 10);
+      const numericApplicationId = Number.parseInt(applicationId, 10);
+
+      if (
+        Number.isNaN(numericJobRoleId) ||
+        numericJobRoleId <= 0 ||
+        !Number.isInteger(numericJobRoleId)
+      ) {
+        res.status(400).send('Invalid job role ID. ID must be a positive integer.');
+        return;
+      }
+
+      if (
+        Number.isNaN(numericApplicationId) ||
+        numericApplicationId <= 0 ||
+        !Number.isInteger(numericApplicationId)
+      ) {
+        res.status(400).send('Invalid application ID. ID must be a positive integer.');
+        return;
+      }
+
+      const result = await api.rejectApplicant(jobRoleId, applicationId);
+
+      if (result.success) {
+        res.redirect(`/jobs/${jobRoleId}/details?rejected=true`);
+      } else {
+        res.status(400).send(result.message || 'Failed to reject applicant');
+      }
+    } catch (error) {
+      console.error('Error rejecting applicant:', error);
+      res.status(500).send('Error processing reject request');
     }
   }
 }

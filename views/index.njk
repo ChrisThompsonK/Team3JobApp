@@ -67,6 +67,7 @@
                         Browse All Jobs
                     </a>
                     
+                    {% if user and user.role !== 'admin' %}
                     <div class="divider text-xs my-2">Track Your Progress</div>
                     
                     <a href="/my-applications" class="btn-kainos-outline shadow-lg hover:shadow-xl w-full inline-flex items-center justify-center gap-2">
@@ -75,6 +76,7 @@
                         </svg>
                         My Applications
                     </a>
+                    {% endif %}
                     
                 </div>
             </div>
