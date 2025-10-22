@@ -18,6 +18,22 @@ const apiClient = axios.create({
   },
 });
 
+// Helper function to create API client with JWT authentication
+export const createAuthenticatedApiClient = (accessToken?: string) => {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  
+  if (accessToken) {
+    headers['Authorization'] = `Bearer ${accessToken}`;
+  }
+  
+  return axios.create({
+    baseURL: API_BASE_URL,
+    headers,
+  });
+};
+
 // Backend API response type (now includes names from joined tables)
 // Can have either 'id' or 'jobRoleId' and either 'name' or 'roleName'
 interface BackendJobRole {
@@ -161,15 +177,17 @@ export const api = {
   },
 
   // Create a new job role
-  createJob: async (jobData: CreateJobRoleRequest): Promise<JobRoleDetails> => {
-    const response = await apiClient.post<BackendJobRoleDetails>('/jobs/job', jobData);
+  createJob: async (jobData: CreateJobRoleRequest, accessToken?: string): Promise<JobRoleDetails> => {
+    const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
+    const response = await client.post<BackendJobRoleDetails>('/jobs/job', jobData);
     return transformJobRoleDetails(response.data);
   },
 
   // Update a job role
-  updateJob: async (id: string, updates: UpdateJobRoleRequest): Promise<JobRole | null> => {
+  updateJob: async (id: string, updates: UpdateJobRoleRequest, accessToken?: string): Promise<JobRole | null> => {
     try {
-      const response = await apiClient.put<BackendJobRole>(`/jobs/${id}`, updates);
+      const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
+      const response = await client.put<BackendJobRole>(`/jobs/${id}`, updates);
       return transformJobRole(response.data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
@@ -196,9 +214,10 @@ export const api = {
   },
 
   // Delete a job role
-  deleteJob: async (id: string): Promise<boolean> => {
+  deleteJob: async (id: string, accessToken?: string): Promise<boolean> => {
     try {
-      await apiClient.delete(`/jobs/${id}`);
+      const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
+      await client.delete(`/jobs/${id}`);
       return true;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {

@@ -405,6 +405,9 @@ export class JobRoleController {
         }
       }
 
+      // Get access token from cookies for backend API authentication
+      const accessToken = req.cookies?.['access_token'];
+
       // Create the job role
       const newJobRole = await this.jobRoleService.createJobRole({
         name: jobRoleData.name.trim(),
@@ -417,7 +420,7 @@ export class JobRoleController {
         jobSpecUrl: jobRoleData.jobSpecUrl?.trim() || undefined,
         openPositions,
         ...(statusId && { statusId }),
-      });
+      }, accessToken);
 
       // Redirect to the new job role details page
       res.redirect(`/jobs/${newJobRole.id}/details`);
@@ -443,7 +446,10 @@ export class JobRoleController {
         return;
       }
 
-      const success = await this.jobRoleService.deleteJobRole(id);
+      // Get access token from cookies for backend API authentication
+      const accessToken = req.cookies?.['access_token'];
+
+      const success = await this.jobRoleService.deleteJobRole(id, accessToken);
 
       if (!success) {
         res.status(404).send(`Job role with ID ${id} not found`);
@@ -568,13 +574,13 @@ export class JobRoleController {
         return;
       }
 
-      // Build update object
+      // Build update object that matches UpdateJobRoleRequest interface
       const updateData = {
-        name: jobRoleData.name.trim(),
+        roleName: jobRoleData.name.trim(),
         location: jobRoleData.location,
         capabilityId,
         bandId,
-        closingDate: new Date(jobRoleData.closingDate),
+        closingDate: jobRoleData.closingDate, // Keep as string
       };
 
       // Add optional fields
@@ -583,7 +589,7 @@ export class JobRoleController {
         responsibilities?: string;
         jobSpecUrl?: string;
         openPositions?: number;
-        status?: 'Open' | 'Closing Soon' | 'Closed';
+        statusId?: number;
       } = {};
 
       if (jobRoleData.description?.trim()) {
@@ -599,14 +605,18 @@ export class JobRoleController {
         optionalData.openPositions = parseInt(jobRoleData.openPositions, 10);
       }
       if (req.body.status) {
-        optionalData.status = req.body.status as 'Open' | 'Closing Soon' | 'Closed';
+        // Convert status text to statusId if needed
+        optionalData.statusId = req.body.statusId || undefined;
       }
+
+      // Get access token from cookies for backend API authentication
+      const accessToken = req.cookies?.['access_token'];
 
       // Update the job role
       const updatedJobRole = await this.jobRoleService.updateJobRole(id, {
         ...updateData,
         ...optionalData,
-      });
+      }, accessToken);
 
       if (!updatedJobRole) {
         res.status(404).send(`Job role with ID ${id} not found`);
