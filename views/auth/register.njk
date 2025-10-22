@@ -106,7 +106,7 @@ function validatePassword(password) {
     errors.push('Password must contain at least one lowercase letter');
   }
   
-  if (!/[!@#$%^&*(),.?":{}|]/.test(password)) {
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
     errors.push('Password must contain at least one special character');
   }
   
