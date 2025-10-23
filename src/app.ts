@@ -16,10 +16,18 @@ export const createApp = (): express.Application => {
   const app = express();
 
   // Configure Nunjucks template engine
-  nunjucks.configure(config.paths.views, {
+  const env = nunjucks.configure(config.paths.views, {
     autoescape: config.template.autoescape,
     express: app,
     watch: config.template.watch,
+  });
+
+  // Add environment variables as global variables for templates
+  env.addGlobal('process', {
+    env: {
+      GA_MEASUREMENT_ID: process.env['GA_MEASUREMENT_ID'],
+      NODE_ENV: process.env['NODE_ENV'],
+    },
   });
 
   // Set template engine

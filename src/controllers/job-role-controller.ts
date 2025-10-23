@@ -722,6 +722,8 @@ export class JobRoleController {
           applicationStatus = 'Rejected';
         } else if (app.status === 'Reviewed') {
           applicationStatus = 'Under Review';
+        } else if (app.status === 'Withdrawn') {
+          applicationStatus = 'Withdrawn';
         } else {
           applicationStatus = 'In Progress'; // Pending
         }
@@ -839,4 +841,37 @@ export class JobRoleController {
     }
   }
 
+  async withdrawApplication(req: Request, res: Response): Promise<void> {
+    const { applicationId } = req.params;
+
+    try {
+      if (!applicationId) {
+        res.status(400).send('Application ID is required');
+        return;
+      }
+
+      // Validate that application ID is a positive integer
+      const numericApplicationId = Number.parseInt(applicationId, 10);
+
+      if (
+        Number.isNaN(numericApplicationId) ||
+        numericApplicationId <= 0 ||
+        !Number.isInteger(numericApplicationId)
+      ) {
+        res.status(400).send('Invalid application ID. ID must be a positive integer.');
+        return;
+      }
+
+      const result = await api.withdrawApplication(applicationId);
+
+      if (result.success) {
+        res.redirect('/my-applications?withdrawn=true');
+      } else {
+        res.status(400).send(result.message || 'Failed to withdraw application');
+      }
+    } catch (error) {
+      console.error('Error withdrawing application:', error);
+      res.status(500).send('Error processing withdraw request');
+    }
+  }
 }

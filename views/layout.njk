@@ -6,6 +6,24 @@
     <title>{% block title %}Kainos Job Portal{% endblock %}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/css/output.css">
+    
+    <!-- Google Analytics 4 -->
+    {% if process.env.GA_MEASUREMENT_ID %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ process.env.GA_MEASUREMENT_ID }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ process.env.GA_MEASUREMENT_ID }}', {
+        enhanced_measurement: true,
+        page_view: true
+      });
+    </script>
+    <!-- Analytics utilities -->
+    <script src="/js/analytics.js"></script>
+    {% endif %}
+    
+    
     {% block head %}{% endblock %}
 </head>
 <body class="min-h-screen bg-base-200 flex flex-col font-kainos">
@@ -25,6 +43,7 @@
                         <li><hr></li>
                         <li><a href="/auth/profile" class="text-kainos-primary hover:text-kainos-accent">Profile</a></li>
                         {% if user.role === 'admin' %}
+                            <li><a href="/analytics" class="text-kainos-primary hover:text-kainos-accent">Analytics</a></li>
                             <li><a href="/jobs/new" class="text-kainos-primary hover:text-kainos-accent">Create Job</a></li>
                         {% endif %}
                     {% else %}
@@ -42,6 +61,9 @@
             <ul class="menu menu-horizontal px-1">
                 <li><a href="/" class="text-kainos-primary hover:text-kainos-accent font-medium">Home</a></li>
                 <li><a href="/jobs" class="text-kainos-primary hover:text-kainos-accent font-medium">Careers</a></li>
+                {% if user and user.role === 'admin' %}
+                <li><a href="/analytics" class="text-kainos-primary hover:text-kainos-accent font-medium">Analytics</a></li>
+                {% endif %}
             </ul>
         </div>
         <div class="navbar-end gap-2">
