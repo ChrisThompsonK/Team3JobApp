@@ -7,6 +7,46 @@
   html {
     scroll-behavior: smooth;
   }
+  
+  /* Modal styles to ensure it appears above everything */
+  #applicationModal {
+    z-index: 9999 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  /* Prevent background scroll when modal is open */
+  body.modal-open {
+    overflow: hidden;
+  }
+  
+  /* Ensure modal content appears above backdrop */
+  #applicationModal > div {
+    z-index: 10000 !important;
+    position: relative !important;
+    animation: slideInUp 0.3s ease-out;
+  }
+  
+  /* Modal animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideInUp {
+    from { 
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
 </style>
 {% endblock %}
 
@@ -217,10 +257,9 @@
           <thead>
             <tr class="bg-kainos-light">
               <th class="text-kainos-primary font-semibold">Applicant</th>
-              <th class="text-kainos-primary font-semibold">Email</th>
-              <th class="text-kainos-primary font-semibold">Phone</th>
               <th class="text-kainos-primary font-semibold">Status</th>
               <th class="text-kainos-primary font-semibold">Applied Date</th>
+              <th class="text-kainos-primary font-semibold">View Application</th>
               <th class="text-kainos-primary font-semibold">Actions</th>
             </tr>
           </thead>
@@ -228,19 +267,18 @@
             {% for application in applications %}
             <tr class="hover:bg-kainos-light/50">
               <td>
-                {% if application.cvUrl %}
-                <a href="{{ application.cvUrl }}" target="_blank" rel="noopener noreferrer" class="text-kainos-primary hover:text-kainos-green font-semibold underline decoration-2 underline-offset-2 hover:decoration-kainos-green transition-colors">
-                  {{ application.displayName }}
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </a>
-                {% else %}
                 <span class="font-semibold text-gray-700">{{ application.displayName }}</span>
+                {% if application.cvUrl %}
+                <div class="mt-1">
+                  <a href="{{ application.cvUrl }}" target="_blank" rel="noopener noreferrer" class="text-xs text-kainos-primary hover:text-kainos-green underline decoration-1 underline-offset-2 hover:decoration-kainos-green transition-colors inline-flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    View CV
+                  </a>
+                </div>
                 {% endif %}
               </td>
-              <td class="text-sm text-gray-600">{{ application.emailAddress }}</td>
-              <td class="text-sm text-gray-600">{{ application.phoneNumber }}</td>
               <td>
                 <div class="badge badge-lg px-3 py-2 font-semibold
                   {% if application.status == 'Accepted' or application.status == 'Hired' %}
@@ -265,17 +303,26 @@
                 {{ application.formattedDate or 'N/A' }}
               </td>
               <td>
+                <button onclick='viewApplicationDetails({{ application | dump | safe }})' 
+                        class="btn btn-sm btn-kainos-outline hover:shadow-lg transition-all duration-200 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                </button>
+              </td>
+              <td>
                 {% if application.status == 'Pending' or application.status == 'In Progress' %}
                 <div class="flex gap-2">
                   <button onclick="confirmHire('{{ jobRole.id }}', '{{ application.applicationID }}', '{{ application.displayName }}')" 
-                          class="btn btn-sm bg-kainos-green hover:bg-green-600 text-white border-none">
+                          class="btn btn-sm btn-success text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
                     Hire
                   </button>
                   <button onclick="confirmReject('{{ jobRole.id }}', '{{ application.applicationID }}', '{{ application.displayName }}')" 
-                          class="btn btn-sm bg-red-500 hover:bg-red-600 text-white border-none">
+                          class="btn btn-sm btn-error text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -331,7 +378,7 @@
     <span>Edit Job Role</span>
   </a>
   
-  <button onclick="confirmDelete('{{ jobRole.id }}', '{{ jobRole.name }}')" class="bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all inline-flex items-center gap-3 px-8 py-4 border-none cursor-pointer" style="background-color: #dc2626;">
+  <button onclick="confirmDelete('{{ jobRole.id }}', '{{ jobRole.name }}')" class="bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-flex items-center gap-3 px-8 py-4 border-none cursor-pointer active:scale-95" style="background-color: #dc2626;">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
     </svg>
@@ -402,6 +449,220 @@ function dismissAlert(alertId) {
     setTimeout(() => {
       alert.remove();
     }, 500);
+  }
+}
+
+function viewApplicationDetails(app) {
+  // Parse the notes field to extract structured information
+  const parseNotesData = (notes) => {
+    if (!notes) return {};
+    
+    const lines = notes.split('\n');
+    const data = {};
+    
+    lines.forEach(line => {
+      if (line.includes('Name:')) {
+        const fullName = line.replace('Name:', '').trim();
+        const nameParts = fullName.split(' ');
+        data.firstName = nameParts[0] || '';
+        data.lastName = nameParts.slice(1).join(' ') || '';
+      } else if (line.includes('Current Job Title:')) {
+        data.jobTitle = line.replace('Current Job Title:', '').trim();
+      } else if (line.includes('Years of Experience:')) {
+        data.yearsOfExperience = line.replace('Years of Experience:', '').trim();
+      } else if (line.includes('LinkedIn:')) {
+        data.linkedinUrl = line.replace('LinkedIn:', '').trim();
+      } else if (line.includes('CV:')) {
+        data.cvUrl = line.replace('CV:', '').trim();
+      } else if (line.includes('Comments:')) {
+        data.comments = line.replace('Comments:', '').trim();
+      }
+    });
+    
+    return data;
+  };
+
+  const parsedData = parseNotesData(app.notes);
+  
+  // Create modal content with application data directly (no API call needed)
+  const modalHTML = `
+    <div id="applicationModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4" style="z-index: 9999;">
+      <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative border-2 border-gray-200" onclick="event.stopPropagation()" style="z-index: 10000; background-color: white !important;">
+        <div class="sticky top-0 bg-white border-b-2 border-kainos-primary px-6 py-4 flex justify-between items-center" style="background-color: white !important;">
+          <div>
+            <h3 class="text-2xl font-bold text-kainos-primary">Application Details - ${app.displayName || 'Unknown Applicant'}</h3>
+            <p class="text-sm text-gray-500 mt-1">Press ESC or click outside to close</p>
+          </div>
+          <button id="closeModalBtn" class="btn btn-sm btn-circle btn-ghost hover:bg-red-100 hover:text-red-600 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+        <div id="applicationContent" class="p-6">
+          <div class="space-y-6">
+            <!-- Personal Information Section -->
+            <div class="bg-kainos-light p-4 rounded-lg">
+              <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Personal Information</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <p><strong>First Name:</strong> ${parsedData.firstName || 'N/A'}</p>
+                <p><strong>Last Name:</strong> ${parsedData.lastName || 'N/A'}</p>
+                <p><strong>Email:</strong> ${app.emailAddress || 'N/A'}</p>
+                <p><strong>Phone Number:</strong> ${app.phoneNumber || 'N/A'}</p>
+              </div>
+            </div>
+
+            <!-- Professional Information Section -->
+            <div class="bg-kainos-light p-4 rounded-lg">
+              <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Professional Information</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p><strong>Job Title:</strong> ${parsedData.jobTitle || 'N/A'}</p>
+                  <p><strong>Years of Experience:</strong> ${parsedData.yearsOfExperience || 'N/A'}</p>
+                </div>
+                <div>
+                  <p><strong>LinkedIn Profile:</strong> ${parsedData.linkedinUrl ? `<a href="${parsedData.linkedinUrl}" target="_blank" rel="noopener noreferrer" class="text-kainos-primary hover:text-kainos-green underline">${parsedData.linkedinUrl}</a>` : 'N/A'}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Application Status Section -->
+            <div class="bg-kainos-light p-4 rounded-lg">
+              <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Application Status</h4>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <p><strong>Status:</strong> <span class="badge badge-lg px-3 py-1 font-semibold
+                  ${app.status === 'Accepted' || app.status === 'Hired' ? 'bg-kainos-green text-white border-kainos-green' : 
+                    app.status === 'Rejected' ? 'bg-red-500 text-white border-red-500' : 
+                    app.status === 'Reviewed' ? 'bg-yellow-500 text-white border-yellow-500' : 
+                    'bg-kainos-primary text-white border-kainos-primary'}">${
+                      app.status === 'Accepted' ? 'Hired' : 
+                      app.status === 'Pending' ? 'In Progress' : 
+                      app.status || 'N/A'
+                    }</span></p>
+                <p><strong>Applied Date:</strong> ${app.formattedDate || 'N/A'}</p>
+                <p><strong>Application ID:</strong> ${app.applicationID || 'N/A'}</p>
+              </div>
+            </div>
+            
+            <!-- Cover Letter and Documents Section -->
+            ${app.coverLetter ? `
+              <div class="bg-kainos-light p-4 rounded-lg">
+                <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Cover Letter</h4>
+                <div class="bg-white p-4 rounded border max-h-64 overflow-y-auto">
+                  <p class="whitespace-pre-wrap">${app.coverLetter}</p>
+                </div>
+                
+                ${(app.cvUrl || parsedData.cvUrl) ? `
+                  <div class="mt-4 pt-4 border-t border-kainos-primary/20">
+                    <h5 class="font-semibold text-kainos-primary mb-2">Uploaded CV/Resume</h5>
+                    <a href="${app.cvUrl || parsedData.cvUrl}" target="_blank" rel="noopener noreferrer" 
+                       class="btn btn-kainos-outline btn-sm inline-flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                      View CV/Resume
+                    </a>
+                  </div>
+                ` : ''}
+                
+                ${parsedData.comments ? `
+                  <div class="mt-4 pt-4 border-t border-kainos-primary/20">
+                    <h5 class="font-semibold text-kainos-primary mb-2">Additional Comments</h5>
+                    <div class="bg-white p-3 rounded border">
+                      <p class="whitespace-pre-wrap text-gray-700">${parsedData.comments}</p>
+                    </div>
+                  </div>
+                ` : ''}
+              </div>
+            ` : `
+              ${(app.cvUrl || parsedData.cvUrl) ? `
+                <div class="bg-kainos-light p-4 rounded-lg">
+                  <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Uploaded Documents</h4>
+                  <a href="${app.cvUrl || parsedData.cvUrl}" target="_blank" rel="noopener noreferrer" 
+                     class="btn btn-kainos-outline btn-sm inline-flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    View CV/Resume
+                  </a>
+                  
+                  ${parsedData.comments ? `
+                    <div class="mt-4 pt-4 border-t border-kainos-primary/20">
+                      <h5 class="font-semibold text-kainos-primary mb-2">Additional Comments</h5>
+                      <div class="bg-white p-3 rounded border">
+                        <p class="whitespace-pre-wrap text-gray-700">${parsedData.comments}</p>
+                      </div>
+                    </div>
+                  ` : ''}
+                </div>
+              ` : `
+                ${parsedData.comments ? `
+                  <div class="bg-kainos-light p-4 rounded-lg">
+                    <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Additional Comments</h4>
+                    <div class="bg-white p-3 rounded border">
+                      <p class="whitespace-pre-wrap text-gray-700">${parsedData.comments}</p>
+                    </div>
+                  </div>
+                ` : ''}
+              `}
+            `}
+            
+            ${!app.cvUrl && !parsedData.cvUrl && !app.coverLetter && !parsedData.comments ? `
+              <div class="bg-kainos-light p-4 rounded-lg text-center">
+                <p class="text-gray-600">No additional application details available.</p>
+                <p class="text-sm text-gray-500 mt-2">Only basic application information is shown above.</p>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  // Add modal to page - no API call needed since we already have the data
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+  
+  // Prevent background scrolling
+  document.body.classList.add('modal-open');
+  
+  // Add event listeners after modal is added to DOM
+  const modal = document.getElementById('applicationModal');
+  const closeBtn = document.getElementById('closeModalBtn');
+  
+  if (modal && closeBtn) {
+    // Close on X button click
+    closeBtn.addEventListener('click', closeApplicationModal);
+    
+    // Close on background click
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        closeApplicationModal();
+      }
+    });
+    
+    // Close on Escape key - store reference to remove later
+    const escapeHandler = function(e) {
+      if (e.key === 'Escape') {
+        closeApplicationModal();
+      }
+    };
+    document.addEventListener('keydown', escapeHandler);
+    
+    // Store the handler on the modal for later removal
+    modal.escapeHandler = escapeHandler;
+  }
+}
+
+function closeApplicationModal() {
+  const modal = document.getElementById('applicationModal');
+  if (modal) {
+    // Remove escape key listener if it exists
+    if (modal.escapeHandler) {
+      document.removeEventListener('keydown', modal.escapeHandler);
+    }
+    // Re-enable background scrolling
+    document.body.classList.remove('modal-open');
+    modal.remove();
   }
 }
 

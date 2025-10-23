@@ -44,6 +44,7 @@
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/method-override": "^3.0.0",
+    "@types/multer": "^2.0.0",
     "@types/node": "^20.11.17",
     "@types/nunjucks": "^3.2.6",
     "@types/uuid": "^10.0.0",
@@ -74,6 +75,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",
+    "multer": "^2.0.2",
     "nunjucks": "^3.2.4",
     "uuid": "^13.0.0"
   }

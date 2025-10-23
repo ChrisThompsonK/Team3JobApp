@@ -43,7 +43,7 @@
     <div class="card-body">
       <h2 class="card-title text-2xl mb-6">Application Information</h2>
       
-      <form id="applicationForm" action="/jobs/{{ jobRole.id }}/apply" method="POST" class="space-y-6">
+      <form id="applicationForm" action="/jobs/{{ jobRole.id }}/apply" method="POST" enctype="multipart/form-data" class="space-y-6">
         <!-- Personal Information Section -->
         <div class="divider text-lg font-semibold text-blue-800">Personal Information</div>
         

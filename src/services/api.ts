@@ -259,6 +259,7 @@ export const api = {
     phoneNumber: string;
     coverLetter?: string;
     notes?: string;
+    cvUrl?: string;
   }): Promise<{
     success: boolean;
     applicationID?: number;
@@ -353,4 +354,5 @@ export const api = {
     });
     return response.data;
   },
+
 };
