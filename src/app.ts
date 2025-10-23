@@ -58,7 +58,12 @@ export const startServer = async (app: express.Application): Promise<void> => {
 
     // Initialize database
     console.log('📀 Initializing database...');
-    runMigrations();
+    try {
+      runMigrations();
+    } catch (error) {
+      console.error('Failed to initialize database:', error);
+      throw error;
+    }
 
     // Ensure admin user exists
     console.log('👤 Checking admin user...');

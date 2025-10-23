@@ -205,7 +205,7 @@ export class JobRoleController {
 
       if (req.user?.role === 'admin') {
         try {
-          const rawApplications = await api.getJobApplications(id);
+          const rawApplications = await api.getJobApplications(id, req.accessToken);
           // Format the dates for display and create display names
           applications = rawApplications.map((app) => ({
             ...app,
@@ -762,7 +762,7 @@ export class JobRoleController {
         return;
       }
 
-      const result = await api.hireApplicant(jobRoleId, applicationId);
+      const result = await api.hireApplicant(jobRoleId, applicationId, req.accessToken);
 
       if (result.success) {
         res.redirect(`/jobs/${jobRoleId}/details?hired=true`);
@@ -806,7 +806,7 @@ export class JobRoleController {
         return;
       }
 
-      const result = await api.rejectApplicant(jobRoleId, applicationId);
+      const result = await api.rejectApplicant(jobRoleId, applicationId, req.accessToken);
 
       if (result.success) {
         res.redirect(`/jobs/${jobRoleId}/details?rejected=true`);
