@@ -28,11 +28,6 @@ router.get(
   requireAdmin,
   analyticsController.getAnalyticsDashboard.bind(analyticsController)
 );
-router.get(
-  '/api/analytics',
-  requireAdmin,
-  analyticsController.getAnalyticsData.bind(analyticsController)
-);
 
 /**
  * Authentication Routes

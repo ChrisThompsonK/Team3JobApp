@@ -21,32 +21,33 @@
       </h2>
       <p class="text-base-content/70 mb-4">View application statistics for a specific date</p>
       
-      <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
+      <form method="GET" action="/analytics" class="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
         <div class="form-control flex-1">
           <label class="label">
             <span class="label-text font-semibold">Date</span>
           </label>
           <input 
             type="date" 
-            id="dateSelector" 
+            name="date"
             value="{{ selectedDate }}"
-            max="{{ selectedDate }}"
+            max="{{ today }}"
             class="input input-bordered w-full"
+            required
           />
         </div>
-        <button onclick="loadAnalytics()" class="btn-kainos shadow-lg hover:shadow-xl">
+        <button type="submit" class="btn-kainos shadow-lg hover:shadow-xl">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
-          Refresh
+          View Analytics
         </button>
-        <button onclick="loadToday()" class="btn-kainos-outline shadow-lg hover:shadow-xl">
+        <a href="/analytics" class="btn-kainos-outline shadow-lg hover:shadow-xl">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           Today
-        </button>
-      </div>
+        </a>
+      </form>
     </div>
   </div>
 
@@ -61,7 +62,7 @@
           </svg>
         </div>
         <div class="stat-title font-bold text-blue-900 dark:text-blue-100">Applications Created</div>
-        <div class="stat-value text-blue-700 dark:text-blue-200" id="applicationsCreated">{{ analytics.applicationsCreatedToday }}</div>
+        <div class="stat-value text-blue-700 dark:text-blue-200">{{ analytics.applicationsCreatedToday }}</div>
         <div class="stat-desc text-blue-600 dark:text-blue-300">New applications submitted</div>
       </div>
     </div>
@@ -75,7 +76,7 @@
           </svg>
         </div>
         <div class="stat-title font-bold text-green-900 dark:text-green-100">Applications Hired</div>
-        <div class="stat-value text-green-700 dark:text-green-200" id="applicationsHired">{{ analytics.applicationsHiredToday }}</div>
+        <div class="stat-value text-green-700 dark:text-green-200">{{ analytics.applicationsHiredToday }}</div>
         <div class="stat-desc text-green-600 dark:text-green-300">Successfully hired</div>
       </div>
     </div>
@@ -89,7 +90,7 @@
           </svg>
         </div>
         <div class="stat-title font-bold text-orange-900 dark:text-orange-100">Applications Rejected</div>
-        <div class="stat-value text-orange-700 dark:text-orange-200" id="applicationsRejected">{{ analytics.applicationsRejectedToday }}</div>
+        <div class="stat-value text-orange-700 dark:text-orange-200">{{ analytics.applicationsRejectedToday }}</div>
         <div class="stat-desc text-orange-600 dark:text-orange-300">Not proceeding</div>
       </div>
     </div>
@@ -103,7 +104,7 @@
           </svg>
         </div>
         <div class="stat-title font-bold text-purple-900 dark:text-purple-100">Applications Accepted</div>
-        <div class="stat-value text-purple-700 dark:text-purple-200" id="applicationsAccepted">{{ analytics.applicationsAcceptedToday }}</div>
+        <div class="stat-value text-purple-700 dark:text-purple-200">{{ analytics.applicationsAcceptedToday }}</div>
         <div class="stat-desc text-purple-600 dark:text-purple-300">Moving forward</div>
       </div>
     </div>
@@ -128,15 +129,15 @@
           <div class="space-y-3">
             <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
               <span class="font-medium">Total Applications</span>
-              <span class="badge badge-lg bg-kainos-primary text-white" id="totalApplications">{{ analytics.totalApplicationsToday }}</span>
+              <span class="badge badge-lg bg-kainos-primary text-white">{{ analytics.totalApplicationsToday }}</span>
             </div>
             <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
               <span class="font-medium">Conversion Rate</span>
-              <span class="badge badge-lg bg-kainos-green text-white" id="conversionRate">-</span>
+              <span class="badge badge-lg bg-kainos-green text-white">{{ statistics.conversionRate }}%</span>
             </div>
             <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
               <span class="font-medium">Rejection Rate</span>
-              <span class="badge badge-lg bg-orange-500 text-white" id="rejectionRate">-</span>
+              <span class="badge badge-lg bg-orange-500 text-white">{{ statistics.rejectionRate }}%</span>
             </div>
           </div>
         </div>
@@ -148,23 +149,23 @@
             <div>
               <div class="flex justify-between text-sm mb-1">
                 <span>Hired</span>
-                <span id="hiredPercentage">0%</span>
+                <span>{{ statistics.hiredPercentage }}%</span>
               </div>
-              <progress class="progress progress-success w-full" value="0" max="100" id="hiredProgress"></progress>
+              <progress class="progress progress-success w-full" value="{{ statistics.hiredPercentage }}" max="100"></progress>
             </div>
             <div>
               <div class="flex justify-between text-sm mb-1">
                 <span>Rejected</span>
-                <span id="rejectedPercentage">0%</span>
+                <span>{{ statistics.rejectedPercentage }}%</span>
               </div>
-              <progress class="progress progress-warning w-full" value="0" max="100" id="rejectedProgress"></progress>
+              <progress class="progress progress-warning w-full" value="{{ statistics.rejectedPercentage }}" max="100"></progress>
             </div>
             <div>
               <div class="flex justify-between text-sm mb-1">
                 <span>Accepted</span>
-                <span id="acceptedPercentage">0%</span>
+                <span>{{ statistics.acceptedPercentage }}%</span>
               </div>
-              <progress class="progress progress-info w-full" value="0" max="100" id="acceptedProgress"></progress>
+              <progress class="progress progress-info w-full" value="{{ statistics.acceptedPercentage }}" max="100"></progress>
             </div>
           </div>
         </div>
@@ -186,74 +187,5 @@
     </a>
   </div>
 </div>
-
-<script>
-// Calculate and update statistics
-function updateStatistics() {
-  const created = parseInt(document.getElementById('applicationsCreated').textContent);
-  const hired = parseInt(document.getElementById('applicationsHired').textContent);
-  const rejected = parseInt(document.getElementById('applicationsRejected').textContent);
-  const accepted = parseInt(document.getElementById('applicationsAccepted').textContent);
-  
-  const total = created || 1; // Avoid division by zero
-  
-  // Calculate percentages
-  const hiredPct = ((hired / total) * 100).toFixed(1);
-  const rejectedPct = ((rejected / total) * 100).toFixed(1);
-  const acceptedPct = ((accepted / total) * 100).toFixed(1);
-  
-  // Update conversion and rejection rates
-  document.getElementById('conversionRate').textContent = hiredPct + '%';
-  document.getElementById('rejectionRate').textContent = rejectedPct + '%';
-  
-  // Update progress bars
-  document.getElementById('hiredPercentage').textContent = hiredPct + '%';
-  document.getElementById('hiredProgress').value = hiredPct;
-  
-  document.getElementById('rejectedPercentage').textContent = rejectedPct + '%';
-  document.getElementById('rejectedProgress').value = rejectedPct;
-  
-  document.getElementById('acceptedPercentage').textContent = acceptedPct + '%';
-  document.getElementById('acceptedProgress').value = acceptedPct;
-}
-
-// Load analytics for selected date
-async function loadAnalytics() {
-  const dateInput = document.getElementById('dateSelector');
-  const selectedDate = dateInput.value;
-  
-  try {
-    const response = await fetch(`/api/analytics?date=${selectedDate}`);
-    const data = await response.json();
-    
-    if (data.success) {
-      // Update stats
-      document.getElementById('applicationsCreated').textContent = data.data.applicationsCreatedToday;
-      document.getElementById('applicationsHired').textContent = data.data.applicationsHiredToday;
-      document.getElementById('applicationsRejected').textContent = data.data.applicationsRejectedToday;
-      document.getElementById('applicationsAccepted').textContent = data.data.applicationsAcceptedToday;
-      document.getElementById('totalApplications').textContent = data.data.totalApplicationsToday;
-      
-      // Recalculate statistics
-      updateStatistics();
-    }
-  } catch (error) {
-    console.error('Error loading analytics:', error);
-    alert('Failed to load analytics data. Please try again.');
-  }
-}
-
-// Load today's data
-function loadToday() {
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('dateSelector').value = today;
-  loadAnalytics();
-}
-
-// Initialize statistics on page load
-document.addEventListener('DOMContentLoaded', function() {
-  updateStatistics();
-});
-</script>
 
 {% endblock %}
