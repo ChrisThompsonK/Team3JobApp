@@ -420,6 +420,9 @@ window.addEventListener('DOMContentLoaded', function() {
       dismissSuccessAlert();
     }, 15000);
   }
+  
+  // Track application created event for analytics
+  trackApplicationCreated('{{ jobRole.id }}', '{{ jobRole.name }}');
   {% endif %}
 
   {% if hired %}
@@ -435,6 +438,9 @@ window.addEventListener('DOMContentLoaded', function() {
       dismissAlert('hireAlert');
     }, 10000);
   }
+  
+  // Track application hired event for analytics
+  trackApplicationHired('{{ jobRole.id }}', '{{ jobRole.name }}');
   {% endif %}
 
   {% if rejected %}
@@ -450,6 +456,9 @@ window.addEventListener('DOMContentLoaded', function() {
       dismissAlert('rejectAlert');
     }, 10000);
   }
+  
+  // Track application rejected event for analytics
+  trackApplicationRejected('{{ jobRole.id }}', '{{ jobRole.name }}');
   {% endif %}
 });
 </script>
