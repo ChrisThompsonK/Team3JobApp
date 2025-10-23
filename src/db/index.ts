@@ -13,7 +13,8 @@ export function runMigrations() {
     console.log('✅ Database migrations completed successfully');
   } catch (error) {
     console.error('❌ Database migration failed:', error);
-    process.exit(1);
+    console.error('Error details:', error);
+    throw error; // Don't exit immediately, let the calling function handle it
   }
 }
 

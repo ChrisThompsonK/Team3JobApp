@@ -2,6 +2,14 @@
 
 {% block title %}{{ jobRole.name }} - Kainos Careers{% endblock %}
 
+{% block head %}
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mx-auto px-4 py-8 max-w-6xl">
   <!-- Success Alert - Prominent and Readable -->
@@ -193,17 +201,17 @@
   </div>
 
   <!-- Admin Applications Section -->
-  {% if user and user.role === 'admin' and applications %}
-  <div class="card bg-base-100 shadow-2xl border-t-4 border-kainos-primary mt-8">
+  {% if user and user.role === 'admin' %}
+  <div id="applications-section" class="card bg-base-100 shadow-2xl border-t-4 border-kainos-primary mt-8">
     <div class="card-body">
       <h3 class="text-3xl font-semibold text-kainos-primary mb-6 flex items-center gap-3">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
-        Applications ({{ applications.length }})
+        Applications ({{ applications.length if applications else 0 }})
       </h3>
       
-      {% if applications.length > 0 %}
+      {% if applications and applications.length > 0 %}
       <div class="overflow-x-auto">
         <table class="table table-zebra w-full">
           <thead>
@@ -299,6 +307,8 @@
 
 <!-- Action Buttons with Kainos styling -->
 <div class="mt-8 flex justify-center gap-6 flex-wrap items-center">
+  {% if user and user.role !== 'admin' %}
+  <!-- Regular User Apply Button -->
   {% if jobRole.status == 'Open' or jobRole.status == 'Closing Soon' or not jobRole.status %}
   <a href="/jobs/{{ jobRole.id }}/apply" class="btn-kainos shadow-lg hover:shadow-xl inline-flex items-center gap-3 px-8 py-4">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -310,6 +320,7 @@
   <button class="btn btn-disabled btn-lg" disabled>
     Applications Closed
   </button>
+  {% endif %}
   {% endif %}
   
   {% if user and user.role === 'admin' %}
@@ -409,6 +420,9 @@ window.addEventListener('DOMContentLoaded', function() {
       dismissSuccessAlert();
     }, 15000);
   }
+  
+  // Track application created event for analytics
+  trackApplicationCreated('{{ jobRole.id }}', '{{ jobRole.name }}');
   {% endif %}
 
   {% if hired %}
@@ -424,6 +438,9 @@ window.addEventListener('DOMContentLoaded', function() {
       dismissAlert('hireAlert');
     }, 10000);
   }
+  
+  // Track application hired event for analytics
+  trackApplicationHired('{{ jobRole.id }}', '{{ jobRole.name }}');
   {% endif %}
 
   {% if rejected %}
@@ -439,6 +456,9 @@ window.addEventListener('DOMContentLoaded', function() {
       dismissAlert('rejectAlert');
     }, 10000);
   }
+  
+  // Track application rejected event for analytics
+  trackApplicationRejected('{{ jobRole.id }}', '{{ jobRole.name }}');
   {% endif %}
 });
 </script>

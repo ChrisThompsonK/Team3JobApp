@@ -294,7 +294,8 @@ export const api = {
 
   // Get applications for a specific job role (admin only)
   getJobApplications: async (
-    jobRoleId: string
+    jobRoleId: string,
+    accessToken?: string
   ): Promise<
     Array<{
       applicationID: number;
@@ -311,19 +312,27 @@ export const api = {
       userId?: string;
     }>
   > => {
-    const response = await apiClient.get(`/applications/job/${jobRoleId}`);
-    return response.data;
+    try {
+      const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
+      const response = await client.get(`/applications/job-role/${jobRoleId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching applications:', error);
+      throw error;
+    }
   },
 
   // Hire an applicant (admin only)
   hireApplicant: async (
     jobRoleId: string,
-    applicationId: string
+    applicationId: string,
+    accessToken?: string
   ): Promise<{
     success: boolean;
     message?: string;
   }> => {
-    const response = await apiClient.post(`/applications/${applicationId}/hire`, {
+    const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
+    const response = await client.post(`/applications/${applicationId}/hire`, {
       jobRoleId: parseInt(jobRoleId, 10),
     });
     return response.data;
@@ -332,14 +341,27 @@ export const api = {
   // Reject an applicant (admin only)
   rejectApplicant: async (
     jobRoleId: string,
+    applicationId: string,
+    accessToken?: string
+  ): Promise<{
+    success: boolean;
+    message?: string;
+  }> => {
+    const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
+    const response = await client.post(`/applications/${applicationId}/reject`, {
+      jobRoleId: parseInt(jobRoleId, 10),
+    });
+    return response.data;
+  },
+
+  // Withdraw an application (user only - can only withdraw their own applications)
+  withdrawApplication: async (
     applicationId: string
   ): Promise<{
     success: boolean;
     message?: string;
   }> => {
-    const response = await apiClient.post(`/applications/${applicationId}/reject`, {
-      jobRoleId: parseInt(jobRoleId, 10),
-    });
+    const response = await apiClient.post(`/applications/${applicationId}/withdraw`);
     return response.data;
   },
 
