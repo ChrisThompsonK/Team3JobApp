@@ -3,11 +3,12 @@ import type { AuthUser } from '../models/user.js';
 import { userRepository } from '../repositories/user-repository.js';
 import { verifyAccessToken } from '../services/token-service.js';
 
-// Extend Request interface to include user
+// Extend Request interface to include user and token
 declare global {
   namespace Express {
     interface Request {
       user?: AuthUser;
+      accessToken?: string;
     }
   }
 }
@@ -45,8 +46,9 @@ export async function authMiddleware(
           role: payload.role as 'admin' | 'user',
         };
 
-    // Attach user to request object
+    // Attach user and token to request object
     req.user = user;
+    req.accessToken = token;
 
     // Also make user available to templates via res.locals
     res.locals['user'] = user;
