@@ -116,7 +116,9 @@ function initializeAnalytics(measurementId) {
       page_view: true,
     });
 
-    console.log('Analytics: Initialized with measurement ID:', measurementId);
+    if (window.DEBUG_ANALYTICS) {
+      console.log('Analytics: Initialized with measurement ID:', measurementId);
+    }
   } else {
     console.error('Google Analytics (gtag) not loaded - cannot initialize');
   }
