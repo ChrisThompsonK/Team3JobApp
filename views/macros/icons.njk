@@ -1,0 +1,7 @@
+{# Macro for rendering Lucide icons in templates #}
+{# Usage: {{ lucideIcon('menu', 'h-5 w-5') }} #}
+{# Or with the icon() function: {{ icon('menu', 'h-5 w-5') | safe }} #}
+
+{% macro lucideIcon(name, className='') %}
+  {{ icon(name, className) | safe }}
+{% endmacro %}
