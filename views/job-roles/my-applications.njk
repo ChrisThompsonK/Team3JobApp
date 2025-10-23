@@ -14,7 +14,7 @@
     <!-- Applications List -->
     <div class="grid gap-6">
       {% for app in applications %}
-      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow border-l-4 {% if app.applicationStatus == 'Hired' %}border-kainos-green{% elif app.applicationStatus == 'Rejected' %}border-red-500{% else %}border-kainos-primary{% endif %}">
+      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow border-l-4 {% if app.applicationStatus == 'Hired' %}border-kainos-green{% elif app.applicationStatus == 'Rejected' %}border-red-500{% elif app.applicationStatus == 'Withdrawn' %}border-red-500{% else %}border-kainos-primary{% endif %}">
         <div class="card-body">
           <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <!-- Job Info -->
@@ -67,6 +67,8 @@
                   bg-kainos-green text-white border-kainos-green
                 {% elif app.applicationStatus == 'Rejected' %}
                   bg-red-500 text-white border-red-500
+                {% elif app.applicationStatus == 'Withdrawn' %}
+                  bg-red-500 text-white border-red-500
                 {% elif app.applicationStatus == 'Under Review' %}
                   bg-yellow-500 text-white border-yellow-500
                 {% else %}
@@ -82,14 +84,31 @@
               </div>
               {% endif %}
 
-              <!-- View Job Details Button -->
-              <a href="/jobs/{{ app.jobRoleId }}/details" class="btn-kainos-outline shadow-md hover:shadow-lg inline-flex items-center gap-2 text-sm px-4 py-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-                </svg>
-                <span>View Job</span>
-              </a>
+              <!-- Action Buttons -->
+              <div class="flex flex-col gap-2">
+                <!-- View Job Details Button -->
+                <a href="/jobs/{{ app.jobRoleId }}/details" class="btn-kainos-outline shadow-md hover:shadow-lg inline-flex items-center gap-2 text-sm px-4 py-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span>View Job</span>
+                </a>
+
+                <!-- Withdraw Application Button - Only show for applications that can be withdrawn -->
+                {% if app.applicationStatus == 'In Progress' or app.applicationStatus == 'Under Review' %}
+                <button 
+                  class="btn btn-error text-white shadow-md hover:shadow-lg inline-flex items-center gap-2 text-sm px-4 py-2"
+                  onclick="showWithdrawConfirmation({{ app.id }}, '{{ app.roleName }}')"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h6a1 1 0 100-2H7zm0 4a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+                  </svg>
+                  <span>Withdraw</span>
+                </button>
+                {% endif %}
+              </div>
             </div>
           </div>
         </div>
@@ -148,5 +167,78 @@
       <span>Back to Home</span>
     </a>
   </div>
+
+  <!-- Withdraw Confirmation Modal -->
+  <div id="withdrawModal" class="modal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg text-red-600">Confirm Application Withdrawal</h3>
+      <p class="py-4">Are you sure you want to withdraw your application for <strong id="jobRoleName"></strong>?</p>
+      <p class="text-sm text-gray-600 mb-4">This action cannot be undone. You will need to reapply if you change your mind.</p>
+      <div class="modal-action">
+        <button class="btn btn-ghost" onclick="closeWithdrawModal()">Cancel</button>
+        <button id="confirmWithdrawBtn" class="btn btn-error text-white">
+          Withdraw Application
+        </button>
+      </div>
+    </div>
+    <div class="modal-backdrop" onclick="closeWithdrawModal()"></div>
+  </div>
+
+  <!-- Hidden form for withdrawing applications -->
+  <form id="withdrawForm" method="POST" style="display: none;">
+  </form>
 </div>
+
+<script>
+  let currentApplicationId = null;
+
+  function showWithdrawConfirmation(applicationId, roleName) {
+    currentApplicationId = applicationId;
+    document.getElementById('jobRoleName').textContent = roleName;
+    document.getElementById('withdrawModal').classList.add('modal-open');
+  }
+
+  function closeWithdrawModal() {
+    document.getElementById('withdrawModal').classList.remove('modal-open');
+    currentApplicationId = null;
+  }
+
+  document.getElementById('confirmWithdrawBtn').addEventListener('click', function() {
+    if (currentApplicationId) {
+      const form = document.getElementById('withdrawForm');
+      form.action = `/applications/${currentApplicationId}/withdraw`;
+      form.submit();
+    }
+  });
+
+  // Close modal when clicking outside or pressing Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeWithdrawModal();
+    }
+  });
+
+  // Show success message if redirected after withdrawal
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('withdrawn') === 'true') {
+    // Create a temporary success alert
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-success fixed top-4 right-4 w-auto z-50 shadow-lg';
+    alert.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>Application withdrawn successfully</span>
+    `;
+    document.body.appendChild(alert);
+    
+    // Remove the alert after 5 seconds
+    setTimeout(() => {
+      alert.remove();
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }, 5000);
+  }
+</script>
+
 {% endblock %}
