@@ -18,15 +18,12 @@ function toPascalCase(str: string): string {
  * @param size - Optional size (defaults to current font size via em units)
  * @returns SVG string for the icon
  */
-export function lucideIcon(
-  name: string,
-  className = '',
-  size?: number | string,
-): string {
+export function lucideIcon(name: string, className = '', size?: number | string): string {
   // Convert name to PascalCase for lucide-static
   const iconName = toPascalCase(name);
-  
+
   // Get the icon from lucide-static
+  // biome-ignore lint/performance/noDynamicNamespaceImportAccess: Dynamic icon lookup is required for runtime icon selection
   const icon = LucideIcons[iconName as keyof typeof LucideIcons];
 
   if (!icon || typeof icon !== 'string') {
