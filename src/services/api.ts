@@ -372,6 +372,14 @@ export const api = {
     const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
     const url = date ? `/analytics/applications?date=${date}` : '/analytics/applications';
     const response = await client.get(url);
+  // Withdraw an application (user only - can only withdraw their own applications)
+  withdrawApplication: async (
+    applicationId: string
+  ): Promise<{
+    success: boolean;
+    message?: string;
+  }> => {
+    const response = await apiClient.post(`/applications/${applicationId}/withdraw`);
     return response.data;
   },
 };

@@ -100,6 +100,13 @@ router.post(
   jobRoleController.rejectApplicant.bind(jobRoleController)
 );
 
+// User application management routes
+router.post(
+  '/applications/:applicationId/withdraw',
+  requireAuth,
+  jobRoleController.withdrawApplication.bind(jobRoleController)
+);
+
 // Generic job by ID - MUST be last as it's the most general pattern
 router.get('/jobs/:id', jobRoleController.getJobRoleById.bind(jobRoleController));
 
