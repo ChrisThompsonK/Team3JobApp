@@ -100,7 +100,8 @@
                 <form method="POST" action="/applications/{{ app.id }}/withdraw" style="display: inline;" id="withdraw-form-{{ app.id }}">
                   <button 
                     type="button"
-                    onclick="confirmWithdraw('{{ app.id }}', {{ app.roleName | dump }})"
+                    data-role-name="{{ app.roleName | escape }}"
+                    onclick="confirmWithdraw('{{ app.id }}', this.getAttribute('data-role-name'))"
                     class="btn btn-error text-white shadow-md hover:shadow-lg inline-flex items-center gap-2 text-sm px-4 py-2"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
