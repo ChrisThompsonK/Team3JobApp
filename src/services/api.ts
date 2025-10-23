@@ -363,7 +363,7 @@ export const api = {
     message?: string;
   }> => {
     const response = await apiClient.post(`/applications/${applicationId}/withdraw`, {
-      email: email,
+      email,
     });
     return response.data;
   },
