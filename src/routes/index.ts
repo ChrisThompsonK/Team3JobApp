@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { AnalyticsController } from '../controllers/analytics-controller.js';
 import { HomeController } from '../controllers/index.js';
 import { JobRoleController } from '../controllers/job-role-controller.js';
 import { requireAdmin } from '../middleware/require-admin.js';
@@ -11,11 +12,22 @@ const router = Router();
 
 const applicationValidator = new JobApplicationValidator();
 const jobRoleController = new JobRoleController(jobRoleService, applicationValidator);
+const analyticsController = new AnalyticsController();
+
 /**
  * Home Routes
  */
 router.get('/', HomeController.index);
 router.get('/daisyui-test', HomeController.daisyuiTest);
+
+/**
+ * Analytics Routes (Admin Only)
+ */
+router.get(
+  '/analytics',
+  requireAdmin,
+  analyticsController.getAnalyticsDashboard.bind(analyticsController)
+);
 
 /**
  * Authentication Routes
@@ -86,6 +98,13 @@ router.post(
   '/jobs/:id/reject/:applicationId',
   requireAdmin,
   jobRoleController.rejectApplicant.bind(jobRoleController)
+);
+
+// User application management routes
+router.post(
+  '/applications/:applicationId/withdraw',
+  requireAuth,
+  jobRoleController.withdrawApplication.bind(jobRoleController)
 );
 
 // Generic job by ID - MUST be last as it's the most general pattern

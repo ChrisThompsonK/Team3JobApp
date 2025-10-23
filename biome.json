@@ -69,6 +69,7 @@
     }
   },
   "javascript": {
+    "globals": ["gtag"],
     "formatter": {
       "quoteStyle": "single",
       "jsxQuoteStyle": "double",
