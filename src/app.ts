@@ -8,6 +8,7 @@ import { authMiddleware } from './middleware/auth-middleware.js';
 import { errorHandler, notFoundHandler, requestLogger } from './middleware/index.js';
 import routes from './routes/index.js';
 import { adminSeedService } from './services/admin-seed-service.js';
+import { icon } from './utils/lucide-helper.js';
 
 /**
  * Create and configure the Express application
@@ -21,6 +22,10 @@ export const createApp = (): express.Application => {
     express: app,
     watch: config.template.watch,
   });
+
+  // Add Lucide icon helper as a global filter
+  env.addFilter('icon', icon);
+  env.addGlobal('icon', icon);
 
   // Add environment variables as global variables for templates
   env.addGlobal('process', {

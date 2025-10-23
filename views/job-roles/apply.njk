@@ -8,9 +8,7 @@
   <div class="flex justify-between items-center mb-8">
     <h1 class="text-5xl font-bold kainos-text-gradient">Apply for Job Role</h1>
     <a href="/jobs/{{ jobRole.id }}/details" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 no-underline flex items-center gap-2">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-      </svg>
+      {{ icon('arrow-left', 'h-4 w-4') | safe }}
       Back to Job Details
     </a>
   </div>
@@ -295,10 +293,7 @@
       Cancel
     </a>
     <button type="submit" id="submitBtn" form="applicationForm" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 text-center min-w-[160px] flex items-center justify-center gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100" disabled>
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-      </svg>
+      {{ icon('send', 'h-5 w-5') | safe }}
       Submit Application
     </button>
   </div>
