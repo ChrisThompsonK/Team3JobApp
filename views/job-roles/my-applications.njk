@@ -97,16 +97,19 @@
 
                 <!-- Withdraw Application Button - Only show for applications that can be withdrawn -->
                 {% if app.applicationStatus == 'In Progress' or app.applicationStatus == 'Under Review' %}
-                <button 
-                  class="btn btn-error text-white shadow-md hover:shadow-lg inline-flex items-center gap-2 text-sm px-4 py-2"
-                  onclick="showWithdrawConfirmation({{ app.id }}, '{{ app.roleName }}')"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd" />
-                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h6a1 1 0 100-2H7zm0 4a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
-                  </svg>
-                  <span>Withdraw</span>
-                </button>
+                <form method="POST" action="/applications/{{ app.id }}/withdraw" style="display: inline;" 
+                      onsubmit="return confirm('Are you sure you want to withdraw your application for {{ app.roleName }}? This action cannot be undone.')">
+                  <button 
+                    type="submit"
+                    class="btn btn-error text-white shadow-md hover:shadow-lg inline-flex items-center gap-2 text-sm px-4 py-2"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd" />
+                      <path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h6a1 1 0 100-2H7zm0 4a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Withdraw</span>
+                  </button>
+                </form>
                 {% endif %}
               </div>
             </div>
@@ -167,57 +170,9 @@
       <span>Back to Home</span>
     </a>
   </div>
-
-  <!-- Withdraw Confirmation Modal -->
-  <div id="withdrawModal" class="modal">
-    <div class="modal-box">
-      <h3 class="font-bold text-lg text-red-600">Confirm Application Withdrawal</h3>
-      <p class="py-4">Are you sure you want to withdraw your application for <strong id="jobRoleName"></strong>?</p>
-      <p class="text-sm text-gray-600 mb-4">This action cannot be undone. You will need to reapply if you change your mind.</p>
-      <div class="modal-action">
-        <button class="btn btn-ghost" onclick="closeWithdrawModal()">Cancel</button>
-        <button id="confirmWithdrawBtn" class="btn btn-error text-white">
-          Withdraw Application
-        </button>
-      </div>
-    </div>
-    <div class="modal-backdrop" onclick="closeWithdrawModal()"></div>
-  </div>
-
-  <!-- Hidden form for withdrawing applications -->
-  <form id="withdrawForm" method="POST" style="display: none;">
-  </form>
 </div>
 
 <script>
-  let currentApplicationId = null;
-
-  function showWithdrawConfirmation(applicationId, roleName) {
-    currentApplicationId = applicationId;
-    document.getElementById('jobRoleName').textContent = roleName;
-    document.getElementById('withdrawModal').classList.add('modal-open');
-  }
-
-  function closeWithdrawModal() {
-    document.getElementById('withdrawModal').classList.remove('modal-open');
-    currentApplicationId = null;
-  }
-
-  document.getElementById('confirmWithdrawBtn').addEventListener('click', function() {
-    if (currentApplicationId) {
-      const form = document.getElementById('withdrawForm');
-      form.action = `/applications/${currentApplicationId}/withdraw`;
-      form.submit();
-    }
-  });
-
-  // Close modal when clicking outside or pressing Escape
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      closeWithdrawModal();
-    }
-  });
-
   // Show success message if redirected after withdrawal
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('withdrawn') === 'true') {
