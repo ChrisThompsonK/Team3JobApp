@@ -345,12 +345,15 @@ export const api = {
 
   // Withdraw an application (user only - can only withdraw their own applications)
   withdrawApplication: async (
-    applicationId: string
+    applicationId: string,
+    email: string
   ): Promise<{
     success: boolean;
     message?: string;
   }> => {
-    const response = await apiClient.post(`/applications/${applicationId}/withdraw`);
+    const response = await apiClient.post(`/applications/${applicationId}/withdraw`, {
+      email: email,
+    });
     return response.data;
   },
 };

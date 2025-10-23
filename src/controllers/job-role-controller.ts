@@ -830,6 +830,12 @@ export class JobRoleController {
         return;
       }
 
+      // Check if user is authenticated
+      if (!req.user || !req.user.email) {
+        res.status(401).send('You must be logged in to withdraw an application');
+        return;
+      }
+
       // Validate that application ID is a positive integer
       const numericApplicationId = Number.parseInt(applicationId, 10);
 
@@ -842,7 +848,7 @@ export class JobRoleController {
         return;
       }
 
-      const result = await api.withdrawApplication(applicationId);
+      const result = await api.withdrawApplication(applicationId, req.user.email);
 
       if (result.success) {
         res.redirect('/my-applications?withdrawn=true');

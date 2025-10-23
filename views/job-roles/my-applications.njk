@@ -97,10 +97,10 @@
 
                 <!-- Withdraw Application Button - Only show for applications that can be withdrawn -->
                 {% if app.applicationStatus == 'In Progress' or app.applicationStatus == 'Under Review' %}
-                <form method="POST" action="/applications/{{ app.id }}/withdraw" style="display: inline;" 
-                      onsubmit="return confirm('Are you sure you want to withdraw your application for {{ app.roleName }}? This action cannot be undone.')">
+                <form method="POST" action="/applications/{{ app.id }}/withdraw" style="display: inline;" id="withdraw-form-{{ app.id }}">
                   <button 
-                    type="submit"
+                    type="button"
+                    onclick="confirmWithdraw('{{ app.id }}', '{{ app.roleName }}')"
                     class="btn btn-error text-white shadow-md hover:shadow-lg inline-flex items-center gap-2 text-sm px-4 py-2"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -173,6 +173,20 @@
 </div>
 
 <script>
+  // Confirm withdrawal with a single dialog
+  function confirmWithdraw(appId, roleName) {
+    // Show confirmation dialog only once
+    const confirmed = confirm(`Are you sure you want to withdraw your application for ${roleName}? This action cannot be undone.`);
+    
+    if (confirmed) {
+      // Submit the form
+      const form = document.getElementById('withdraw-form-' + appId);
+      if (form) {
+        form.submit();
+      }
+    }
+  }
+
   // Show success message if redirected after withdrawal
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('withdrawn') === 'true') {
