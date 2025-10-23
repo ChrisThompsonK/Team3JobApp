@@ -356,17 +356,6 @@ export const api = {
 
   // Withdraw an application (user only - can only withdraw their own applications)
   withdrawApplication: async (
-    applicationId: string
-  ): Promise<{
-    success: boolean;
-    message?: string;
-  }> => {
-    const response = await apiClient.post(`/applications/${applicationId}/withdraw`);
-    return response.data;
-  },
-
-  // Withdraw an application (user only - can only withdraw their own applications)
-  withdrawApplication: async (
     applicationId: string,
     email: string
   ): Promise<{
