@@ -1,6 +1,7 @@
+/* global gtag */
 /**
  * Google Analytics 4 Event Tracking Utilities
- * 
+ *
  * This module provides functions to track job application events
  * based on application status changes in the job portal.
  */
@@ -20,21 +21,21 @@ function trackApplicationStatusChange(status, jobRoleId, additionalData = {}) {
       job_role_id: jobRoleId,
       application_status: status,
       value: 1,
-      ...additionalData
+      ...additionalData,
     };
 
     // Send the event to Google Analytics
     gtag('event', 'application_status_change', eventData);
-    
+
     // Also send specific event names for easier filtering
     gtag('event', `application_${status}`, eventData);
-    
+
     console.log(`Analytics: Tracked status change to ${status} for job ${jobRoleId}`, eventData);
   } else {
     console.warn('Google Analytics (gtag) not loaded - tracking event would be:', {
       status,
       jobRoleId,
-      additionalData
+      additionalData,
     });
   }
 }
@@ -49,7 +50,7 @@ function trackApplicationCreated(jobRoleId, jobRoleName = null) {
   if (jobRoleName) {
     additionalData.job_role_name = jobRoleName;
   }
-  
+
   trackApplicationStatusChange('applied', jobRoleId, additionalData);
 }
 
@@ -63,7 +64,7 @@ function trackApplicationHired(jobRoleId, jobRoleName = null) {
   if (jobRoleName) {
     additionalData.job_role_name = jobRoleName;
   }
-  
+
   trackApplicationStatusChange('hired', jobRoleId, additionalData);
 }
 
@@ -77,7 +78,7 @@ function trackApplicationRejected(jobRoleId, jobRoleName = null) {
   if (jobRoleName) {
     additionalData.job_role_name = jobRoleName;
   }
-  
+
   trackApplicationStatusChange('rejected', jobRoleId, additionalData);
 }
 
@@ -90,14 +91,14 @@ function trackCustomJobEvent(eventName, eventData = {}) {
   if (typeof gtag !== 'undefined') {
     gtag('event', eventName, {
       event_category: 'job_applications',
-      ...eventData
+      ...eventData,
     });
-    
+
     console.log(`Analytics: Tracked custom event ${eventName}`, eventData);
   } else {
     console.warn('Google Analytics (gtag) not loaded - custom event would be:', {
       eventName,
-      eventData
+      eventData,
     });
   }
 }
@@ -112,9 +113,9 @@ function initializeAnalytics(measurementId) {
       // Enable enhanced measurement for better tracking
       enhanced_measurement: true,
       // Track page views automatically
-      page_view: true
+      page_view: true,
     });
-    
+
     console.log('Analytics: Initialized with measurement ID:', measurementId);
   } else {
     console.error('Google Analytics (gtag) not loaded - cannot initialize');

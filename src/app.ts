@@ -26,8 +26,8 @@ export const createApp = (): express.Application => {
   env.addGlobal('process', {
     env: {
       GA_MEASUREMENT_ID: process.env['GA_MEASUREMENT_ID'],
-      NODE_ENV: process.env['NODE_ENV']
-    }
+      NODE_ENV: process.env['NODE_ENV'],
+    },
   });
 
   // Set template engine
