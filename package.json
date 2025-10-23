@@ -74,6 +74,7 @@
     "drizzle-orm": "^0.44.6",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "lucide-static": "^0.546.0",
     "method-override": "^3.0.0",
     "multer": "^2.0.2",
     "nunjucks": "^3.2.4",
