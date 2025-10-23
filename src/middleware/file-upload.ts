@@ -1,5 +1,6 @@
-import multer from 'multer';
 import path from 'node:path';
+import type { Request } from 'express';
+import multer from 'multer';
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -8,7 +9,7 @@ const storage = multer.diskStorage({
   },
   filename: (_req, file, cb) => {
     // Generate a unique filename with timestamp
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
     const ext = path.extname(file.originalname);
     const name = path.basename(file.originalname, ext);
     cb(null, `${name}-${uniqueSuffix}${ext}`);
@@ -16,7 +17,7 @@ const storage = multer.diskStorage({
 });
 
 // File filter for CVs - only allow PDF, DOC, DOCX
-const fileFilter = (_req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+const fileFilter = (_req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
   const allowedMimes = [
     'application/pdf',
     'application/msword',
