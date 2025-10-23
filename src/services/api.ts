@@ -354,7 +354,6 @@ export const api = {
     return response.data;
   },
 
-
   // Withdraw an application (user only - can only withdraw their own applications)
   withdrawApplication: async (
     applicationId: string,
