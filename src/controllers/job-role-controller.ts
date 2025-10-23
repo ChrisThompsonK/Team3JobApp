@@ -820,7 +820,7 @@ export class JobRoleController {
       res.status(500).send('Error processing reject request');
     }
   }
-  
+
   async withdrawApplication(req: Request, res: Response): Promise<void> {
     const { applicationId } = req.params;
 
