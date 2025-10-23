@@ -6,6 +6,24 @@
     <title>{% block title %}Kainos Job Portal{% endblock %}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/css/output.css">
+    
+    <!-- Google Analytics 4 -->
+    {% if process.env.GA_MEASUREMENT_ID %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ process.env.GA_MEASUREMENT_ID }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ process.env.GA_MEASUREMENT_ID }}', {
+        enhanced_measurement: true,
+        page_view: true
+      });
+    </script>
+    {% endif %}
+    
+    <!-- Analytics utilities -->
+    <script src="/js/analytics.js"></script>
+    
     {% block head %}{% endblock %}
 </head>
 <body class="min-h-screen bg-base-200 flex flex-col font-kainos">
