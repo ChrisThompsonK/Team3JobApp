@@ -714,8 +714,8 @@ export class JobRoleController {
           jobRoleId: app.jobRoleId,
           roleName: app.jobRoleName || 'Position Not Available',
           location: app.jobRoleLocation || 'Location Not Specified',
-          capability: 'Not Available', // Backend doesn't provide this in my-applications endpoint
-          band: 'Not Available', // Backend doesn't provide this in my-applications endpoint
+          capability: app.capabilityName || 'Not Specified',
+          band: app.bandName || 'Not Specified',
           applicationStatus,
           appliedDate: new Date(app.createdAt),
           emailAddress: app.emailAddress,
