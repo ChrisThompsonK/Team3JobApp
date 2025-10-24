@@ -47,6 +47,53 @@
       transform: translateY(0) scale(1);
     }
   }
+  
+  /* Button hover effects */
+  .hire-btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .hire-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(110, 170, 58, 0.4);
+  }
+  
+  .hire-btn:active {
+    transform: translateY(0) scale(1);
+  }
+  
+  .reject-btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .reject-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(220, 38, 38, 0.4);
+  }
+  
+  .reject-btn:active {
+    transform: translateY(0) scale(1);
+  }
+  
+  .delete-btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .delete-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 12px 24px rgba(220, 38, 38, 0.5);
+    background-color: #b91c1c !important;
+  }
+  
+  .delete-btn:active {
+    transform: translateY(0) scale(1);
+  }
 </style>
 {% endblock %}
 
@@ -257,6 +304,7 @@
                   </a>
                 </div>
                 {% endif %}
+                {% endif %}
               </td>
               <td>
                 <div class="badge badge-lg px-3 py-2 font-semibold
@@ -294,12 +342,12 @@
                 {% if application.status == 'Pending' or application.status == 'In Progress' %}
                 <div class="flex gap-2">
                   <button onclick="confirmHire('{{ jobRole.id }}', '{{ application.applicationID }}', '{{ application.displayName }}')" 
-                          class="btn btn-sm bg-kainos-green hover:bg-green-600 text-white border-none">
+                          class="btn btn-sm text-white border-none hire-btn" style="background-color: #6EAA3A;">
                     {{ icon('check', 'h-4 w-4') | safe }}
                     Hire
                   </button>
                   <button onclick="confirmReject('{{ jobRole.id }}', '{{ application.applicationID }}', '{{ application.displayName }}')" 
-                          class="btn btn-sm bg-red-500 hover:bg-red-600 text-white border-none">
+                          class="btn btn-sm text-white border-none reject-btn" style="background-color: #dc2626;">
                     {{ icon('x', 'h-4 w-4') | safe }}
                     Reject
                   </button>
@@ -347,7 +395,7 @@
     <span>Edit Job Role</span>
   </a>
   
-  <button onclick="confirmDelete('{{ jobRole.id }}', '{{ jobRole.name }}')" class="bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all inline-flex items-center gap-3 px-8 py-4 border-none cursor-pointer" style="background-color: #dc2626;">
+  <button onclick="confirmDelete('{{ jobRole.id }}', '{{ jobRole.name }}')" class="bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all inline-flex items-center gap-3 px-8 py-4 border-none cursor-pointer delete-btn" style="background-color: #dc2626;">
     {{ icon('trash-2', 'h-5 w-5') | safe }}
     <span>Delete Job Role</span>
   </button>
