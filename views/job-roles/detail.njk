@@ -94,6 +94,48 @@
   .delete-btn:active {
     transform: translateY(0) scale(1);
   }
+  
+  /* View CV Button Styles */
+  .cv-view-btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cv-view-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .cv-view-btn:hover::before {
+    left: 100%;
+  }
+  
+  .cv-view-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(110, 170, 58, 0.3);
+    background-color: #6EAA3A !important;
+  }
+  
+  .cv-view-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 6px rgba(110, 170, 58, 0.2);
+  }
+  
+  .cv-view-btn svg {
+    transition: transform 0.3s ease;
+  }
+  
+  .cv-view-btn:hover svg {
+    transform: scale(1.1) rotate(-5deg);
+  }
 </style>
 {% endblock %}
 
@@ -277,6 +319,7 @@
           <thead>
             <tr class="bg-kainos-light">
               <th class="text-kainos-primary font-semibold">Applicant</th>
+              <th class="text-kainos-primary font-semibold">CV/Resume</th>
               <th class="text-kainos-primary font-semibold">Status</th>
               <th class="text-kainos-primary font-semibold">Applied Date</th>
               <th class="text-kainos-primary font-semibold">View Application</th>
@@ -287,24 +330,13 @@
             {% for application in applications %}
             <tr class="hover:bg-kainos-light/50">
               <td>
-                {% if application.cvUrl %}
-                <a href="{{ application.cvUrl }}" target="_blank" rel="noopener noreferrer" class="text-kainos-primary hover:text-kainos-green font-semibold underline decoration-2 underline-offset-2 hover:decoration-kainos-green transition-colors">
-                  {{ application.displayName }}
-                  {{ icon('external-link', 'h-4 w-4 inline ml-1') | safe }}
-                </a>
-                {% else %}
                 <span class="font-semibold text-gray-700">{{ application.displayName }}</span>
-                {% if application.cvUrl %}
-                <div class="mt-1">
-                  <a href="{{ application.cvUrl }}" target="_blank" rel="noopener noreferrer" class="text-xs text-kainos-primary hover:text-kainos-green underline decoration-1 underline-offset-2 hover:decoration-kainos-green transition-colors inline-flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                    View CV
-                  </a>
-                </div>
-                {% endif %}
-                {% endif %}
+              </td>
+              <td>
+                <span class="cv-link-cell" data-application-id="{{ application.applicationID }}">
+                  <!-- CV link will be populated by JavaScript after parsing notes -->
+                  <span class="text-gray-400 text-sm">Loading...</span>
+                </span>
               </td>
               <td>
                 <div class="badge badge-lg px-3 py-2 font-semibold
@@ -477,18 +509,6 @@
           </div>
         </div>
         
-        <!-- Documents Section -->
-        <div id="modal-documentsSection" class="bg-kainos-light p-4 rounded-lg hidden">
-          <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Uploaded Documents</h4>
-          <a id="modal-cvLink" href="#" target="_blank" rel="noopener noreferrer" 
-             class="btn btn-kainos-outline btn-sm inline-flex items-center gap-2 hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-            View CV/Resume
-          </a>
-        </div>
-        
         <!-- Comments Section -->
         <div id="modal-commentsSection" class="bg-kainos-light p-4 rounded-lg hidden">
           <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Additional Comments</h4>
@@ -642,20 +662,6 @@ function viewApplicationDetails(app) {
     coverLetterSection.classList.add('hidden');
   }
   
-  // Handle documents section
-  const documentsSection = document.getElementById('modal-documentsSection');
-  const cvLink = document.getElementById('modal-cvLink');
-  const cvUrl = app.cvUrl || parsedData.cvUrl;
-  
-  if (cvUrl) {
-    cvLink.href = cvUrl;
-    cvLink.classList.remove('hidden');
-    documentsSection.classList.remove('hidden');
-  } else {
-    cvLink.classList.add('hidden');
-    documentsSection.classList.add('hidden');
-  }
-  
   // Handle comments section
   const commentsSection = document.getElementById('modal-commentsSection');
   if (parsedData.comments) {
@@ -667,7 +673,7 @@ function viewApplicationDetails(app) {
   
   // Show/hide no details section
   const noDetailsSection = document.getElementById('modal-noDetailsSection');
-  const hasDetails = app.coverLetter || cvUrl || parsedData.comments;
+  const hasDetails = app.coverLetter || parsedData.comments;
   
   if (hasDetails) {
     noDetailsSection.classList.add('hidden');
@@ -770,6 +776,45 @@ window.addEventListener('DOMContentLoaded', function() {
   
   // Track application rejected event for analytics
   trackApplicationRejected('{{ jobRole.id }}', '{{ jobRole.name }}');
+  {% endif %}
+  
+  // Populate CV links in the applications table
+  {% if user and user.role === 'admin' and applications %}
+  const applications = {{ applications | dump | safe }};
+  
+  applications.forEach(app => {
+    const cvCell = document.querySelector(`.cv-link-cell[data-application-id="${app.applicationID}"]`);
+    if (cvCell) {
+      // Parse notes to extract CV URL
+      let cvUrl = app.cvUrl;
+      
+      if (!cvUrl && app.notes) {
+        const lines = app.notes.split('\n');
+        lines.forEach(line => {
+          if (line.includes('CV:')) {
+            cvUrl = line.replace('CV:', '').trim();
+          }
+        });
+      }
+      
+      // Update the cell with CV link or "Not uploaded" message
+      if (cvUrl) {
+        cvCell.innerHTML = `
+          <a href="${cvUrl}" target="_blank" rel="noopener noreferrer"
+             class="btn btn-sm text-white border-none hire-btn inline-flex items-center gap-2" style="background-color: #6EAA3A;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span>View CV</span>
+          </a>
+        `;
+      } else {
+        cvCell.innerHTML = `
+          <span class="text-gray-500 text-sm italic">Not uploaded</span>
+        `;
+      }
+    }
+  });
   {% endif %}
 });
 </script>
