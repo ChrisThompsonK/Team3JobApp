@@ -814,6 +814,7 @@ window.addEventListener('DOMContentLoaded', function() {
       dismissAlert('errorAlert');
     }, 10000);
   }
+  {% endif %}
   
   // Populate CV links in the applications table
   {% if user and user.role === 'admin' and applications %}
