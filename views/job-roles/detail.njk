@@ -7,6 +7,46 @@
   html {
     scroll-behavior: smooth;
   }
+  
+  /* Modal styles to ensure it appears above everything */
+  #applicationModal {
+    z-index: 9999 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  /* Prevent background scroll when modal is open */
+  body.modal-open {
+    overflow: hidden;
+  }
+  
+  /* Ensure modal content appears above backdrop */
+  #applicationModal > div {
+    z-index: 10000 !important;
+    position: relative !important;
+    animation: slideInUp 0.3s ease-out;
+  }
+  
+  /* Modal animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideInUp {
+    from { 
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
 </style>
 {% endblock %}
 
@@ -190,10 +230,9 @@
           <thead>
             <tr class="bg-kainos-light">
               <th class="text-kainos-primary font-semibold">Applicant</th>
-              <th class="text-kainos-primary font-semibold">Email</th>
-              <th class="text-kainos-primary font-semibold">Phone</th>
               <th class="text-kainos-primary font-semibold">Status</th>
               <th class="text-kainos-primary font-semibold">Applied Date</th>
+              <th class="text-kainos-primary font-semibold">View Application</th>
               <th class="text-kainos-primary font-semibold">Actions</th>
             </tr>
           </thead>
@@ -208,10 +247,17 @@
                 </a>
                 {% else %}
                 <span class="font-semibold text-gray-700">{{ application.displayName }}</span>
+                {% if application.cvUrl %}
+                <div class="mt-1">
+                  <a href="{{ application.cvUrl }}" target="_blank" rel="noopener noreferrer" class="text-xs text-kainos-primary hover:text-kainos-green underline decoration-1 underline-offset-2 hover:decoration-kainos-green transition-colors inline-flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    View CV
+                  </a>
+                </div>
                 {% endif %}
               </td>
-              <td class="text-sm text-gray-600">{{ application.emailAddress }}</td>
-              <td class="text-sm text-gray-600">{{ application.phoneNumber }}</td>
               <td>
                 <div class="badge badge-lg px-3 py-2 font-semibold
                   {% if application.status == 'Accepted' or application.status == 'Hired' %}
@@ -234,6 +280,15 @@
               </td>
               <td class="text-sm text-gray-600">
                 {{ application.formattedDate or 'N/A' }}
+              </td>
+              <td>
+                <button onclick='viewApplicationDetails({{ application | dump | safe }})' 
+                        class="btn btn-sm btn-kainos-outline hover:shadow-lg transition-all duration-200 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                </button>
               </td>
               <td>
                 {% if application.status == 'Pending' or application.status == 'In Progress' %}
@@ -315,6 +370,95 @@
 <form id="rejectForm" method="POST" style="display: none;">
 </form>
 
+<!-- Application Details Modal -->
+<div id="applicationModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 hidden" style="z-index: 9999;">
+  <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative border-2 border-gray-200" onclick="event.stopPropagation()" style="z-index: 10000; background-color: white !important;">
+    <div class="sticky top-0 bg-white border-b-2 border-kainos-primary px-6 py-4 flex justify-between items-center" style="background-color: white !important;">
+      <div>
+        <h3 id="modalTitle" class="text-2xl font-bold text-kainos-primary">Application Details</h3>
+        <p class="text-sm text-gray-500 mt-1">Press ESC or click outside to close</p>
+      </div>
+      <button id="closeModalBtn" class="btn btn-sm btn-circle btn-ghost hover:bg-red-100 hover:text-red-600 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
+    <div id="applicationContent" class="p-6">
+      <div class="space-y-6">
+        <!-- Personal Information Section -->
+        <div class="bg-kainos-light p-4 rounded-lg">
+          <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Personal Information</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <p><strong>First Name:</strong> <span id="modal-firstName">N/A</span></p>
+            <p><strong>Last Name:</strong> <span id="modal-lastName">N/A</span></p>
+            <p><strong>Email:</strong> <span id="modal-email">N/A</span></p>
+            <p><strong>Phone Number:</strong> <span id="modal-phone">N/A</span></p>
+          </div>
+        </div>
+
+        <!-- Professional Information Section -->
+        <div class="bg-kainos-light p-4 rounded-lg">
+          <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Professional Information</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p><strong>Job Title:</strong> <span id="modal-jobTitle">N/A</span></p>
+              <p><strong>Years of Experience:</strong> <span id="modal-experience">N/A</span></p>
+            </div>
+            <div>
+              <p><strong>LinkedIn Profile:</strong> <span id="modal-linkedin">N/A</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Application Status Section -->
+        <div class="bg-kainos-light p-4 rounded-lg">
+          <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Application Status</h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <p><strong>Status:</strong> <span id="modal-status" class="badge badge-lg px-3 py-1 font-semibold">N/A</span></p>
+            <p><strong>Applied Date:</strong> <span id="modal-date">N/A</span></p>
+            <p><strong>Application ID:</strong> <span id="modal-applicationId">N/A</span></p>
+          </div>
+        </div>
+        
+        <!-- Cover Letter Section -->
+        <div id="modal-coverLetterSection" class="bg-kainos-light p-4 rounded-lg hidden">
+          <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Cover Letter</h4>
+          <div class="bg-white p-4 rounded border max-h-64 overflow-y-auto">
+            <p id="modal-coverLetter" class="whitespace-pre-wrap"></p>
+          </div>
+        </div>
+        
+        <!-- Documents Section -->
+        <div id="modal-documentsSection" class="bg-kainos-light p-4 rounded-lg hidden">
+          <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Uploaded Documents</h4>
+          <a id="modal-cvLink" href="#" target="_blank" rel="noopener noreferrer" 
+             class="btn btn-kainos-outline btn-sm inline-flex items-center gap-2 hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            View CV/Resume
+          </a>
+        </div>
+        
+        <!-- Comments Section -->
+        <div id="modal-commentsSection" class="bg-kainos-light p-4 rounded-lg hidden">
+          <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Additional Comments</h4>
+          <div class="bg-white p-3 rounded border">
+            <p id="modal-comments" class="whitespace-pre-wrap text-gray-700"></p>
+          </div>
+        </div>
+        
+        <!-- No Details Available Section -->
+        <div id="modal-noDetailsSection" class="bg-kainos-light p-4 rounded-lg text-center hidden">
+          <p class="text-gray-600">No additional application details available.</p>
+          <p class="text-sm text-gray-500 mt-2">Only basic application information is shown above.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 function confirmDelete(jobId, jobName) {
   if (confirm(`Are you sure you want to delete the job role "${jobName}"? This action cannot be undone.`)) {
@@ -359,6 +503,168 @@ function dismissAlert(alertId) {
     setTimeout(() => {
       alert.remove();
     }, 500);
+  }
+}
+
+function viewApplicationDetails(app) {
+  // Parse the notes field to extract structured information
+  const parseNotesData = (notes) => {
+    if (!notes) return {};
+    
+    const lines = notes.split('\n');
+    const data = {};
+    
+    lines.forEach(line => {
+      if (line.includes('Name:')) {
+        const fullName = line.replace('Name:', '').trim();
+        const nameParts = fullName.split(' ');
+        data.firstName = nameParts[0] || '';
+        data.lastName = nameParts.slice(1).join(' ') || '';
+      } else if (line.includes('Current Job Title:')) {
+        data.jobTitle = line.replace('Current Job Title:', '').trim();
+      } else if (line.includes('Years of Experience:')) {
+        data.yearsOfExperience = line.replace('Years of Experience:', '').trim();
+      } else if (line.includes('LinkedIn:')) {
+        data.linkedinUrl = line.replace('LinkedIn:', '').trim();
+      } else if (line.includes('CV:')) {
+        data.cvUrl = line.replace('CV:', '').trim();
+      } else if (line.includes('Comments:')) {
+        data.comments = line.replace('Comments:', '').trim();
+      }
+    });
+    
+    return data;
+  };
+
+  const parsedData = parseNotesData(app.notes);
+  
+  // Get modal elements
+  const modal = document.getElementById('applicationModal');
+  const modalTitle = document.getElementById('modalTitle');
+  
+  // Populate basic information
+  modalTitle.textContent = `Application Details - ${app.displayName || 'Unknown Applicant'}`;
+  
+  // Populate personal information
+  document.getElementById('modal-firstName').textContent = parsedData.firstName || 'N/A';
+  document.getElementById('modal-lastName').textContent = parsedData.lastName || 'N/A';
+  document.getElementById('modal-email').textContent = app.emailAddress || 'N/A';
+  document.getElementById('modal-phone').textContent = app.phoneNumber || 'N/A';
+  
+  // Populate professional information
+  document.getElementById('modal-jobTitle').textContent = parsedData.jobTitle || 'N/A';
+  document.getElementById('modal-experience').textContent = parsedData.yearsOfExperience || 'N/A';
+  
+  // Populate LinkedIn with link if available
+  const linkedinElement = document.getElementById('modal-linkedin');
+  if (parsedData.linkedinUrl) {
+    linkedinElement.innerHTML = `<a href="${parsedData.linkedinUrl}" target="_blank" rel="noopener noreferrer" class="text-kainos-primary hover:text-kainos-green underline">${parsedData.linkedinUrl}</a>`;
+  } else {
+    linkedinElement.textContent = 'N/A';
+  }
+  
+  // Populate application status with appropriate styling
+  const statusElement = document.getElementById('modal-status');
+  const displayStatus = app.status === 'Accepted' ? 'Hired' : 
+                       app.status === 'Pending' ? 'In Progress' : 
+                       app.status || 'N/A';
+  
+  statusElement.textContent = displayStatus;
+  statusElement.className = 'badge badge-lg px-3 py-1 font-semibold';
+  
+  if (app.status === 'Accepted' || app.status === 'Hired') {
+    statusElement.classList.add('bg-kainos-green', 'text-white', 'border-kainos-green');
+  } else if (app.status === 'Rejected') {
+    statusElement.classList.add('bg-red-500', 'text-white', 'border-red-500');
+  } else if (app.status === 'Reviewed') {
+    statusElement.classList.add('bg-yellow-500', 'text-white', 'border-yellow-500');
+  } else {
+    statusElement.classList.add('bg-kainos-primary', 'text-white', 'border-kainos-primary');
+  }
+  
+  document.getElementById('modal-date').textContent = app.formattedDate || 'N/A';
+  document.getElementById('modal-applicationId').textContent = app.applicationID || 'N/A';
+  
+  // Handle cover letter section
+  const coverLetterSection = document.getElementById('modal-coverLetterSection');
+  if (app.coverLetter) {
+    document.getElementById('modal-coverLetter').textContent = app.coverLetter;
+    coverLetterSection.classList.remove('hidden');
+  } else {
+    coverLetterSection.classList.add('hidden');
+  }
+  
+  // Handle documents section
+  const documentsSection = document.getElementById('modal-documentsSection');
+  const cvLink = document.getElementById('modal-cvLink');
+  const cvUrl = app.cvUrl || parsedData.cvUrl;
+  
+  if (cvUrl) {
+    cvLink.href = cvUrl;
+    cvLink.classList.remove('hidden');
+    documentsSection.classList.remove('hidden');
+  } else {
+    cvLink.classList.add('hidden');
+    documentsSection.classList.add('hidden');
+  }
+  
+  // Handle comments section
+  const commentsSection = document.getElementById('modal-commentsSection');
+  if (parsedData.comments) {
+    document.getElementById('modal-comments').textContent = parsedData.comments;
+    commentsSection.classList.remove('hidden');
+  } else {
+    commentsSection.classList.add('hidden');
+  }
+  
+  // Show/hide no details section
+  const noDetailsSection = document.getElementById('modal-noDetailsSection');
+  const hasDetails = app.coverLetter || cvUrl || parsedData.comments;
+  
+  if (hasDetails) {
+    noDetailsSection.classList.add('hidden');
+  } else {
+    noDetailsSection.classList.remove('hidden');
+  }
+  
+  // Show modal and prevent background scrolling
+  modal.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  
+  // Set up event listeners if not already set
+  if (!modal.hasAttribute('data-listeners-added')) {
+    const closeBtn = document.getElementById('closeModalBtn');
+    
+    // Close on X button click
+    closeBtn.addEventListener('click', closeApplicationModal);
+    
+    // Close on background click
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        closeApplicationModal();
+      }
+    });
+    
+    // Close on Escape key
+    const escapeHandler = function(e) {
+      if (e.key === 'Escape') {
+        closeApplicationModal();
+      }
+    };
+    document.addEventListener('keydown', escapeHandler);
+    
+    // Store the handler on the modal for later removal
+    modal.escapeHandler = escapeHandler;
+    modal.setAttribute('data-listeners-added', 'true');
+  }
+}
+
+function closeApplicationModal() {
+  const modal = document.getElementById('applicationModal');
+  if (modal) {
+    // Hide modal and re-enable background scrolling
+    modal.classList.add('hidden');
+    document.body.classList.remove('modal-open');
   }
 }
 

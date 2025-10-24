@@ -314,6 +314,13 @@ export class JobRoleController {
         return;
       }
 
+      // Handle CV file upload
+      let cvUrl: string | undefined;
+      if (req.file) {
+        // Generate URL path for the uploaded CV
+        cvUrl = `/uploads/${req.file.filename}`;
+      }
+
       // Map frontend form data to backend API format
       // Combine additional information into notes field
       const notes = [
@@ -322,18 +329,31 @@ export class JobRoleController {
         `Years of Experience: ${applicationData.yearsOfExperience}`,
         applicationData.linkedinUrl ? `LinkedIn: ${applicationData.linkedinUrl}` : '',
         applicationData.additionalComments ? `Comments: ${applicationData.additionalComments}` : '',
+        cvUrl ? `CV: ${cvUrl}` : '',
       ]
         .filter((line) => line)
         .join('\n');
 
       // Submit application to backend API
-      const backendApplicationData = {
+      const backendApplicationData: {
+        jobRoleId: number;
+        emailAddress: string;
+        phoneNumber: string;
+        coverLetter: string;
+        notes: string;
+        cvUrl?: string;
+      } = {
         jobRoleId: numericId,
         emailAddress: applicationData.email,
         phoneNumber: applicationData.phone,
         coverLetter: applicationData.coverLetter,
         notes: notes,
       };
+
+      // Only add cvUrl if it exists
+      if (cvUrl) {
+        backendApplicationData.cvUrl = cvUrl;
+      }
 
       const result = await api.submitApplication(backendApplicationData);
 
