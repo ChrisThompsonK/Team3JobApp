@@ -102,3 +102,7 @@ temp/
 *.db
 *.sqlite
 *.sqlite3
+
+# User uploaded files
+public/uploads/*
+!public/uploads/.gitkeep

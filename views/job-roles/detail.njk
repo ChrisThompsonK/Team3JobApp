@@ -277,6 +277,7 @@
           <thead>
             <tr class="bg-kainos-light">
               <th class="text-kainos-primary font-semibold">Applicant</th>
+              <th class="text-kainos-primary font-semibold">CV/Resume</th>
               <th class="text-kainos-primary font-semibold">Status</th>
               <th class="text-kainos-primary font-semibold">Applied Date</th>
               <th class="text-kainos-primary font-semibold">View Application</th>
@@ -287,24 +288,13 @@
             {% for application in applications %}
             <tr class="hover:bg-kainos-light/50">
               <td>
-                {% if application.cvUrl %}
-                <a href="{{ application.cvUrl }}" target="_blank" rel="noopener noreferrer" class="text-kainos-primary hover:text-kainos-green font-semibold underline decoration-2 underline-offset-2 hover:decoration-kainos-green transition-colors">
-                  {{ application.displayName }}
-                  {{ icon('external-link', 'h-4 w-4 inline ml-1') | safe }}
-                </a>
-                {% else %}
                 <span class="font-semibold text-gray-700">{{ application.displayName }}</span>
-                {% if application.cvUrl %}
-                <div class="mt-1">
-                  <a href="{{ application.cvUrl }}" target="_blank" rel="noopener noreferrer" class="text-xs text-kainos-primary hover:text-kainos-green underline decoration-1 underline-offset-2 hover:decoration-kainos-green transition-colors inline-flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                    View CV
-                  </a>
-                </div>
-                {% endif %}
-                {% endif %}
+              </td>
+              <td>
+                <span class="cv-link-cell" data-application-id="{{ application.applicationID }}">
+                  <!-- CV link will be populated by JavaScript after parsing notes -->
+                  <span class="text-gray-400 text-sm">Loading...</span>
+                </span>
               </td>
               <td>
                 <div class="badge badge-lg px-3 py-2 font-semibold
@@ -770,6 +760,45 @@ window.addEventListener('DOMContentLoaded', function() {
   
   // Track application rejected event for analytics
   trackApplicationRejected('{{ jobRole.id }}', '{{ jobRole.name }}');
+  {% endif %}
+  
+  // Populate CV links in the applications table
+  {% if user and user.role === 'admin' and applications %}
+  const applications = {{ applications | dump | safe }};
+  
+  applications.forEach(app => {
+    const cvCell = document.querySelector(`.cv-link-cell[data-application-id="${app.applicationID}"]`);
+    if (cvCell) {
+      // Parse notes to extract CV URL
+      let cvUrl = app.cvUrl;
+      
+      if (!cvUrl && app.notes) {
+        const lines = app.notes.split('\n');
+        lines.forEach(line => {
+          if (line.includes('CV:')) {
+            cvUrl = line.replace('CV:', '').trim();
+          }
+        });
+      }
+      
+      // Update the cell with CV link or "Not uploaded" message
+      if (cvUrl) {
+        cvCell.innerHTML = `
+          <a href="${cvUrl}" target="_blank" rel="noopener noreferrer" 
+             class="inline-flex items-center gap-2 px-3 py-1.5 bg-kainos-primary hover:bg-kainos-green text-white rounded-md transition-all hover:shadow-md font-medium text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            View CV
+          </a>
+        `;
+      } else {
+        cvCell.innerHTML = `
+          <span class="text-gray-500 text-sm italic">Not uploaded</span>
+        `;
+      }
+    }
+  });
   {% endif %}
 });
 </script>

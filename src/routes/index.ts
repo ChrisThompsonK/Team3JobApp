@@ -4,7 +4,7 @@ import { HomeController } from '../controllers/index.js';
 import { JobRoleController } from '../controllers/job-role-controller.js';
 import { requireAdmin } from '../middleware/require-admin.js';
 import { requireAuth } from '../middleware/require-auth.js';
-// import { uploadCV } from '../middleware/file-upload.js';
+import { upload } from '../middleware/file-upload.js';
 import { jobRoleService } from '../services/job-role-service.js';
 import { JobApplicationValidator } from '../validators/index.js';
 import { authRoutes } from './auth-routes.js';
@@ -80,7 +80,7 @@ router.get(
 router.post(
   '/jobs/:id/apply',
   requireAuth,
-  // uploadCV, // Temporarily disabled for testing
+  upload.single('cv'),
   jobRoleController.submitJobRoleApplication.bind(jobRoleController)
 );
 router.post(
