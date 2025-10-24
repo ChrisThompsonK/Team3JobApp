@@ -791,11 +791,14 @@ export class JobRoleController {
       if (result.success) {
         res.redirect(`/jobs/${jobRoleId}/details?hired=true`);
       } else {
-        res.redirect(`/jobs/${jobRoleId}/details?error=${encodeURIComponent(result.message || 'Failed to hire applicant')}`);
+        res.redirect(
+          `/jobs/${jobRoleId}/details?error=${encodeURIComponent(result.message || 'Failed to hire applicant')}`
+        );
       }
     } catch (error: any) {
       console.error('Error hiring applicant:', error);
-      const errorMessage = error.response?.data?.message || error.message || 'Error processing hire request';
+      const errorMessage =
+        error.response?.data?.message || error.message || 'Error processing hire request';
       res.redirect(`/jobs/${jobRoleId}/details?error=${encodeURIComponent(errorMessage)}`);
     }
   }
