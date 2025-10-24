@@ -222,11 +222,26 @@ export class JobRoleController {
         }
       }
 
+      // Check if the user has already applied for this job role (non-admin users only)
+      let hasApplied = false;
+      if (req.user && req.user.role !== 'admin' && req.user.email) {
+        try {
+          const userApplications = await api.getMyApplications(req.user.email);
+          hasApplied = userApplications.some(
+            (app) => app.jobRoleId === numericId && app.status !== 'Withdrawn'
+          );
+        } catch (applicationError) {
+          console.error('Error checking user applications:', applicationError);
+          // Don't fail the whole page if checking applications fails
+        }
+      }
+
       res.render('job-roles/detail', {
         title: `${jobRoleDetails.name} - Job Details`,
         jobRole: jobRoleDetails,
         applications,
         user: req.user,
+        hasApplied,
         applicationSubmitted: applicationSubmitted === 'true',
         hired: hired === 'true',
         rejected: rejected === 'true',
@@ -260,6 +275,26 @@ export class JobRoleController {
       if (Number.isNaN(numericId) || numericId <= 0 || !Number.isInteger(numericId)) {
         res.status(400).send('Invalid job role ID. ID must be a positive integer.');
         return;
+      }
+
+      // Check if the user has already applied for this job role
+      if (req.user && req.user.email) {
+        try {
+          const userApplications = await api.getMyApplications(req.user.email);
+          const hasApplied = userApplications.some(
+            (app) => app.jobRoleId === numericId && app.status !== 'Withdrawn'
+          );
+          
+          if (hasApplied) {
+            res.redirect(
+              `/jobs/${id}/details?error=${encodeURIComponent('You have already applied for this position.')}`
+            );
+            return;
+          }
+        } catch (checkError) {
+          console.error('Error checking existing applications:', checkError);
+          // Continue to show form if check fails
+        }
       }
 
       // Fetch job role details directly from the backend API
@@ -313,6 +348,26 @@ export class JobRoleController {
       if (!validationResult.isValid) {
         res.status(400).send(validationResult.errors.join(', '));
         return;
+      }
+
+      // Check if the user has already applied for this job role
+      if (req.user && req.user.email) {
+        try {
+          const userApplications = await api.getMyApplications(req.user.email);
+          const hasApplied = userApplications.some(
+            (app) => app.jobRoleId === numericId && app.status !== 'Withdrawn'
+          );
+          
+          if (hasApplied) {
+            res.redirect(
+              `/jobs/${id}/details?error=${encodeURIComponent('You have already applied for this position.')}`
+            );
+            return;
+          }
+        } catch (checkError) {
+          console.error('Error checking existing applications:', checkError);
+          // Continue with submission if check fails
+        }
       }
 
       // Map frontend form data to backend API format
