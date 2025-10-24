@@ -774,10 +774,13 @@ export class JobRoleController {
           `/jobs/${jobRoleId}/details?error=${encodeURIComponent(result.message || 'Failed to hire applicant')}`
         );
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error hiring applicant:', error);
       const errorMessage =
-        error.response?.data?.message || error.message || 'Error processing hire request';
+        error instanceof Error && 'response' in error
+          ? (error as { response?: { data?: { message?: string } } }).response?.data?.message ||
+            (error as Error).message
+          : 'Error processing hire request';
       res.redirect(`/jobs/${jobRoleId}/details?error=${encodeURIComponent(errorMessage)}`);
     }
   }
