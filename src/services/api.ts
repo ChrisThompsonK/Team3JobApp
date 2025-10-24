@@ -284,6 +284,8 @@ export const api = {
       updatedAt: string;
       jobRoleName?: string | null;
       jobRoleLocation?: string | null;
+      capabilityName?: string | null;
+      bandName?: string | null;
     }>
   > => {
     const response = await apiClient.get('/applications/my-applications', {
