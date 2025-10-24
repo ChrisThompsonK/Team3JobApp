@@ -167,7 +167,7 @@ export class JobRoleController {
 
   async getJobRoleDetails(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
-    const { applicationSubmitted, hired, rejected } = req.query;
+    const { applicationSubmitted, hired, rejected, error } = req.query;
 
     try {
       if (!id) {
@@ -230,6 +230,7 @@ export class JobRoleController {
         applicationSubmitted: applicationSubmitted === 'true',
         hired: hired === 'true',
         rejected: rejected === 'true',
+        error: error as string | undefined,
       });
     } catch (error) {
       console.error('Error fetching job role details:', error);
@@ -769,11 +770,15 @@ export class JobRoleController {
       if (result.success) {
         res.redirect(`/jobs/${jobRoleId}/details?hired=true`);
       } else {
-        res.status(400).send(result.message || 'Failed to hire applicant');
+        res.redirect(
+          `/jobs/${jobRoleId}/details?error=${encodeURIComponent(result.message || 'Failed to hire applicant')}`
+        );
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error hiring applicant:', error);
-      res.status(500).send('Error processing hire request');
+      const errorMessage =
+        error.response?.data?.message || error.message || 'Error processing hire request';
+      res.redirect(`/jobs/${jobRoleId}/details?error=${encodeURIComponent(errorMessage)}`);
     }
   }
 
