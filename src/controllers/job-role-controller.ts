@@ -278,13 +278,13 @@ export class JobRoleController {
       }
 
       // Check if the user has already applied for this job role
-      if (req.user && req.user.email) {
+      if (req.user?.email) {
         try {
           const userApplications = await api.getMyApplications(req.user.email);
           const hasApplied = userApplications.some(
             (app) => app.jobRoleId === numericId && app.status !== 'Withdrawn'
           );
-          
+
           if (hasApplied) {
             res.redirect(
               `/jobs/${id}/details?error=${encodeURIComponent('You have already applied for this position.')}`
@@ -351,13 +351,13 @@ export class JobRoleController {
       }
 
       // Check if the user has already applied for this job role
-      if (req.user && req.user.email) {
+      if (req.user?.email) {
         try {
           const userApplications = await api.getMyApplications(req.user.email);
           const hasApplied = userApplications.some(
             (app) => app.jobRoleId === numericId && app.status !== 'Withdrawn'
           );
-          
+
           if (hasApplied) {
             res.redirect(
               `/jobs/${id}/details?error=${encodeURIComponent('You have already applied for this position.')}`
