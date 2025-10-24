@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { AnalyticsController } from '../controllers/analytics-controller.js';
 import { HomeController } from '../controllers/index.js';
 import { JobRoleController } from '../controllers/job-role-controller.js';
-import { uploadCV } from '../middleware/file-upload.js';
+import { upload } from '../middleware/file-upload.js';
 import { requireAdmin } from '../middleware/require-admin.js';
 import { requireAuth } from '../middleware/require-auth.js';
 import { jobRoleService } from '../services/job-role-service.js';
@@ -80,7 +80,7 @@ router.get(
 router.post(
   '/jobs/:id/apply',
   requireAuth,
-  uploadCV,
+  upload.single('cv'),
   jobRoleController.submitJobRoleApplication.bind(jobRoleController)
 );
 router.post(
