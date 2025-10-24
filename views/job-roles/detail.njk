@@ -467,18 +467,6 @@
           </div>
         </div>
         
-        <!-- Documents Section -->
-        <div id="modal-documentsSection" class="bg-kainos-light p-4 rounded-lg hidden">
-          <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Uploaded Documents</h4>
-          <a id="modal-cvLink" href="#" target="_blank" rel="noopener noreferrer" 
-             class="btn btn-kainos-outline btn-sm inline-flex items-center gap-2 hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-            View CV/Resume
-          </a>
-        </div>
-        
         <!-- Comments Section -->
         <div id="modal-commentsSection" class="bg-kainos-light p-4 rounded-lg hidden">
           <h4 class="font-semibold text-kainos-primary mb-3 text-lg">Additional Comments</h4>
@@ -632,20 +620,6 @@ function viewApplicationDetails(app) {
     coverLetterSection.classList.add('hidden');
   }
   
-  // Handle documents section
-  const documentsSection = document.getElementById('modal-documentsSection');
-  const cvLink = document.getElementById('modal-cvLink');
-  const cvUrl = app.cvUrl || parsedData.cvUrl;
-  
-  if (cvUrl) {
-    cvLink.href = cvUrl;
-    cvLink.classList.remove('hidden');
-    documentsSection.classList.remove('hidden');
-  } else {
-    cvLink.classList.add('hidden');
-    documentsSection.classList.add('hidden');
-  }
-  
   // Handle comments section
   const commentsSection = document.getElementById('modal-commentsSection');
   if (parsedData.comments) {
@@ -657,7 +631,7 @@ function viewApplicationDetails(app) {
   
   // Show/hide no details section
   const noDetailsSection = document.getElementById('modal-noDetailsSection');
-  const hasDetails = app.coverLetter || cvUrl || parsedData.comments;
+  const hasDetails = app.coverLetter || parsedData.comments;
   
   if (hasDetails) {
     noDetailsSection.classList.add('hidden');
