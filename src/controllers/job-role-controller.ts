@@ -848,7 +848,18 @@ export class JobRoleController {
         return;
       }
 
-      const result = await api.withdrawApplication(applicationId, req.user.email);
+      // Get access token from cookies to authenticate with backend
+      const accessToken = req.cookies?.['access_token'];
+
+      if (!accessToken) {
+        console.error('No access token found in cookies');
+        res.status(401).send('Authentication token not found. Please log in again.');
+        return;
+      }
+
+      console.log('Withdrawing application:', applicationId, 'for user:', req.user.email);
+
+      const result = await api.withdrawApplication(applicationId, accessToken);
 
       if (result.success) {
         res.redirect('/my-applications?withdrawn=true');
@@ -857,6 +868,9 @@ export class JobRoleController {
       }
     } catch (error) {
       console.error('Error withdrawing application:', error);
+      if (error instanceof Error) {
+        console.error('Error details:', error.message);
+      }
       res.status(500).send('Error processing withdraw request');
     }
   }

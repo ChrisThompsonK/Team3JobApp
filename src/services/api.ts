@@ -354,38 +354,52 @@ export const api = {
     return response.data;
   },
 
+  // Withdraw an application (user only - can only withdraw their own applications)
+  withdrawApplication: async (
+    applicationId: string,
+    accessToken?: string
+  ): Promise<{
+    success: boolean;
+    message?: string;
+  }> => {
+    try {
+      const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
+      console.log('Sending withdraw request for application:', applicationId);
+      console.log('Using authenticated client:', !!accessToken);
+      const response = await client.post(`/applications/${applicationId}/withdraw`, {});
+      return response.data;
+    } catch (error) {
+      console.error('API withdraw error:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('Response status:', error.response?.status);
+        console.error('Response data:', error.response?.data);
+        // Return error details from backend
+        return {
+          success: false,
+          message: error.response?.data?.message || 'Failed to withdraw application',
+        };
+      }
+      throw error;
+    }
+  },
+
   // Get application analytics (admin only)
   getApplicationAnalytics: async (
     date?: string,
     accessToken?: string
   ): Promise<{
     success: boolean;
+    date: string;
     data: {
       applicationsCreatedToday: number;
       applicationsHiredToday: number;
       applicationsRejectedToday: number;
       applicationsAcceptedToday: number;
-      totalApplicationsToday: number;
     };
-    date: string;
   }> => {
     const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
-    const url = date ? `/analytics/applications?date=${date}` : '/analytics/applications';
-    const response = await client.get(url);
-    return response.data;
-  },
-
-  // Withdraw an application (user only - can only withdraw their own applications)
-  withdrawApplication: async (
-    applicationId: string,
-    email: string
-  ): Promise<{
-    success: boolean;
-    message?: string;
-  }> => {
-    const response = await apiClient.post(`/applications/${applicationId}/withdraw`, {
-      email,
-    });
+    const params = date ? { date } : {};
+    const response = await client.get('/analytics/applications', { params });
     return response.data;
   },
 };
