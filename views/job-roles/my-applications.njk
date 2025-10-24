@@ -53,18 +53,18 @@
             <!-- Status Badge and Actions -->
             <div class="flex flex-col items-end gap-3">
               <!-- Status Badge -->
-              <div class="badge badge-lg px-4 py-3 font-semibold
+              <div class="badge badge-lg px-4 py-3 font-semibold text-white"
                 {% if app.applicationStatus == 'Hired' %}
-                  bg-kainos-green text-white border-kainos-green
+                  style="background-color: #16a34a; border-color: #16a34a;"
                 {% elif app.applicationStatus == 'Rejected' %}
-                  bg-red-500 text-white border-red-500
+                  style="background-color: #dc2626; border-color: #dc2626;"
                 {% elif app.applicationStatus == 'Withdrawn' %}
-                  bg-red-500 text-white border-red-500
+                  style="background-color: #dc2626; border-color: #dc2626;"
                 {% elif app.applicationStatus == 'Under Review' %}
-                  bg-yellow-500 text-white border-yellow-500
+                  style="background-color: #ca8a04; border-color: #ca8a04;"
                 {% else %}
-                  bg-kainos-primary text-white border-kainos-primary
-                {% endif %}">
+                  style="background-color: #2563eb; border-color: #2563eb;"
+                {% endif %}>
                 {{ app.applicationStatus }}
               </div>
 

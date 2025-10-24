@@ -207,15 +207,18 @@ export class JobRoleController {
         try {
           const rawApplications = await api.getJobApplications(id, req.accessToken);
           // Format the dates for display and create display names
-          applications = rawApplications.map((app) => ({
-            ...app,
-            formattedDate: new Date(app.createdAt).toLocaleDateString('en-GB', {
-              day: '2-digit',
-              month: 'short',
-              year: 'numeric',
-            }),
-            displayName: app.applicantName || app.emailAddress.split('@')[0] || 'Unknown User',
-          }));
+          // Filter out rejected applications so they don't appear in the list
+          applications = rawApplications
+            .filter((app) => app.status !== 'Rejected')
+            .map((app) => ({
+              ...app,
+              formattedDate: new Date(app.createdAt).toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+              }),
+              displayName: app.applicantName || app.emailAddress.split('@')[0] || 'Unknown User',
+            }));
         } catch (applicationError) {
           console.error('Error fetching applications:', applicationError);
           // Don't fail the whole page if applications can't be loaded
@@ -697,7 +700,7 @@ export class JobRoleController {
       const applications = backendApplications.map((app) => {
         // Map backend status to frontend status display
         let applicationStatus: string;
-        if (app.status === 'Accepted') {
+        if (app.status === 'Accepted' || app.status === 'Hired') {
           applicationStatus = 'Hired';
         } else if (app.status === 'Rejected') {
           applicationStatus = 'Rejected';

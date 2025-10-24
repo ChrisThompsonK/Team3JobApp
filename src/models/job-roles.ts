@@ -78,7 +78,7 @@ export interface UserJobApplication {
   location: string;
   capability: string;
   band: string;
-  applicationStatus: 'In Progress' | 'Hired' | 'Rejected' | 'Under Review';
+  applicationStatus: 'In Progress' | 'Hired' | 'Rejected' | 'Under Review' | 'Withdrawn';
   appliedDate: Date;
   emailAddress: string;
 }
