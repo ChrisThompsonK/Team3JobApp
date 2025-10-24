@@ -316,9 +316,10 @@ export class JobRoleController {
 
       // Handle CV file upload
       let cvUrl: string | undefined;
-      if (req.file) {
+      const file = (req as Request & { file?: { filename: string } }).file;
+      if (file) {
         // Generate URL path for the uploaded CV
-        cvUrl = `/uploads/${req.file.filename}`;
+        cvUrl = `/uploads/${file.filename}`;
       }
 
       // Map frontend form data to backend API format
