@@ -382,4 +382,24 @@ export const api = {
       throw error;
     }
   },
+
+  // Get application analytics (admin only)
+  getApplicationAnalytics: async (
+    date?: string,
+    accessToken?: string
+  ): Promise<{
+    success: boolean;
+    date: string;
+    data: {
+      applicationsCreatedToday: number;
+      applicationsHiredToday: number;
+      applicationsRejectedToday: number;
+      applicationsAcceptedToday: number;
+    };
+  }> => {
+    const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
+    const params = date ? { date } : {};
+    const response = await client.get('/analytics/applications', { params });
+    return response.data;
+  },
 };
