@@ -152,6 +152,22 @@
   </div>
   {% endif %}
 
+  <!-- Error Alert -->
+  {% if error %}
+  <div id="errorAlert" role="alert" class="alert bg-red-50 border-4 border-red-500 shadow-2xl mb-8 p-6 rounded-xl">
+    {{ icon('alert-circle', 'stroke-red-600 shrink-0 h-12 w-12') | safe }}
+    <div class="flex-1">
+      <h3 class="font-bold text-2xl mb-2 text-red-700">❌ Error</h3>
+      <div class="text-base text-red-600">
+        <p class="mb-2">{{ error }}</p>
+      </div>
+    </div>
+    <button onclick="dismissAlert('errorAlert')" class="btn btn-sm btn-circle btn-ghost hover:bg-red-500 hover:text-white text-red-600">
+      {{ icon('x', 'h-6 w-6') | safe }}
+    </button>
+  </div>
+  {% endif %}
+
   <!-- Page Title -->
   <div class="text-center mb-8">
     <h1 class="text-5xl md:text-6xl font-bold kainos-text-gradient mb-4">Job Details</h1>
@@ -341,11 +357,18 @@
               <td>
                 {% if application.status == 'Pending' or application.status == 'In Progress' %}
                 <div class="flex gap-2">
+                  {% if jobRole.openPositions > 0 %}
                   <button onclick="confirmHire('{{ jobRole.id }}', '{{ application.applicationID }}', '{{ application.displayName }}')" 
                           class="btn btn-sm text-white border-none hire-btn" style="background-color: #6EAA3A;">
                     {{ icon('check', 'h-4 w-4') | safe }}
                     Hire
                   </button>
+                  {% else %}
+                  <button class="btn btn-sm btn-disabled" disabled title="No open positions available">
+                    {{ icon('check', 'h-4 w-4') | safe }}
+                    Hire
+                  </button>
+                  {% endif %}
                   <button onclick="confirmReject('{{ jobRole.id }}', '{{ application.applicationID }}', '{{ application.displayName }}')" 
                           class="btn btn-sm text-white border-none reject-btn" style="background-color: #dc2626;">
                     {{ icon('x', 'h-4 w-4') | safe }}
@@ -770,6 +793,21 @@ window.addEventListener('DOMContentLoaded', function() {
   
   // Track application rejected event for analytics
   trackApplicationRejected('{{ jobRole.id }}', '{{ jobRole.name }}');
+  {% endif %}
+
+  {% if error %}
+  // Handle error alert
+  const errorAlert = document.getElementById('errorAlert');
+  if (errorAlert) {
+    setTimeout(function() {
+      errorAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      errorAlert.style.animation = 'pulse 2s ease-in-out 3';
+    }, 100);
+    
+    setTimeout(function() {
+      dismissAlert('errorAlert');
+    }, 10000);
+  }
   {% endif %}
 });
 </script>

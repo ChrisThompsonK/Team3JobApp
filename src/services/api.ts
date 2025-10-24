@@ -333,7 +333,7 @@ export const api = {
     message?: string;
   }> => {
     const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
-    const response = await client.post(`/applications/${applicationId}/hire`, {
+    const response = await client.put(`/applications/${applicationId}/hire`, {
       jobRoleId: parseInt(jobRoleId, 10),
     });
     return response.data;
@@ -349,7 +349,7 @@ export const api = {
     message?: string;
   }> => {
     const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
-    const response = await client.post(`/applications/${applicationId}/reject`, {
+    const response = await client.put(`/applications/${applicationId}/reject`, {
       jobRoleId: parseInt(jobRoleId, 10),
     });
     return response.data;
