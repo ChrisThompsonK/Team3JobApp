@@ -12,14 +12,14 @@ test.describe('Job Application Form', () => {
     await expect(page.locator('form')).toBeVisible();
   });
 
-  test('should validate required fields', async ({ page }) => {
+  test('should validate required fields', async ({ page: _page }) => {
     // Try to submit empty form
     // await page.click('button[type="submit"]');
     // Check for validation messages
     // await expect(page.locator('.error-message')).toBeVisible();
   });
 
-  test('should successfully submit application', async ({ page }) => {
+  test('should successfully submit application', async ({ page: _page }) => {
     // Fill out the form
     // await page.fill('[name="firstName"]', 'John');
     // await page.fill('[name="lastName"]', 'Doe');
