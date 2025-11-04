@@ -31,6 +31,9 @@ jobs:
         run: npm run test:e2e
         env:
           CI: true
+          JWT_ACCESS_SECRET: test-access-secret-key-for-ci
+          JWT_REFRESH_SECRET: test-refresh-secret-key-for-ci
+          PASSWORD_HASH_ROUNDS: 10
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
