@@ -106,3 +106,9 @@ temp/
 # User uploaded files
 public/uploads/*
 !public/uploads/.gitkeep
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
