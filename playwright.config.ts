@@ -8,8 +8,6 @@ import { defineConfig, devices } from '@playwright/test';
 // import dotenv from 'dotenv';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-const isCI = process.env.CI === 'true';
-
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
