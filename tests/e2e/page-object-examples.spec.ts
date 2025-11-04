@@ -43,7 +43,7 @@ test.describe('Page Object Model Examples', () => {
       await page.waitForTimeout(500);
 
       expect(true).toBeTruthy();
-    } catch (error) {
+    } catch (_error) {
       // Search might not be visible, that's ok
       expect(true).toBeTruthy();
     }

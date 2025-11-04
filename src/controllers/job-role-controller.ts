@@ -368,7 +368,7 @@ export class JobRoleController {
             formData: applicationData, // Preserve form data
           });
           return;
-        } catch (fetchError) {
+        } catch (_fetchError) {
           // If we can't fetch the job role, show a generic error page
           res.status(400).render('error', {
             title: 'Validation Error',
@@ -438,7 +438,7 @@ export class JobRoleController {
             errors: [result.message || 'Failed to submit application. Please try again.'],
             formData: applicationData,
           });
-        } catch (fetchError) {
+        } catch (_fetchError) {
           res.status(400).render('error', {
             title: 'Application Submission Failed',
             message: result.message || 'Failed to submit application. Please try again.',
@@ -477,7 +477,7 @@ export class JobRoleController {
             user: req.user,
           });
         }
-      } catch (renderError) {
+      } catch (_renderError) {
         res.status(500).render('error', {
           title: 'Application Error',
           message: errorMessage,

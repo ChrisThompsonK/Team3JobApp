@@ -1,12 +1,12 @@
 import { expect, test } from '../fixtures/auth.fixture';
-import { FormHelper, NavigationHelper } from '../utils/helpers';
+import { NavigationHelper } from '../utils/helpers';
 
 /**
  * Example test using custom fixtures and helpers
  */
 test.describe('Authenticated User Tests', () => {
   test('authenticated user can view profile', async ({ authenticatedPage }) => {
-    const nav = new NavigationHelper(authenticatedPage);
+    const _nav = new NavigationHelper(authenticatedPage);
 
     // Navigate to profile
     await authenticatedPage.goto('/auth/profile');
