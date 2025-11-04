@@ -332,14 +332,22 @@ export class JobRoleController {
 
     try {
       if (!id) {
-        res.status(400).send('Job role ID is required');
+        res.status(400).render('error', {
+          title: 'Invalid Request',
+          message: 'Job role ID is required',
+          user: req.user,
+        });
         return;
       }
 
       // Validate that ID is a positive integer
       const numericId = Number.parseInt(id, 10);
       if (Number.isNaN(numericId) || numericId <= 0 || !Number.isInteger(numericId)) {
-        res.status(400).send('Invalid job role ID. ID must be a positive integer.');
+        res.status(400).render('error', {
+          title: 'Invalid Request',
+          message: 'Invalid job role ID. Please check the URL and try again.',
+          user: req.user,
+        });
         return;
       }
 
@@ -349,8 +357,26 @@ export class JobRoleController {
       // Validate application data
       const validationResult = this.applicationValidator.validate(applicationData);
       if (!validationResult.isValid) {
-        res.status(400).send(validationResult.errors.join(', '));
-        return;
+        // Fetch job role details to re-render the form with errors
+        try {
+          const jobRoleDetails = await api.getJobById(id);
+          res.status(400).render('job-roles/apply', {
+            title: `Apply for ${jobRoleDetails.name}`,
+            jobRole: jobRoleDetails,
+            user: req.user,
+            errors: validationResult.errors,
+            formData: applicationData, // Preserve form data
+          });
+          return;
+        } catch (fetchError) {
+          // If we can't fetch the job role, show a generic error page
+          res.status(400).render('error', {
+            title: 'Validation Error',
+            message: `Please fix the following errors: ${validationResult.errors.join('; ')}`,
+            user: req.user,
+          });
+          return;
+        }
       }
 
       // Check if the user has already applied for this job role
@@ -402,11 +428,62 @@ export class JobRoleController {
           `/jobs/${id}/details?applicationSubmitted=true&applicationId=${result.applicationID}`
         );
       } else {
-        res.status(400).send(result.message || 'Failed to submit application');
+        // Re-render the form with the error message and preserved form data
+        try {
+          const jobRoleDetails = await api.getJobById(id);
+          res.status(400).render('job-roles/apply', {
+            title: `Apply for ${jobRoleDetails.name}`,
+            jobRole: jobRoleDetails,
+            user: req.user,
+            errors: [result.message || 'Failed to submit application. Please try again.'],
+            formData: applicationData,
+          });
+        } catch (fetchError) {
+          res.status(400).render('error', {
+            title: 'Application Submission Failed',
+            message: result.message || 'Failed to submit application. Please try again.',
+            user: req.user,
+          });
+        }
       }
     } catch (error) {
       console.error('Error submitting job application:', error);
-      res.status(500).send('Error submitting application. Please try again.');
+      
+      // Extract useful error message from axios error if available
+      let errorMessage = 'An error occurred while submitting your application. Please try again.';
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { message?: string } } };
+        if (axiosError.response?.data?.message) {
+          errorMessage = axiosError.response.data.message;
+        }
+      }
+      
+      // Try to re-render the form with the error, or fall back to error page
+      try {
+        if (id) {
+          const applicationData = req.body as JobApplicationData;
+          const jobRoleDetails = await api.getJobById(id);
+          res.status(500).render('job-roles/apply', {
+            title: `Apply for ${jobRoleDetails.name}`,
+            jobRole: jobRoleDetails,
+            user: req.user,
+            errors: [errorMessage],
+            formData: applicationData,
+          });
+        } else {
+          res.status(500).render('error', {
+            title: 'Application Error',
+            message: errorMessage,
+            user: req.user,
+          });
+        }
+      } catch (renderError) {
+        res.status(500).render('error', {
+          title: 'Application Error',
+          message: errorMessage,
+          user: req.user,
+        });
+      }
     }
   }
 
