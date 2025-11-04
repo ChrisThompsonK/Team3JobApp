@@ -41,6 +41,25 @@
     <div class="card-body">
       <h2 class="card-title text-2xl mb-6">Application Information</h2>
       
+      <!-- Error Messages -->
+      {% if errors and errors.length > 0 %}
+      <div class="alert alert-error shadow-lg mb-6">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div>
+            <h3 class="font-bold">Please correct the following errors:</h3>
+            <ul class="list-disc list-inside mt-2">
+              {% for error in errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      
       <form id="applicationForm" action="/jobs/{{ jobRole.id }}/apply" method="POST" enctype="multipart/form-data" class="space-y-6">
         <!-- Personal Information Section -->
         <div class="divider text-lg font-semibold text-blue-800">Personal Information</div>
@@ -56,6 +75,7 @@
               id="firstName"
               name="firstName" 
               placeholder="John" 
+              value="{{ formData.firstName if formData else '' }}"
               class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200" 
               required
             />
@@ -71,6 +91,7 @@
               id="lastName"
               name="lastName" 
               placeholder="Doe" 
+              value="{{ formData.lastName if formData else '' }}"
               class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200" 
               required
             />
@@ -86,6 +107,7 @@
               id="email"
               name="email" 
               placeholder="john.doe@example.com" 
+              value="{{ formData.email if formData else '' }}"
               autocomplete="off"
               class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200" 
               required
@@ -104,7 +126,7 @@
                 class="select select-bordered select-lg w-32 focus:select-primary transition-colors duration-200" 
                 required
               >
-                <option value="+44">🇬🇧 +44</option>
+                <option value="+44" {{ 'selected' if formData.countryCode == '+44' or not formData else '' }}>🇬🇧 +44</option>
                 <option value="+1">🇺🇸 +1</option>
                 <option value="+91">🇮🇳 +91</option>
                 <option value="+86">🇨🇳 +86</option>
@@ -159,6 +181,7 @@
                 id="phone"
                 name="phone" 
                 placeholder="7XXX XXXXXX" 
+                value="{{ formData.phone if formData else '' }}"
                 class="input input-bordered input-lg flex-1 focus:input-primary transition-colors duration-200" 
                 required
               />
@@ -180,6 +203,7 @@
               id="currentJobTitle"
               name="currentJobTitle" 
               placeholder="e.g., Software Engineer" 
+              value="{{ formData.currentJobTitle if formData else '' }}"
               class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200" 
               required
             />
@@ -196,12 +220,12 @@
               class="select select-bordered select-lg w-full focus:select-primary transition-colors duration-200" 
               required
             >
-              <option disabled selected>Select experience level</option>
-              <option value="0-1">0-1 years</option>
-              <option value="1-3">1-3 years</option>
-              <option value="3-5">3-5 years</option>
-              <option value="5-10">5-10 years</option>
-              <option value="10+">10+ years</option>
+              <option disabled {{ 'selected' if not formData or not formData.yearsOfExperience else '' }}>Select experience level</option>
+              <option value="0-1" {{ 'selected' if formData and formData.yearsOfExperience == '0-1' else '' }}>0-1 years</option>
+              <option value="1-3" {{ 'selected' if formData and formData.yearsOfExperience == '1-3' else '' }}>1-3 years</option>
+              <option value="3-5" {{ 'selected' if formData and formData.yearsOfExperience == '3-5' else '' }}>3-5 years</option>
+              <option value="5-10" {{ 'selected' if formData and formData.yearsOfExperience == '5-10' else '' }}>5-10 years</option>
+              <option value="10+" {{ 'selected' if formData and formData.yearsOfExperience == '10+' else '' }}>10+ years</option>
             </select>
           </div>
 
@@ -215,6 +239,7 @@
               id="linkedinUrl"
               name="linkedinUrl" 
               placeholder="https://www.linkedin.com/in/yourprofile" 
+              value="{{ formData.linkedinUrl if formData else '' }}"
               class="input input-bordered input-lg w-full focus:input-primary transition-colors duration-200"
             />
             <label class="label">
@@ -251,7 +276,7 @@
               class="textarea textarea-bordered textarea-lg h-40 resize-none w-full focus:textarea-primary transition-colors duration-200" 
               placeholder="Tell us why you're interested in this role and what makes you a great fit for Kainos..."
               required
-            ></textarea>
+            >{{ formData.coverLetter if formData else '' }}</textarea>
             <label class="label">
               <span class="label-text-alt text-sm opacity-70">Required</span>
             </label>
@@ -268,7 +293,7 @@
             name="additionalComments" 
             class="textarea textarea-bordered textarea-lg h-24 resize-none w-full focus:textarea-primary transition-colors duration-200" 
             placeholder="Any additional information you'd like to share..."
-          ></textarea>
+          >{{ formData.additionalComments if formData else '' }}</textarea>
           <label class="label">
             <span class="label-text-alt text-sm opacity-70">Optional</span>
           </label>
