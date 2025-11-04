@@ -448,7 +448,7 @@ export class JobRoleController {
       }
     } catch (error) {
       console.error('Error submitting job application:', error);
-      
+
       // Extract useful error message from axios error if available
       let errorMessage = 'An error occurred while submitting your application. Please try again.';
       if (error && typeof error === 'object' && 'response' in error) {
@@ -457,7 +457,7 @@ export class JobRoleController {
           errorMessage = axiosError.response.data.message;
         }
       }
-      
+
       // Try to re-render the form with the error, or fall back to error page
       try {
         if (id) {

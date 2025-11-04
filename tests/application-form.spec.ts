@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.describe('Job Application Form', () => {
   test.beforeEach(async ({ page }) => {
@@ -15,7 +15,6 @@ test.describe('Job Application Form', () => {
   test('should validate required fields', async ({ page }) => {
     // Try to submit empty form
     // await page.click('button[type="submit"]');
-    
     // Check for validation messages
     // await expect(page.locator('.error-message')).toBeVisible();
   });
@@ -26,10 +25,8 @@ test.describe('Job Application Form', () => {
     // await page.fill('[name="lastName"]', 'Doe');
     // await page.fill('[name="email"]', 'john.doe@example.com');
     // await page.fill('[name="phone"]', '1234567890');
-    
     // Submit the form
     // await page.click('button[type="submit"]');
-    
     // Verify success message or redirect
     // await expect(page).toHaveURL(/success/);
   });
