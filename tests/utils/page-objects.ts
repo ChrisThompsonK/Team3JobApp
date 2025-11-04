@@ -1,8 +1,8 @@
-import type { Page, Locator } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 /**
  * Page Object Model for Login Page
- * 
+ *
  * This class encapsulates all interactions with the login page,
  * providing a clean interface for test files.
  */
@@ -50,7 +50,7 @@ export class LoginPage {
    * Get the error message text
    */
   async getErrorMessage(): Promise<string> {
-    return await this.errorMessage.first().textContent() || '';
+    return (await this.errorMessage.first().textContent()) || '';
   }
 
   /**
@@ -146,8 +146,8 @@ export class RegisterPage {
   async register(email: string, password: string, confirmPassword?: string) {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
-    
-    if (await this.confirmPasswordInput.count() > 0) {
+
+    if ((await this.confirmPasswordInput.count()) > 0) {
       await this.confirmPasswordInput.fill(confirmPassword || password);
     }
   }

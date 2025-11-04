@@ -24,9 +24,9 @@ export class PageHelper {
    * Take a screenshot with a custom name
    */
   async screenshot(name: string) {
-    await this.page.screenshot({ 
+    await this.page.screenshot({
       path: `test-results/screenshots/${name}.png`,
-      fullPage: true 
+      fullPage: true,
     });
   }
 
@@ -85,10 +85,10 @@ export class FormHelper {
    */
   async fillRegistrationForm(email: string, password: string, confirmPassword?: string) {
     await this.page.getByLabel(/email/i).fill(email);
-    
+
     const passwordFields = this.page.getByLabel(/password/i);
     const count = await passwordFields.count();
-    
+
     if (count === 1) {
       await passwordFields.fill(password);
     } else if (count >= 2) {
@@ -113,7 +113,7 @@ export class FormHelper {
       '.alert-error',
       '[role="alert"]',
       '.invalid-feedback',
-      '.error-message'
+      '.error-message',
     ];
 
     for (const selector of errorSelectors) {
