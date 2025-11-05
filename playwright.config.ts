@@ -1,83 +1,106 @@
-/// <reference types="node" />
+import path from 'node:path';
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 /**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
-
-/**
- * See https://playwright.dev/docs/test-configuration.
+ * Kainos Job Portal E2E Test Configuration
+ *
+ * This configuration sets up comprehensive end-to-end testing for the Kainos Job Portal
+ * with proper test environments, data management, and reporting.
  */
 export default defineConfig({
-  testDir: './tests',
-  /* Run tests in files in parallel */
-  fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:3000',
+  testDir: './tests/e2e',
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+  /* Test output and artifacts */
+  outputDir: './test-results',
 
-    /* Screenshot on failure */
-    screenshot: 'only-on-failure',
+  /* Global test timeout */
+  timeout: 30000,
+  expect: {
+    timeout: 10000,
   },
 
-  /* Configure projects for major browsers */
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
+  /* Run tests in files in parallel */
+  fullyParallel: false, // Set to false for better test isolation with database
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  forbidOnly: !!process.env.CI,
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+  /* Retry on CI only */
+  retries: process.env.CI ? 2 : 1,
 
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
+  /* Workers configuration */
+  workers: process.env.CI ? 1 : 2, // Limited workers for database consistency
 
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+  /* Reporter configuration */
+  reporter: [
+    ['html', { outputFolder: 'playwright-report', open: 'never' }],
+    ['json', { outputFile: 'test-results/results.json' }],
+    ['junit', { outputFile: 'test-results/results.xml' }],
+    process.env.CI ? ['github'] : ['list'],
   ],
 
-  /* Run your local dev server before starting the tests */
+  /* Global test setup and teardown */
+  // globalSetup: './tests/config/global-setup.ts',
+  // globalTeardown: './tests/config/global-teardown.ts',
+
+  /* Shared settings for all projects */
+  use: {
+    /* Base URL for the application */
+    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+
+    /* Browser context options */
+    viewport: { width: 1280, height: 720 },
+
+    /* Disable all artifacts */
+    trace: 'off',
+    screenshot: 'off',
+    video: 'off',
+
+    /* Ignore HTTPS errors for local development */
+    ignoreHTTPSErrors: true,
+  },
+
+  /* Configure projects for different browsers and test types */
+  projects: [
+    // Setup project for database preparation
+    {
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
+      teardown: 'cleanup',
+    },
+
+    // Cleanup project
+    {
+      name: 'cleanup',
+      testMatch: /.*\.teardown\.ts/,
+    },
+
+    // Main test suite - Chromium only
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: './tests/fixtures/auth/admin-storage-state.json',
+      },
+      dependencies: ['setup'],
+      testIgnore: ['**/examples.spec.ts'], // Ignore framework examples
+    },
+  ],
+
+  /* Start local dev server before running the tests */
   webServer: {
-    command: 'npm run dev',
+    command:
+      'JWT_ACCESS_SECRET=dev-access-secret-replace-in-production-with-secure-random-string-abcdef123456 JWT_REFRESH_SECRET=dev-refresh-secret-replace-in-production-with-different-secure-string-xyz789 PASSWORD_HASH_ROUNDS=12 DATABASE_URL=./jobs.db node --import tsx/esm src/index.ts',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
+    timeout: 120000,
+    env: {
+      NODE_ENV: 'test',
+      PORT: '3000',
+    },
   },
 });

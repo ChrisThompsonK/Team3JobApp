@@ -1,5 +1,8 @@
+/* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind base;
+/* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind components;
+/* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind utilities;
 
 /* Kainos Brand Styles - Based on actual official website */
@@ -66,7 +69,7 @@ h6 {
 }
 
 .btn-kainos:hover {
-  background: #5a8c30;
+  background: var(--kainos-green-dark);
   color: white;
   text-decoration: none;
   transform: translateY(-1px);
@@ -89,4 +92,31 @@ h6 {
   background: var(--kainos-primary);
   color: white;
   text-decoration: none;
+}
+
+/* Improved focus indicators for accessibility */
+.btn-kainos:focus,
+.btn-kainos-outline:focus,
+button:focus,
+a:focus {
+  outline: 3px solid #fbbf24;
+  outline-offset: 2px;
+}
+
+/* Ensure sufficient contrast for disabled states */
+.btn:disabled,
+.btn-disabled {
+  background-color: #e5e7eb !important;
+  color: #6b7280 !important;
+  border-color: #e5e7eb !important;
+}
+
+/* Improve text contrast in tables */
+.table th {
+  color: var(--kainos-dark) !important;
+  font-weight: 700 !important;
+}
+
+.table td {
+  color: #111827 !important;
 }

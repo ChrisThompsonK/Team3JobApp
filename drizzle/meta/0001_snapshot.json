@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "c179c66f-017e-42db-9164-a8159e5f398c",
-  "prevId": "12186ab8-63f3-4e1d-8160-bc50a6eb023f",
+  "id": "83f69847-5634-49c7-8a33-c28c269bed48",
+  "prevId": "c179c66f-017e-42db-9164-a8159e5f398c",
   "tables": {
     "users": {
       "name": "users",
@@ -23,13 +23,6 @@
         },
         "password_hash": {
           "name": "password_hash",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "date_of_birth": {
-          "name": "date_of_birth",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
