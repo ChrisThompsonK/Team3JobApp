@@ -3,9 +3,9 @@
  * Provides utilities for testing frontend-backend communication
  */
 
-import axios from 'axios';
 import type { AxiosInstance } from 'axios';
-import { beforeAll, afterAll, afterEach } from 'vitest';
+import axios from 'axios';
+import { afterAll, afterEach, beforeAll } from 'vitest';
 
 // Use test backend URL or fallback to localhost
 export const BACKEND_URL = process.env['INTEGRATION_TEST_BACKEND_URL'] || 'http://localhost:3001';
@@ -39,7 +39,6 @@ export const createTestClient = (accessToken?: string): AxiosInstance => {
   return client;
 };
 
-
 /**
  * Test data factories
  */
@@ -47,13 +46,15 @@ export const testDataFactories = {
   /**
    * Create a test job application payload
    */
-  createApplicationPayload: (overrides?: Partial<{
-    jobRoleId: number;
-    emailAddress: string;
-    phoneNumber: string;
-    coverLetter?: string;
-    notes?: string;
-  }>) => ({
+  createApplicationPayload: (
+    overrides?: Partial<{
+      jobRoleId: number;
+      emailAddress: string;
+      phoneNumber: string;
+      coverLetter?: string;
+      notes?: string;
+    }>
+  ) => ({
     jobRoleId: 1,
     emailAddress: `test-${Date.now()}@example.com`,
     phoneNumber: '123-456-7890',
@@ -65,18 +66,20 @@ export const testDataFactories = {
   /**
    * Create a test job role payload
    */
-  createJobRolePayload: (overrides?: Partial<{
-    name: string;
-    location: string;
-    capabilityId: number;
-    bandId: number;
-    statusId: number;
-    closingDate: string;
-    description?: string;
-    responsibilities?: string;
-    jobSpecUrl?: string;
-    openPositions?: number;
-  }>) => ({
+  createJobRolePayload: (
+    overrides?: Partial<{
+      name: string;
+      location: string;
+      capabilityId: number;
+      bandId: number;
+      statusId: number;
+      closingDate: string;
+      description?: string;
+      responsibilities?: string;
+      jobSpecUrl?: string;
+      openPositions?: number;
+    }>
+  ) => ({
     name: `Test Role ${Date.now()}`,
     location: 'London',
     capabilityId: 1,
@@ -92,12 +95,14 @@ export const testDataFactories = {
   /**
    * Create an update job role payload
    */
-  updateJobRolePayload: (overrides?: Partial<{
-    name?: string;
-    location?: string;
-    closingDate?: string;
-    statusId?: number;
-  }>) => ({
+  updateJobRolePayload: (
+    overrides?: Partial<{
+      name?: string;
+      location?: string;
+      closingDate?: string;
+      statusId?: number;
+    }>
+  ) => ({
     location: 'Manchester',
     statusId: 2,
     ...overrides,
@@ -107,10 +112,7 @@ export const testDataFactories = {
 /**
  * Helper to check if a response matches expected shape
  */
-export const assertResponseShape = (
-  data: unknown,
-  expectedKeys: string[]
-): boolean => {
+export const assertResponseShape = (data: unknown, expectedKeys: string[]): boolean => {
   if (typeof data !== 'object' || data === null) {
     return false;
   }
@@ -122,10 +124,7 @@ export const assertResponseShape = (
 /**
  * Helper to check if response is an array of objects with expected keys
  */
-export const assertArrayResponseShape = (
-  data: unknown,
-  expectedKeys: string[]
-): boolean => {
+export const assertArrayResponseShape = (data: unknown, expectedKeys: string[]): boolean => {
   if (!Array.isArray(data)) {
     return false;
   }

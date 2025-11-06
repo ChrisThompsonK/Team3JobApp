@@ -24,10 +24,7 @@ export default defineConfig({
   /* Reduce workers to prevent memory exhaustion and stack overflow during concurrent downloads */
   workers: process.env.CI ? 1 : 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ['html'],
-    ['json', { outputFile: 'playwright-report/results.json' }],
-  ],
+  reporter: [['html'], ['json', { outputFile: 'playwright-report/results.json' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   timeout: 60 * 1000, // 60 second timeout per test to handle long operations
   use: {

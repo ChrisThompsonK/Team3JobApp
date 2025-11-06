@@ -1,10 +1,10 @@
 import {
-  Reporter,
-  TestCase,
-  TestResult,
-  Suite,
+  type FullConfig,
   FullProject,
-  FullConfig,
+  type Reporter,
+  type Suite,
+  type TestCase,
+  type TestResult,
 } from '@playwright/test/reporter';
 import fs from 'fs';
 import path from 'path';
@@ -43,10 +43,7 @@ class CustomTestReporter implements Reporter {
       name: testName,
       duration: result.duration,
       status: result.status,
-      error:
-        result.status === 'failed'
-          ? result.error?.message || 'Unknown error'
-          : undefined,
+      error: result.status === 'failed' ? result.error?.message || 'Unknown error' : undefined,
       file: test.location?.file,
       attachments,
     });
@@ -66,16 +63,20 @@ class CustomTestReporter implements Reporter {
 
     fs.writeFileSync(
       reportPath,
-      JSON.stringify({
-        timestamp,
-        tests: this.testData,
-        summary: {
-          total: this.testData.length,
-          passed: this.testData.filter((t) => t.status === 'passed').length,
-          failed: this.testData.filter((t) => t.status === 'failed').length,
-          skipped: this.testData.filter((t) => t.status === 'skipped').length,
+      JSON.stringify(
+        {
+          timestamp,
+          tests: this.testData,
+          summary: {
+            total: this.testData.length,
+            passed: this.testData.filter((t) => t.status === 'passed').length,
+            failed: this.testData.filter((t) => t.status === 'failed').length,
+            skipped: this.testData.filter((t) => t.status === 'skipped').length,
+          },
         },
-      }, null, 2)
+        null,
+        2
+      )
     );
 
     console.log(`✅ Playwright report saved to ${reportPath}`);

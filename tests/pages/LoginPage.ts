@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 /**
@@ -53,12 +53,11 @@ export class LoginPage extends BasePage {
     await this.fillEmail(email);
     await this.fillPassword(password);
     await this.clickSubmit();
-    
+
     // Wait for login to complete - check for successful redirect away from login page
-    await this.page.waitForFunction(
-      () => !window.location.href.includes('/auth/login'),
-      { timeout: 10000 }
-    );
+    await this.page.waitForFunction(() => !window.location.href.includes('/auth/login'), {
+      timeout: 10000,
+    });
   }
 
   /**

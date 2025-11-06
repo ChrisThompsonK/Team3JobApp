@@ -3,12 +3,12 @@
  * Tests the frontend-backend communication for application-related endpoints
  */
 
-import { describe, it, expect, beforeAll } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import {
   BACKEND_URL,
   createTestClient,
-  testDataFactories,
   setupIntegrationTest,
+  testDataFactories,
 } from './integration.setup.js';
 
 setupIntegrationTest();
@@ -34,7 +34,7 @@ describe('Application Routes Integration Tests', () => {
 
       // Accept both success and validation error states for now
       expect([200, 201, 400, 422]).toContain(response.status);
-      
+
       // If successful, expect success property
       if (response.status === 200 || response.status === 201) {
         expect(response.data).toHaveProperty('success');

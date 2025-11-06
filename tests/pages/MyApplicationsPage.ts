@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 /**
@@ -45,13 +45,17 @@ export class MyApplicationsPage extends BasePage {
     // If a specific job title is provided, find that application first
     if (jobTitle) {
       await this.page
-        .locator('div').filter({ has: this.page.getByRole('link', { name: new RegExp(jobTitle, 'i') }) })
+        .locator('div')
+        .filter({ has: this.page.getByRole('link', { name: new RegExp(jobTitle, 'i') }) })
         .getByRole('link', { name: /view job/i })
         .first()
         .click();
     } else {
       // Otherwise, click the first View Job link
-      await this.page.getByRole('link', { name: /view job/i }).first().click();
+      await this.page
+        .getByRole('link', { name: /view job/i })
+        .first()
+        .click();
     }
   }
 
@@ -75,8 +79,4 @@ export class MyApplicationsPage extends BasePage {
   async verifyLoginFormDisplayed() {
     await expect(this.page.getByRole('heading', { name: /sign in/i })).toBeVisible();
   }
-
-
 }
-
-

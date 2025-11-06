@@ -15,10 +15,7 @@
     },
     "preserveOutput": "always",
     "reporter": [
-      [
-        "html",
-        null
-      ],
+      ["html", null],
       [
         "json",
         {
@@ -43,9 +40,7 @@
         "name": "chromium",
         "testDir": "/Users/andrewlyttle/Documents/Engineering-Academy/Job-Application-App/team3-job-app-frontend/tests",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 60000
       },
       {
@@ -59,9 +54,7 @@
         "name": "firefox",
         "testDir": "/Users/andrewlyttle/Documents/Engineering-Academy/Job-Application-App/team3-job-app-frontend/tests",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 60000
       },
       {
@@ -75,9 +68,7 @@
         "name": "webkit",
         "testDir": "/Users/andrewlyttle/Documents/Engineering-Academy/Job-Application-App/team3-job-app-frontend/tests",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 60000
       },
       {
@@ -91,9 +82,7 @@
         "name": "microsoft-edge",
         "testDir": "/Users/andrewlyttle/Documents/Engineering-Academy/Job-Application-App/team3-job-app-frontend/tests",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 60000
       }
     ],

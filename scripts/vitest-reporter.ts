@@ -1,7 +1,7 @@
-import type { Reporter } from 'vitest/reporters';
-import type { File, Task } from 'vitest';
 import fs from 'fs';
 import path from 'path';
+import type { File, Task } from 'vitest';
+import type { Reporter } from 'vitest/reporters';
 
 interface VitestTestData {
   name: string;
@@ -16,11 +16,8 @@ export default class CustomVitestReporter implements Reporter {
   private startTime = Date.now();
 
   onTestEnd(file: File, task: Task): void {
-    const status = task.result?.state === 'pass'
-      ? 'pass'
-      : task.result?.state === 'fail'
-        ? 'fail'
-        : 'skip';
+    const status =
+      task.result?.state === 'pass' ? 'pass' : task.result?.state === 'fail' ? 'fail' : 'skip';
 
     this.testData.push({
       name: task.name,

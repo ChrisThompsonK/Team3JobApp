@@ -3,7 +3,6 @@ import { LoginPage } from './pages/LoginPage';
 import { MyApplicationsPage } from './pages/MyApplicationsPage';
 
 test.describe('My Applications - View Applications', () => {
-  
   let loginPage: LoginPage;
   let myApplicationsPage: MyApplicationsPage;
 
@@ -13,7 +12,7 @@ test.describe('My Applications - View Applications', () => {
     myApplicationsPage = new MyApplicationsPage(page);
   });
 
-   /**
+  /**
    * Test 1: Regular user can see their applications
    */
   test('should display list of applications for regular users', async () => {
@@ -22,7 +21,6 @@ test.describe('My Applications - View Applications', () => {
 
     // Navigate to My Applications by clicking the button
     await myApplicationsPage.clickMyApplicationsButton();
-
   });
 
   test('should return to main menu when clicking back to home button', async () => {
@@ -34,7 +32,6 @@ test.describe('My Applications - View Applications', () => {
 
     // Click back to home button
     await myApplicationsPage.clickBackToHomeButton();
-
   });
 
   test('should return to main menu when kainos logo clicked', async () => {
@@ -61,5 +58,4 @@ test.describe('My Applications - View Applications', () => {
     // Verify that we're on a job details page by checking the URL
     await myApplicationsPage.waitForUrl(/\/jobs\/\d+\/details/);
   });
-
-  });
+});

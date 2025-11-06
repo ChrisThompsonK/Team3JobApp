@@ -1,6 +1,6 @@
+import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
 interface TestMetadata {
@@ -97,11 +97,7 @@ function getBranch(): string {
  */
 function parseVitestCoverage(): CoverageData | undefined {
   try {
-    const coverageFile = path.join(
-      projectRoot,
-      'coverage',
-      'coverage-final.json'
-    );
+    const coverageFile = path.join(projectRoot, 'coverage', 'coverage-final.json');
     if (!fs.existsSync(coverageFile)) {
       return undefined;
     }
@@ -129,8 +125,7 @@ function parseVitestCoverage(): CoverageData | undefined {
       fileCount++;
     });
 
-    const percentage =
-      totalLines > 0 ? Math.round((coveredLines / totalLines) * 100) : 0;
+    const percentage = totalLines > 0 ? Math.round((coveredLines / totalLines) * 100) : 0;
 
     return {
       percentage,
@@ -154,7 +149,7 @@ function parseVitestReport(): {
   try {
     // Vitest doesn't output standard JSON by default, so we parse the HTML report
     const htmlFile = path.join(projectRoot, 'coverage', 'index.html');
-    
+
     // For now, return defaults - we'll enhance this if Vitest JSON output is available
     return {
       summary: {
@@ -188,12 +183,8 @@ function parsePlaywrightReport(): {
   failed: FailedTest[];
 } {
   try {
-    const reportFile = path.join(
-      projectRoot,
-      'playwright-report',
-      'index.json'
-    );
-    
+    const reportFile = path.join(projectRoot, 'playwright-report', 'index.json');
+
     if (!fs.existsSync(reportFile)) {
       return {
         summary: {
@@ -209,7 +200,7 @@ function parsePlaywrightReport(): {
 
     const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
     const suites = report.suites || [];
-    
+
     let total = 0;
     let passed = 0;
     let failed = 0;
@@ -233,9 +224,8 @@ function parsePlaywrightReport(): {
               name: test.title || 'Unknown',
               error: test.error?.message || 'Unknown error',
               file: test.file,
-              screenshot: test.attachments?.find(
-                (a: any) => a.contentType?.includes('image')
-              )?.path,
+              screenshot: test.attachments?.find((a: any) => a.contentType?.includes('image'))
+                ?.path,
               stackTrace: test.error?.stack,
             });
           }
@@ -252,8 +242,7 @@ function parsePlaywrightReport(): {
     const durationSeconds = Math.round(duration / 1000);
     const minutes = Math.floor(durationSeconds / 60);
     const seconds = durationSeconds % 60;
-    const durationStr =
-      minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+    const durationStr = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
 
     return {
       summary: { total, passed, failed, skipped, duration: durationStr },
@@ -282,7 +271,7 @@ function parseCucumberReport(): {
 } {
   try {
     const reportFile = path.join(projectRoot, 'cucumber-report.json');
-    
+
     if (!fs.existsSync(reportFile)) {
       return {
         summary: {
@@ -297,7 +286,7 @@ function parseCucumberReport(): {
     }
 
     const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
-    
+
     let total = 0;
     let passed = 0;
     let failed = 0;
@@ -339,8 +328,7 @@ function parseCucumberReport(): {
     const durationSeconds = Math.round(duration / 1000000000); // Cucumber uses nanoseconds
     const minutes = Math.floor(durationSeconds / 60);
     const seconds = durationSeconds % 60;
-    const durationStr =
-      minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+    const durationStr = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
 
     return {
       summary: { total, passed, failed, skipped, duration: durationStr },
@@ -383,22 +371,11 @@ function generateTestReport(): void {
 
   // Combine summaries
   const combinedSummary: TestSummary = {
-    total:
-      vitestData.summary.total +
-      playwrightData.summary.total +
-      cucumberData.summary.total,
-    passed:
-      vitestData.summary.passed +
-      playwrightData.summary.passed +
-      cucumberData.summary.passed,
-    failed:
-      vitestData.summary.failed +
-      playwrightData.summary.failed +
-      cucumberData.summary.failed,
+    total: vitestData.summary.total + playwrightData.summary.total + cucumberData.summary.total,
+    passed: vitestData.summary.passed + playwrightData.summary.passed + cucumberData.summary.passed,
+    failed: vitestData.summary.failed + playwrightData.summary.failed + cucumberData.summary.failed,
     skipped:
-      vitestData.summary.skipped +
-      playwrightData.summary.skipped +
-      cucumberData.summary.skipped,
+      vitestData.summary.skipped + playwrightData.summary.skipped + cucumberData.summary.skipped,
     duration: `${vitestData.summary.duration} + ${playwrightData.summary.duration} + ${cucumberData.summary.duration}`,
   };
 

@@ -1,13 +1,13 @@
 /**
  * Post-Test Report Hook
- * 
+ *
  * This module provides utilities to generate test reports after any test run.
  * Can be imported and used in test setup files or CI/CD scripts.
  */
 
+import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import { execSync } from 'child_process';
 
 interface ReportGeneratorOptions {
   outputDir?: string;
@@ -41,24 +41,17 @@ export async function collectTestArtifacts(projectRoot: string = process.cwd()):
   const vitestReportPath = path.join(projectRoot, 'vitest-report.json');
   if (fs.existsSync(vitestReportPath)) {
     try {
-      artifacts.vitest = JSON.parse(
-        fs.readFileSync(vitestReportPath, 'utf-8')
-      );
+      artifacts.vitest = JSON.parse(fs.readFileSync(vitestReportPath, 'utf-8'));
     } catch (error) {
       console.warn('Failed to parse Vitest report:', error);
     }
   }
 
   // Collect Playwright results
-  const playwrightReportPath = path.join(
-    projectRoot,
-    'playwright-report/results.json'
-  );
+  const playwrightReportPath = path.join(projectRoot, 'playwright-report/results.json');
   if (fs.existsSync(playwrightReportPath)) {
     try {
-      artifacts.playwright = JSON.parse(
-        fs.readFileSync(playwrightReportPath, 'utf-8')
-      );
+      artifacts.playwright = JSON.parse(fs.readFileSync(playwrightReportPath, 'utf-8'));
     } catch (error) {
       console.warn('Failed to parse Playwright report:', error);
     }
@@ -68,9 +61,7 @@ export async function collectTestArtifacts(projectRoot: string = process.cwd()):
   const cucumberReportPath = path.join(projectRoot, 'cucumber-report.json');
   if (fs.existsSync(cucumberReportPath)) {
     try {
-      artifacts.cucumber = JSON.parse(
-        fs.readFileSync(cucumberReportPath, 'utf-8')
-      );
+      artifacts.cucumber = JSON.parse(fs.readFileSync(cucumberReportPath, 'utf-8'));
     } catch (error) {
       console.warn('Failed to parse Cucumber report:', error);
     }
@@ -188,18 +179,18 @@ export function exportResultsToCSV(
   // Export Vitest results
   if (artifacts.vitest?.tests) {
     artifacts.vitest.tests.forEach((test: any) => {
-      const status = test.status === 'pass' ? 'PASSED' : test.status === 'fail' ? 'FAILED' : 'SKIPPED';
+      const status =
+        test.status === 'pass' ? 'PASSED' : test.status === 'fail' ? 'FAILED' : 'SKIPPED';
       const error = test.error ? `"${test.error.replace(/"/g, '""')}"` : '';
-      rows.push(
-        `Vitest,"${test.name.replace(/"/g, '""')}",${status},${test.duration},${error}`
-      );
+      rows.push(`Vitest,"${test.name.replace(/"/g, '""')}",${status},${test.duration},${error}`);
     });
   }
 
   // Export Playwright results
   if (artifacts.playwright?.tests) {
     artifacts.playwright.tests.forEach((test: any) => {
-      const status = test.status === 'passed' ? 'PASSED' : test.status === 'failed' ? 'FAILED' : 'SKIPPED';
+      const status =
+        test.status === 'passed' ? 'PASSED' : test.status === 'failed' ? 'FAILED' : 'SKIPPED';
       const error = test.error ? `"${test.error.message?.replace(/"/g, '""') || ''}"` : '';
       rows.push(
         `Playwright,"${test.title.replace(/"/g, '""')}",${status},${test.duration},${error}`
@@ -213,9 +204,7 @@ export function exportResultsToCSV(
       feature.elements?.forEach((scenario: any) => {
         const stepDuration =
           scenario.steps?.reduce((sum: number, s: any) => sum + (s.result?.duration || 0), 0) || 0;
-        const failed = scenario.steps?.some(
-          (s: any) => s.result?.status === 'failed'
-        );
+        const failed = scenario.steps?.some((s: any) => s.result?.status === 'failed');
         const status = failed ? 'FAILED' : 'PASSED';
         const errorMsg = failed
           ? scenario.steps
@@ -223,14 +212,9 @@ export function exportResultsToCSV(
               ?.result?.error_message?.replace(/"/g, '""') || ''
           : '';
         const error = errorMsg ? `"${errorMsg}"` : '';
-        const scenarioName = `${feature.name} - ${scenario.name}`.replace(
-          /"/g,
-          '""'
-        );
+        const scenarioName = `${feature.name} - ${scenario.name}`.replace(/"/g, '""');
 
-        rows.push(
-          `Cucumber,"${scenarioName}",${status},${stepDuration},${error}`
-        );
+        rows.push(`Cucumber,"${scenarioName}",${status},${stepDuration},${error}`);
       });
     });
   }
@@ -242,9 +226,7 @@ export function exportResultsToCSV(
 /**
  * Main function to generate reports after tests
  */
-export async function generatePostTestReport(
-  options: ReportGeneratorOptions = {}
-): Promise<void> {
+export async function generatePostTestReport(options: ReportGeneratorOptions = {}): Promise<void> {
   const opts = { ...DEFAULT_OPTIONS, ...options };
   const projectRoot = process.cwd();
 

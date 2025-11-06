@@ -8,7 +8,10 @@ test.describe('Flow 16: Submit Job Application (Authenticated User)', () => {
   test.beforeEach(async ({ page }) => {
     // Check if we need to register and login a test user
     await page.goto(baseURL);
-    const isLoggedIn = await page.locator('[data-testid="user-menu"]').isVisible().catch(() => false);
+    const isLoggedIn = await page
+      .locator('[data-testid="user-menu"]')
+      .isVisible()
+      .catch(() => false);
 
     if (!isLoggedIn) {
       // Register a new test user

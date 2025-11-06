@@ -3,14 +3,14 @@
  * Tests the frontend-backend communication for job-related endpoints
  */
 
-import { describe, it, expect, beforeAll } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import {
+  assertArrayResponseShape,
+  assertResponseShape,
   BACKEND_URL,
   createTestClient,
-  testDataFactories,
-  assertResponseShape,
-  assertArrayResponseShape,
   setupIntegrationTest,
+  testDataFactories,
 } from './integration.setup.js';
 
 setupIntegrationTest();

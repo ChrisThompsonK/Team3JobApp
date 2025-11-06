@@ -14,7 +14,7 @@ test.describe('User Login', () => {
     // Submit form
     await page.click('button[type="submit"]');
 
-       // Verify redirect away from login page
+    // Verify redirect away from login page
     await expect(page).not.toHaveURL(/\/auth\/login/);
   });
 });

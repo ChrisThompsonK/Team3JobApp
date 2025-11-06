@@ -3,12 +3,12 @@
  * Tests authentication and authorization for admin-only endpoints
  */
 
-import { describe, it, expect, beforeAll } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import {
   BACKEND_URL,
   createTestClient,
-  testDataFactories,
   setupIntegrationTest,
+  testDataFactories,
 } from './integration.setup.js';
 
 setupIntegrationTest();

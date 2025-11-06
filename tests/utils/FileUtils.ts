@@ -1,7 +1,7 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import * as os from 'os';
 import type { Download } from '@playwright/test';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
 
 /**
  * CSV and File Utilities
@@ -132,10 +132,7 @@ export const getCSVDataRows = (csvContent: string): string[][] => {
  * @param expectedHeaders - Array of expected header names
  * @returns true if headers match
  */
-export const validateCSVHeaders = (
-  csvContent: string,
-  expectedHeaders: string[]
-): boolean => {
+export const validateCSVHeaders = (csvContent: string, expectedHeaders: string[]): boolean => {
   const headers = getCSVHeaders(csvContent);
   return JSON.stringify(headers) === JSON.stringify(expectedHeaders);
 };
@@ -185,16 +182,6 @@ export const extractDateFromFilename = (filename: string): Date | null => {
  * @param day - Day value (1-31)
  * @returns true if date components are valid
  */
-export const isValidDateComponents = (
-  year: number,
-  month: number,
-  day: number
-): boolean => {
-  return (
-    year > 2020 &&
-    month >= 1 &&
-    month <= 12 &&
-    day >= 1 &&
-    day <= 31
-  );
+export const isValidDateComponents = (year: number, month: number, day: number): boolean => {
+  return year > 2020 && month >= 1 && month <= 12 && day >= 1 && day <= 31;
 };

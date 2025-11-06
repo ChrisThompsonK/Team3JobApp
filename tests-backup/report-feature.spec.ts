@@ -1,8 +1,8 @@
+import type { Download } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 import * as fs from 'fs';
-import * as path from 'path';
 import * as os from 'os';
-import type { Download } from '@playwright/test';
+import * as path from 'path';
 
 /**
  * Get a safe temporary directory
@@ -25,9 +25,7 @@ test.describe('Report Feature - Available Jobs', () => {
   /**
    * Test 1: Admin user can see Report button on job listings page
    */
-  test('should display Report button for admin users on job listings page', async ({
-    page,
-  }) => {
+  test('should display Report button for admin users on job listings page', async ({ page }) => {
     // Login as admin
     await loginAsAdmin(page);
 
@@ -61,9 +59,7 @@ test.describe('Report Feature - Available Jobs', () => {
   /**
    * Test 3: Unauthenticated user redirected to login when accessing report
    */
-  test('should redirect unauthenticated user to login when accessing report', async ({
-    page,
-  }) => {
+  test('should redirect unauthenticated user to login when accessing report', async ({ page }) => {
     // Try to access report without being logged in
     await page.goto('/jobs/report');
 
@@ -77,9 +73,7 @@ test.describe('Report Feature - Available Jobs', () => {
   /**
    * Test 4: Non-admin user gets 403 error when accessing report
    */
-  test('should return 403 Forbidden for non-admin user accessing report', async ({
-    page,
-  }) => {
+  test('should return 403 Forbidden for non-admin user accessing report', async ({ page }) => {
     // Login as non-admin user
     await loginAsNonAdmin(page);
 
@@ -114,7 +108,7 @@ test.describe('Report Feature - Available Jobs', () => {
 
     // Save file for content validation
     const filePath = path.join(getTempDir(), suggestedName);
-    
+
     try {
       await download.saveAs(filePath);
       // Verify file exists
@@ -143,7 +137,7 @@ test.describe('Report Feature - Available Jobs', () => {
     // Extract filename and save immediately to avoid serialization issues
     const suggestedFilename = download.suggestedFilename();
     const filePath = path.join(getTempDir(), suggestedFilename);
-    
+
     try {
       await download.saveAs(filePath);
 
@@ -180,7 +174,7 @@ test.describe('Report Feature - Available Jobs', () => {
 
     // Save and read file
     const filePath = path.join(getTempDir(), download.suggestedFilename());
-    
+
     try {
       await download.saveAs(filePath);
 
@@ -238,7 +232,7 @@ test.describe('Report Feature - Available Jobs', () => {
 
     // Save and read file
     const filePath = path.join(getTempDir(), download.suggestedFilename());
-    
+
     try {
       await download.saveAs(filePath);
 
@@ -270,9 +264,7 @@ test.describe('Report Feature - Available Jobs', () => {
   /**
    * Test 10: CSV filename includes current date in correct format
    */
-  test('should generate filename with current date in YYYY-MM-DD format', async ({
-    page,
-  }) => {
+  test('should generate filename with current date in YYYY-MM-DD format', async ({ page }) => {
     // Login as admin
     await loginAsAdmin(page);
 
@@ -322,7 +314,7 @@ test.describe('Report Feature - Available Jobs', () => {
 
     // Save and read file
     const filePath = path.join(getTempDir(), download.suggestedFilename());
-    
+
     try {
       await download.saveAs(filePath);
 
@@ -355,7 +347,7 @@ test.describe('Report Feature - Available Jobs', () => {
 
     // Save and read file
     const filePath = path.join(getTempDir(), download.suggestedFilename());
-    
+
     try {
       await download.saveAs(filePath);
 
@@ -396,7 +388,7 @@ test.describe('Report Feature - Available Jobs', () => {
     await page.getByRole('link', { name: /report/i }).click();
     let download = await downloadPromise;
     let filePath = path.join(getTempDir(), download.suggestedFilename());
-    
+
     try {
       await download.saveAs(filePath);
       expect(fs.existsSync(filePath)).toBe(true);
@@ -412,7 +404,7 @@ test.describe('Report Feature - Available Jobs', () => {
     await page.getByRole('link', { name: /report/i }).click();
     download = await downloadPromise;
     filePath = path.join(getTempDir(), download.suggestedFilename());
-    
+
     try {
       await download.saveAs(filePath);
       expect(fs.existsSync(filePath)).toBe(true);
@@ -439,7 +431,7 @@ test.describe('Report Feature - Available Jobs', () => {
 
     // Save and read file
     const filePath = path.join(getTempDir(), download.suggestedFilename());
-    
+
     try {
       await download.saveAs(filePath);
 
@@ -486,10 +478,9 @@ async function loginAsAdmin(page: any) {
   await page.click('button[type="submit"]');
 
   // Wait for login to complete - check for successful redirect away from login page
-  await page.waitForFunction(
-    () => !window.location.href.includes('/auth/login'),
-    { timeout: 10000 }
-  );
+  await page.waitForFunction(() => !window.location.href.includes('/auth/login'), {
+    timeout: 10000,
+  });
 }
 
 /**
@@ -509,10 +500,9 @@ async function loginAsNonAdmin(page: any) {
   await page.click('button[type="submit"]');
 
   // Wait for login to complete - check for successful redirect away from login page
-  await page.waitForFunction(
-    () => !window.location.href.includes('/auth/login'),
-    { timeout: 10000 }
-  );
+  await page.waitForFunction(() => !window.location.href.includes('/auth/login'), {
+    timeout: 10000,
+  });
 }
 
 /**

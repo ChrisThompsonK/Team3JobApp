@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 /**
@@ -50,9 +50,7 @@ export class ReportPage extends BasePage {
    * Verify error message is displayed
    */
   async verifyErrorMessageDisplayed() {
-    await expect(
-      this.page.getByText(/access forbidden|admin privileges required/i)
-    ).toBeVisible();
+    await expect(this.page.getByText(/access forbidden|admin privileges required/i)).toBeVisible();
   }
 
   /**

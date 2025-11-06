@@ -1,6 +1,5 @@
-import { Given, When, Then, Before, After, DataTable } from '@cucumber/cucumber';
-import { Page, Browser, BrowserContext, expect } from '@playwright/test';
-import { chromium } from '@playwright/test';
+import { After, Before, DataTable, Given, Then, When } from '@cucumber/cucumber';
+import { type Browser, type BrowserContext, chromium, expect, type Page } from '@playwright/test';
 
 interface World {
   browser: Browser | null;
@@ -9,20 +8,20 @@ interface World {
   baseURL: string;
 }
 
-let world: World = {
+const world: World = {
   browser: null,
   context: null,
   page: null,
   baseURL: 'http://localhost:3000',
 };
 
-Before(async function () {
+Before(async () => {
   world.browser = await chromium.launch();
   world.context = await world.browser.newContext();
   world.page = await world.context.newPage();
 });
 
-After(async function () {
+After(async () => {
   if (world.page) {
     await world.page.close();
   }
@@ -36,40 +35,40 @@ After(async function () {
 
 // ==================== HOMEPAGE STEPS ====================
 
-When('I navigate to the homepage', async function () {
+When('I navigate to the homepage', async () => {
   if (!world.page) throw new Error('Page not initialized');
   await world.page.goto(world.baseURL);
 });
 
-Then('the page title should contain {string}', async function (title: string) {
+Then('the page title should contain {string}', async (title: string) => {
   if (!world.page) throw new Error('Page not initialized');
   await expect(world.page).toHaveTitle(new RegExp(title, 'i'));
 });
 
-Then('the main navigation should be visible', async function () {
+Then('the main navigation should be visible', async () => {
   if (!world.page) throw new Error('Page not initialized');
   await expect(world.page.locator('nav')).toBeVisible();
 });
 
 // ==================== JOB LISTINGS STEPS ====================
 
-When('I navigate to the job listings page', async function () {
+When('I navigate to the job listings page', async () => {
   if (!world.page) throw new Error('Page not initialized');
   await world.page.goto(`${world.baseURL}/job-roles`);
 });
 
-Then('I should be on the job listings page', async function () {
+Then('I should be on the job listings page', async () => {
   if (!world.page) throw new Error('Page not initialized');
   await expect(world.page).toHaveURL(/job-roles/);
 });
 
-When('I click on the first job listing', async function () {
+When('I click on the first job listing', async () => {
   if (!world.page) throw new Error('Page not initialized');
   const firstJob = world.page.locator('.job-card').first();
   await firstJob.click();
 });
 
-Then('the job details page should load', async function () {
+Then('the job details page should load', async () => {
   if (!world.page) throw new Error('Page not initialized');
   await expect(world.page).toHaveURL(/job-roles\/\d+/);
 });
