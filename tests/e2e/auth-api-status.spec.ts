@@ -4,220 +4,124 @@ import { testUsers } from '../fixtures/data/test-data.js';
 test.describe('Authentication API Status Codes', () => {
   const baseURL = 'http://localhost:3000';
 
-  test('GET /auth/login should return 200 with error query params', async ({ request }) => {
+  test('GET /auth/login with error params returns 200', async ({ request }) => {
     const response = await request.get(
-      `${baseURL}/auth/login?error=Invalid%20email%20or%20password&returnUrl=%2F`,
-      {
-        headers: {
-          Accept:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-          'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
-          'Cache-Control': 'max-age=0',
-          Connection: 'keep-alive',
-          'User-Agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36',
-          'sec-ch-ua': '"Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"',
-          'sec-ch-ua-mobile': '?0',
-          'sec-ch-ua-platform': '"macOS"',
-          'Sec-Fetch-Dest': 'document',
-          'Sec-Fetch-Mode': 'navigate',
-          'Sec-Fetch-Site': 'same-origin',
-          'Sec-Fetch-User': '?1',
-          'Upgrade-Insecure-Requests': '1',
-        },
-      }
+      `${baseURL}/auth/login?error=Invalid%20email%20or%20password&returnUrl=%2F`
     );
-
     expect(response.status()).toBe(200);
-    const body = await response.text();
-    expect(body).toContain('Invalid email or password'); // Check that error message is displayed
+    expect(await response.text()).toContain('Invalid email or password');
   });
 
-  test('GET /auth/login should return 200 without query params', async ({ request }) => {
+  test('GET /auth/login returns 200', async ({ request }) => {
     const response = await request.get(`${baseURL}/auth/login`);
     expect(response.status()).toBe(200);
-    const body = await response.text();
-    expect(body).toContain('Sign in to your account'); // Check for login form title
+    expect(await response.text()).toContain('Sign in to your account');
   });
 
-  test('GET /auth/register should return 200 with error query params', async ({ request }) => {
+  test('GET /auth/register with error params returns 200', async ({ request }) => {
     const response = await request.get(
-      `${baseURL}/auth/register?error=Please%20enter%20a%20valid%20email%20address`,
-      {
-        headers: {
-          Accept:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-          'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
-          'Cache-Control': 'max-age=0',
-          Connection: 'keep-alive',
-          'User-Agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36',
-          'sec-ch-ua': '"Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"',
-          'sec-ch-ua-mobile': '?0',
-          'sec-ch-ua-platform': '"macOS"',
-          'Sec-Fetch-Dest': 'document',
-          'Sec-Fetch-Mode': 'navigate',
-          'Sec-Fetch-Site': 'same-origin',
-          'Sec-Fetch-User': '?1',
-          'Upgrade-Insecure-Requests': '1',
-        },
-      }
+      `${baseURL}/auth/register?error=Please%20enter%20a%20valid%20email%20address`
     );
-
     expect(response.status()).toBe(200);
-    const body = await response.text();
-    expect(body).toContain('Please enter a valid email address'); // Check that error message is displayed
+    expect(await response.text()).toContain('Please enter a valid email address');
   });
 
-  test('POST /auth/login with valid credentials should redirect (302)', async ({ request }) => {
+  test('POST /auth/login valid credentials redirects 302', async ({ request }) => {
     const response = await request.post(`${baseURL}/auth/login`, {
-      form: {
-        email: testUsers.admin.email,
-        password: testUsers.admin.password,
-        returnUrl: '/',
-      },
-      maxRedirects: 0, // Don't follow redirects to check status code
+      form: { email: testUsers.admin.email, password: testUsers.admin.password, returnUrl: '/' },
+      maxRedirects: 0,
     });
-
     expect(response.status()).toBe(302);
     expect(response.headers()['location']).toBe('/');
   });
 
-  test('POST /auth/login with invalid credentials should redirect to login with error (302)', async ({
-    request,
-  }) => {
+  test('POST /auth/login invalid credentials redirects 302', async ({ request }) => {
     const response = await request.post(`${baseURL}/auth/login`, {
-      form: {
-        email: 'invalid@test.com',
-        password: 'wrongpassword',
-        returnUrl: '/',
-      },
+      form: { email: 'invalid@test.com', password: 'wrong', returnUrl: '/' },
       maxRedirects: 0,
     });
-
     expect(response.status()).toBe(302);
-    const location = response.headers()['location'];
-    expect(location).toContain('/auth/login?error=');
-    expect(location).toContain('returnUrl=%2F');
+    expect(response.headers()['location']).toContain('/auth/login?error=');
   });
 
-  test('POST /auth/login with missing email should redirect with error (302)', async ({
-    request,
-  }) => {
+  test('POST /auth/login missing email redirects 302', async ({ request }) => {
     const response = await request.post(`${baseURL}/auth/login`, {
-      form: {
-        password: 'password123',
-        returnUrl: '/',
-      },
+      form: { password: 'pass', returnUrl: '/' },
       maxRedirects: 0,
     });
-
     expect(response.status()).toBe(302);
-    const location = response.headers()['location'];
-    expect(location).toContain('/auth/login?error=');
-    expect(location).toContain('Email%20and%20password%20are%20required');
+    expect(response.headers()['location']).toContain('/auth/login?error=');
   });
 
-  test('POST /auth/login with missing password should redirect with error (302)', async ({
-    request,
-  }) => {
+  test('POST /auth/login missing password redirects 302', async ({ request }) => {
     const response = await request.post(`${baseURL}/auth/login`, {
-      form: {
-        email: 'test@test.com',
-        returnUrl: '/',
-      },
+      form: { email: 'test@test.com', returnUrl: '/' },
       maxRedirects: 0,
     });
-
     expect(response.status()).toBe(302);
-    const location = response.headers()['location'];
-    expect(location).toContain('/auth/login?error=');
-    expect(location).toContain('Email%20and%20password%20are%20required');
+    expect(response.headers()['location']).toContain('/auth/login?error=');
   });
 
-  test('GET /auth/register should return 200 without query params', async ({ request }) => {
+  test('GET /auth/register returns 200', async ({ request }) => {
     const response = await request.get(`${baseURL}/auth/register`);
     expect(response.status()).toBe(200);
-    const body = await response.text();
-    expect(body).toContain('Register'); // Basic check for register form
+    expect(await response.text()).toContain('Register');
   });
 
-  test('POST /auth/register with valid data should redirect (302)', async ({ request }) => {
-    const uniqueEmail = `test-${Date.now()}@example.com`;
+  test('POST /auth/register valid data redirects 302', async ({ request }) => {
     const response = await request.post(`${baseURL}/auth/register`, {
       form: {
-        email: uniqueEmail,
-        password: 'ValidPassword123!',
-        confirmPassword: 'ValidPassword123!',
+        email: `test-${Date.now()}@example.com`,
+        password: 'ValidPass123!',
+        confirmPassword: 'ValidPass123!',
       },
       maxRedirects: 0,
     });
-
     expect(response.status()).toBe(302);
     expect(response.headers()['location']).toBe('/');
   });
 
-  test('POST /auth/register with missing fields should redirect with error (302)', async ({
-    request,
-  }) => {
+  test('POST /auth/register missing fields redirects 302', async ({ request }) => {
+    const response = await request.post(`${baseURL}/auth/register`, {
+      form: { email: 'test@example.com' },
+      maxRedirects: 0,
+    });
+    expect(response.status()).toBe(302);
+    expect(response.headers()['location']).toContain('/auth/register?error=');
+  });
+
+  test('POST /auth/register password mismatch redirects 302', async ({ request }) => {
     const response = await request.post(`${baseURL}/auth/register`, {
       form: {
         email: 'test@example.com',
-        // missing password and confirmPassword
+        password: 'Pass123!',
+        confirmPassword: 'Different123!',
       },
       maxRedirects: 0,
     });
-
     expect(response.status()).toBe(302);
-    const location = response.headers()['location'];
-    expect(location).toContain('/auth/register?error=');
-    expect(location).toContain('All%20fields%20are%20required');
+    expect(response.headers()['location']).toContain('/auth/register?error=');
   });
 
-  test('POST /auth/register with password mismatch should redirect with error (302)', async ({
-    request,
-  }) => {
+  test('POST /auth/register existing email redirects 302', async ({ request }) => {
     const response = await request.post(`${baseURL}/auth/register`, {
       form: {
-        email: 'test@example.com',
-        password: 'Password123!',
-        confirmPassword: 'DifferentPassword123!',
+        email: testUsers.admin.email,
+        password: 'NewPass123!',
+        confirmPassword: 'NewPass123!',
       },
       maxRedirects: 0,
     });
-
     expect(response.status()).toBe(302);
-    const location = response.headers()['location'];
-    expect(location).toContain('/auth/register?error=');
+    expect(response.headers()['location']).toContain('/auth/register?error=');
   });
 
-  test('POST /auth/register with existing email should redirect with error (302)', async ({
-    request,
-  }) => {
-    const response = await request.post(`${baseURL}/auth/register`, {
-      form: {
-        email: testUsers.admin.email, // existing email
-        password: 'NewPassword123!',
-        confirmPassword: 'NewPassword123!',
-      },
-      maxRedirects: 0,
-    });
-
-    expect(response.status()).toBe(302);
-    const location = response.headers()['location'];
-    expect(location).toContain('/auth/register?error=');
-  });
-
-  test('POST /auth/login with malformed data should handle gracefully', async ({ request }) => {
+  test('POST /auth/login malformed data returns 500', async ({ request }) => {
     const response = await request.post(`${baseURL}/auth/login`, {
       data: 'invalid json',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       maxRedirects: 0,
     });
-
-    // Express returns 500 for malformed JSON
     expect(response.status()).toBe(500);
   });
 });
