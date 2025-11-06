@@ -24,7 +24,7 @@ export default defineConfig({
   },
 
   /* Run tests in files in parallel */
-  fullyParallel: false, // Set to false for better test isolation with database
+  fullyParallel: true,
 
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
@@ -33,7 +33,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 1,
 
   /* Workers configuration */
-  workers: process.env.CI ? 1 : 2, // Limited workers for database consistency
+  workers: process.env.CI ? 2 : 4, // Increased for better parallelism
 
   /* Reporter configuration */
   reporter: [
@@ -55,10 +55,10 @@ export default defineConfig({
     /* Browser context options */
     viewport: { width: 1280, height: 720 },
 
-    /* Disable all artifacts */
-    trace: 'off',
-    screenshot: 'off',
-    video: 'off',
+    /* Collect artifacts on failure for debugging */
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
 
     /* Ignore HTTPS errors for local development */
     ignoreHTTPSErrors: true,

@@ -66,10 +66,20 @@ export class LoginPage extends BasePage {
 
     // Wait for either condition with a reasonable timeout
     await Promise.race([
-      this.page.waitForURL((url) => !url.pathname.includes('/auth/login') && url.pathname !== '/auth/login', {
-        timeout: 7000,
-      }).then(() => null).catch(() => null),
-      this.validationErrors.first().waitFor({ state: 'visible', timeout: 7000 }).then(() => null).catch(() => null),
+      this.page
+        .waitForURL(
+          (url) => !url.pathname.includes('/auth/login') && url.pathname !== '/auth/login',
+          {
+            timeout: 7000,
+          }
+        )
+        .then(() => null)
+        .catch(() => null),
+      this.validationErrors
+        .first()
+        .waitFor({ state: 'visible', timeout: 7000 })
+        .then(() => null)
+        .catch(() => null),
     ]);
 
     // Small pause to allow page to settle

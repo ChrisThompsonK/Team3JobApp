@@ -9,19 +9,15 @@ import { BasePage } from './base.page.js';
 export class HomePage extends BasePage {
   // Page elements
   private get jobListingsLink(): Locator {
-    return this.page.locator(
-      'a[href*="job"], text="Job Roles", text="Jobs", [data-testid="jobs-link"]'
-    );
+    return this.page.locator('.navbar-center a[href="/jobs"]').first();
   }
 
   private get myApplicationsLink(): Locator {
-    return this.page.locator(
-      'a[href*="application"], text="My Applications", [data-testid="applications-link"]'
-    );
+    return this.page.locator('.dropdown-content a[href="/my-applications"]');
   }
 
   private get profileLink(): Locator {
-    return this.page.locator('a[href*="profile"], text="Profile", [data-testid="profile-link"]');
+    return this.page.locator('.dropdown-content a[href="/auth/profile"]');
   }
 
   private get navigationMenu(): Locator {
@@ -60,6 +56,13 @@ export class HomePage extends BasePage {
    * Navigate to my applications
    */
   async goToMyApplications(): Promise<void> {
+    // First try to open the dropdown if needed
+    const dropdown = this.page.locator('.dropdown.dropdown-end');
+    if (await dropdown.isVisible()) {
+      await dropdown.locator('[tabindex="0"]').click();
+      await this.page.waitForTimeout(200); // Wait for dropdown to open
+    }
+
     if (await this.myApplicationsLink.isVisible()) {
       await this.myApplicationsLink.click();
       await expect(this.page).toHaveURL(/application/);
@@ -70,6 +73,13 @@ export class HomePage extends BasePage {
    * Navigate to profile
    */
   async goToProfile(): Promise<void> {
+    // First try to open the dropdown if needed
+    const dropdown = this.page.locator('.dropdown.dropdown-end');
+    if (await dropdown.isVisible()) {
+      await dropdown.locator('[tabindex="0"]').click();
+      await this.page.waitForTimeout(200); // Wait for dropdown to open
+    }
+
     await this.profileLink.click();
     await expect(this.page).toHaveURL(/profile/);
   }

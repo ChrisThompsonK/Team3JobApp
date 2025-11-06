@@ -2,6 +2,12 @@
 
 A comprehensive, TypeScript-based end-to-end testing framework built with Playwright for the Kainos Job Portal application.
 
+**Key Technologies:**
+- **Playwright** - Modern web testing framework
+- **TypeScript** - Type-safe test development
+- **Page Object Model** - Maintainable test architecture
+- **Cucumber/Gherkin** - Behavior-Driven Development support (optional)
+
 ## 📋 Table of Contents
 
 - [Features](#-features)
@@ -27,6 +33,7 @@ A comprehensive, TypeScript-based end-to-end testing framework built with Playwr
 - **Parallel Execution** - Fast test execution with proper isolation
 - **Detailed Reporting** - HTML reports with traces and videos
 - **CI/CD Ready** - GitHub Actions and other CI/CD platforms
+- **BDD Support** - Cucumber/Gherkin integration for behavior-driven development
 
 ## � Test Plan
 
@@ -151,6 +158,8 @@ npx playwright show-report
 npx playwright test auth.spec.ts:25
 ```
 
+**Note:** By default, screenshots, videos, and traces are automatically captured on test failures for debugging purposes. These artifacts are saved in the `test-results/` directory.
+
 ## ✍️ Writing Tests
 
 ### Basic Test Structure
@@ -219,7 +228,161 @@ await WaitUtils.waitForForm(page);
 await ScreenshotUtils.takeTimestampedScreenshot(page, 'test-name');
 ```
 
-## ⚙️ Configuration
+## 🥒 Cucumber/Gherkin BDD Testing
+
+The framework supports Behavior-Driven Development (BDD) using Cucumber and Gherkin syntax for writing human-readable test scenarios.
+
+### Installation
+
+To add Cucumber support:
+
+```bash
+# Install Cucumber dependencies
+npm install --save-dev @cucumber/cucumber @cucumber/pretty-formatter playwright-cucumber
+
+# Install TypeScript support for Cucumber
+npm install --save-dev @types/cucumber ts-node
+```
+
+### Configuration
+
+Create a `cucumber.js` configuration file in the project root:
+
+```javascript
+module.exports = {
+  default: {
+    format: ['pretty', 'json:reports/cucumber-report.json'],
+    formatOptions: { snippetInterface: 'async-await' },
+    paths: ['tests/features/**/*.feature'],
+    require: ['tests/features/step-definitions/**/*.ts'],
+    requireModule: ['ts-node/register'],
+    worldParameters: {
+      baseURL: 'http://localhost:3000'
+    }
+  }
+};
+```
+
+### Writing Feature Files
+
+Create `.feature` files in `tests/features/` using Gherkin syntax:
+
+```gherkin
+# tests/features/authentication.feature
+Feature: User Authentication
+  As a user of the Kainos Job Portal
+  I want to be able to log in and log out
+  So that I can access my account securely
+
+  Background:
+    Given I am on the login page
+
+  Scenario: Successful login with valid credentials
+    When I enter valid admin credentials
+    And I click the login button
+    Then I should be redirected to the dashboard
+    And I should see my user avatar
+
+  Scenario: Failed login with invalid credentials
+    When I enter invalid credentials
+    And I click the login button
+    Then I should see an error message
+    And I should remain on the login page
+```
+
+### Step Definitions
+
+Create step definition files in `tests/features/step-definitions/`:
+
+```typescript
+// tests/features/step-definitions/auth-steps.ts
+import { Given, When, Then, Before, After } from '@cucumber/cucumber';
+import { expect } from '@playwright/test';
+import { LoginPage, HomePage } from '../../pages/index.js';
+import { testUsers } from '../../fixtures/data/test-data.js';
+
+let loginPage: LoginPage;
+let homePage: HomePage;
+
+Before(async function () {
+  // Initialize page objects
+  loginPage = new LoginPage(this.page);
+  homePage = new HomePage(this.page);
+});
+
+Given('I am on the login page', async function () {
+  await loginPage.goto();
+});
+
+When('I enter valid admin credentials', async function () {
+  await loginPage.login(testUsers.admin.email, testUsers.admin.password);
+});
+
+When('I click the login button', async function () {
+  await loginPage.submitLoginForm();
+});
+
+Then('I should be redirected to the dashboard', async function () {
+  await expect(this.page).toHaveURL(/\/dashboard|\/home/);
+});
+
+Then('I should see my user avatar', async function () {
+  await expect(homePage.userAvatar).toBeVisible();
+});
+
+When('I enter invalid credentials', async function () {
+  await loginPage.login('invalid@email.com', 'wrongpassword');
+});
+
+Then('I should see an error message', async function () {
+  await expect(loginPage.errorMessage).toBeVisible();
+});
+
+Then('I should remain on the login page', async function () {
+  await expect(this.page).toHaveURL(/\/login/);
+});
+
+After(async function () {
+  // Cleanup if needed
+});
+```
+
+### Running Cucumber Tests
+
+```bash
+# Run all Cucumber features
+npm run test:cucumber
+
+# Run specific feature
+npm run test:cucumber -- tests/features/authentication.feature
+
+# Run with tags
+npm run test:cucumber -- --tags "@smoke"
+
+# Generate HTML report
+npm run test:cucumber:report
+```
+
+### Package.json Scripts for Cucumber
+
+Add these scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "test:cucumber": "cucumber-js",
+    "test:cucumber:report": "cucumber-js && node generate-report.js"
+  }
+}
+```
+
+### Benefits of Cucumber/Gherkin
+
+- **Human-readable tests** - Business stakeholders can understand test scenarios
+- **Living documentation** - Feature files serve as documentation
+- **Collaboration** - Enables better communication between developers, testers, and business
+- **Reusable steps** - Step definitions can be shared across multiple scenarios
+- **Parallel execution** - Can run features in parallel for faster execution
 
 ### Playwright Configuration
 

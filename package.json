@@ -26,7 +26,12 @@
     "test:e2e:ui": "playwright test tests/e2e/quick-start.spec.ts --ui",
     "test:e2e:debug": "playwright test tests/e2e/quick-start.spec.ts --debug",
     "test:e2e:report": "playwright show-report",
-    "test:e2e:full": "JWT_ACCESS_SECRET=dev-access-secret-replace-in-production-with-secure-random-string-abcdef123456 JWT_REFRESH_SECRET=dev-refresh-secret-replace-in-production-with-different-secure-string-xyz789 PASSWORD_HASH_ROUNDS=12 DATABASE_URL=./jobs.db node --import tsx/esm src/index.ts > /dev/null 2>&1 & sleep 3 && npm run test:e2e && kill $!",
+    "test:e2e:with-report": "npm run test:e2e && npm run test:generate-report",
+    "test:e2e:full": "JWT_ACCESS_SECRET=dev-access-secret-replace-in-production-with-secure-random-string-abcdef123456 JWT_REFRESH_SECRET=dev-refresh-secret-replace-in-production-with-different-secure-string-xyz789 PASSWORD_HASH_ROUNDS=12 DATABASE_URL=./jobs.db node --import tsx/esm src/index.ts > /dev/null 2>&1 & sleep 3 && npm run test:e2e:with-report && kill $!",
+    "test:generate-report": "node generate-test-report.js",
+    "test:generate-pdf-report": "GENERATE_PDF=true node generate-test-report.js",
+    "test:cucumber": "cucumber-js --config cucumber.cjs",
+    "test:cucumber:full": "JWT_ACCESS_SECRET=dev-access-secret-replace-in-production-with-secure-random-string-abcdef123456 JWT_REFRESH_SECRET=dev-refresh-secret-replace-in-production-with-different-secure-string-xyz789 PASSWORD_HASH_ROUNDS=12 DATABASE_URL=./jobs.db CUCUMBER_TEST=true node --import tsx/esm src/index.ts > /dev/null 2>&1 & sleep 3 && npm run test:cucumber && kill $!",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio"
@@ -44,6 +49,7 @@
   "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
+    "@cucumber/cucumber": "^12.2.0",
     "@playwright/test": "^1.56.1",
     "@types/bcrypt": "^6.0.0",
     "@types/better-sqlite3": "^7.6.13",
@@ -63,6 +69,7 @@
     "drizzle-kit": "^0.31.5",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.18",
+    "ts-node": "^10.9.2",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
     "vitest": "^3.2.4"

@@ -13,7 +13,7 @@ export class JobListingsPage extends BasePage {
   }
 
   private get jobCards(): Locator {
-    return this.page.locator('[data-testid="job-card"], .job-card');
+    return this.page.locator('tbody tr.hover'); // Jobs are rendered as table rows
   }
 
   private get searchInput(): Locator {
@@ -23,7 +23,7 @@ export class JobListingsPage extends BasePage {
   }
 
   private get noJobsMessage(): Locator {
-    return this.page.locator('.no-jobs, .empty-state, [data-testid="no-jobs"]');
+    return this.page.locator('.no-jobs, .empty-state, [data-testid="no-jobs"], .alert-info');
   }
 
   /**
@@ -58,12 +58,16 @@ export class JobListingsPage extends BasePage {
    * Click on a specific job card by index
    */
   async clickJobCard(index: number = 0): Promise<void> {
-    const jobCard = this.jobCards.nth(index);
-    await expect(jobCard).toBeVisible();
-    await jobCard.click();
+    const jobRow = this.jobCards.nth(index);
+    await expect(jobRow).toBeVisible();
+
+    // Click on the "View Details" link within the table row
+    const viewDetailsLink = jobRow.locator('a[href*="details"]');
+    await expect(viewDetailsLink).toBeVisible();
+    await viewDetailsLink.click();
 
     // Wait for navigation to job detail page
-    await expect(this.page).toHaveURL(/job.*detail|job\/\d+/);
+    await expect(this.page).toHaveURL(/\/jobs\/\d+\/details/);
   }
 
   /**
@@ -73,7 +77,13 @@ export class JobListingsPage extends BasePage {
     if (await this.searchInput.isVisible()) {
       await this.searchInput.fill(searchTerm);
       await this.searchInput.press('Enter');
-      await this.waitForNetworkIdle();
+
+      // Wait for page to reload with search results
+      await this.page.waitForLoadState('networkidle');
+      await this.page.waitForLoadState('domcontentloaded');
+
+      // Wait for job listings to be visible again
+      await expect(this.jobCards.first()).toBeVisible({ timeout: 10000 });
     }
   }
 }

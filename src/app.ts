@@ -68,6 +68,8 @@ export const createApp = (): express.Application => {
 export const startServer = async (app: express.Application): Promise<void> => {
   try {
     console.log(`🚀 ${config.app.name} is starting...`);
+    console.log(`🧪 CUCUMBER_TEST: ${process.env['CUCUMBER_TEST']}`);
+    console.log(`🧪 NODE_ENV: ${process.env['NODE_ENV']}`);
 
     // Initialize database
     console.log('📀 Initializing database...');

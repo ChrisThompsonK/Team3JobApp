@@ -1,4 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
+import { config } from '../config/config';
+import { isLoggedIn, logout } from '../utils/auth.utils';
 
 /**
  * Base Page Object Model
@@ -11,34 +14,34 @@ export abstract class BasePage {
 
   constructor(page: Page) {
     this.page = page;
-    this.baseURL = process.env.BASE_URL || 'http://localhost:3000';
+    this.baseURL = config.baseURL;
   }
 
   /**
    * Common page elements
    */
   protected get navigation(): Locator {
-    return this.page.locator('nav, header, .navbar');
+    return this.page.locator('[data-testid="navigation"], nav, header, .navbar');
   }
 
   protected get mainContent(): Locator {
-    return this.page.locator('main, .main, #main');
+    return this.page.locator('[data-testid="main-content"], main, .main, #main');
   }
 
   protected get footer(): Locator {
-    return this.page.locator('footer');
+    return this.page.locator('[data-testid="footer"], footer');
   }
 
   protected get loadingSpinner(): Locator {
-    return this.page.locator('.loading, .spinner, [data-testid="loading"]');
+    return this.page.locator('[data-testid="loading"], .loading, .spinner');
   }
 
   protected get errorMessage(): Locator {
-    return this.page.locator('.error, .alert-error, [data-testid="error"]');
+    return this.page.locator('[data-testid="error"], .error, .alert-error');
   }
 
   protected get successMessage(): Locator {
-    return this.page.locator('.success, .alert-success, [data-testid="success"]');
+    return this.page.locator('[data-testid="success"], .success, .alert-success');
   }
 
   /**
@@ -46,6 +49,7 @@ export abstract class BasePage {
    */
   async goto(path: string = ''): Promise<void> {
     const url = path.startsWith('http') ? path : `${this.baseURL}${path}`;
+    console.log(`Navigating to ${url}`);
     await this.page.goto(url);
     await this.waitForPageLoad();
   }
@@ -54,11 +58,12 @@ export abstract class BasePage {
    * Wait for page to be fully loaded
    */
   async waitForPageLoad(): Promise<void> {
+    console.log('Waiting for page load');
     await this.page.waitForLoadState('domcontentloaded');
 
     // Wait for any loading spinners to disappear
     try {
-      await this.loadingSpinner.waitFor({ state: 'hidden', timeout: 5000 });
+      await this.loadingSpinner.waitFor({ state: 'hidden', timeout: config.timeouts.pageLoad });
     } catch {
       // Loading spinner might not exist, that's okay
     }
@@ -68,26 +73,11 @@ export abstract class BasePage {
    * Authentication helpers
    */
   async isLoggedIn(): Promise<boolean> {
-    try {
-      // Look for authenticated user elements - avatar with user initial
-      const userAvatar = this.page.locator('.avatar.placeholder');
-      const signInButton = this.page.locator('text="Sign In"');
-
-      // Check if user avatar is visible and sign in button is NOT visible
-      const hasUserAvatar = await userAvatar.isVisible({ timeout: 3000 });
-      const hasSignIn = await signInButton.isVisible({ timeout: 1000 }).catch(() => false);
-
-      return hasUserAvatar && !hasSignIn;
-    } catch {
-      return false;
-    }
+    return isLoggedIn(this.page);
   }
 
   async logout(): Promise<void> {
-    // Logout is done via POST to /auth/logout
-    // We'll use page.request to make the POST request
-    await this.page.request.post(`${this.baseURL}/auth/logout`);
-    await this.page.goto('/');
+    await logout(this.page, this.baseURL);
     await this.waitForPageLoad();
   }
 
@@ -123,12 +113,15 @@ export abstract class BasePage {
    * Wait for specific conditions
    */
   async waitForNetworkIdle(): Promise<void> {
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('networkidle', { timeout: config.timeouts.networkIdle });
   }
 
-  async waitForSelector(selector: string, timeout: number = 10000): Promise<Locator> {
+  async waitForSelector(
+    selector: string,
+    timeout: number = config.timeouts.selectorWait
+  ): Promise<Locator> {
     const locator = this.page.locator(selector);
-    await locator.waitFor({ timeout });
+    await expect(locator).toBeVisible({ timeout });
     return locator;
   }
 
@@ -137,4 +130,29 @@ export abstract class BasePage {
    * to verify the page has loaded correctly
    */
   abstract verifyPageLoaded(): Promise<void>;
+
+  /**
+   * Check accessibility of the current page
+   */
+  async checkAccessibility(): Promise<void> {
+    const snapshot = await this.page.accessibility.snapshot();
+
+    if (!snapshot) {
+      console.log('No accessibility snapshot available');
+      return;
+    }
+
+    // Log any accessibility violations
+    const violations =
+      snapshot.children?.filter((child) => child.role === 'error' || !child.role) || [];
+
+    if (violations.length > 0) {
+      console.warn(`Accessibility violations found: ${violations.length}`);
+      violations.forEach((violation, index) => {
+        console.warn(`${index + 1}. ${violation.name || 'Unnamed violation'}`);
+      });
+    } else {
+      console.log('No accessibility violations found');
+    }
+  }
 }

@@ -1,0 +1,564 @@
+[
+  {
+    "description": "  As a job seeker\n  I want to browse and apply for jobs\n  So that I can find employment opportunities",
+    "elements": [
+      {
+        "description": "",
+        "id": "job-portal-user-experience;view-available-job-listings",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "View available job listings",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 186115208
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "I am on the job portal home page",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:34"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 54063875
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I navigate to the job listings page",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 40840207
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 11,
+            "name": "I should see a list of available job roles",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:43"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1842291
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "each job listing should display the job title and location",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:48"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 33655582
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 39837417
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "job-portal-user-experience;search-for-specific-job-roles",
+        "keyword": "Scenario",
+        "line": 14,
+        "name": "Search for specific job roles",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 149600125
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "I am on the job portal home page",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:34"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 36620458
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 15,
+            "name": "I search for \"Software Engineer\" jobs",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:63"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1218750
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 16,
+            "name": "I should see only Software Engineer positions",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:67"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 7729624
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 17,
+            "name": "the search results should be filtered accordingly",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:77"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 5002179500,
+              "error_message": "Error: function timed out, ensure the promise resolves within 5000 milliseconds\n    at Timeout.<anonymous> (/Users/emmagrier/EngineeringAcademy/Job-App/team3-job-app-frontend/node_modules/@cucumber/cucumber/lib/time.js:64:20)\n    at listOnTimeout (node:internal/timers:581:17)\n    at process.processTimers (node:internal/timers:519:7)"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 51830667
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "job-portal-user-experience;view-detailed-job-information",
+        "keyword": "Scenario",
+        "line": 19,
+        "name": "View detailed job information",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 123179082
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "I am on the job portal home page",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:34"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 39052333
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 20,
+            "name": "I click on a job listing",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:83"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 5001008125,
+              "error_message": "Error: function timed out, ensure the promise resolves within 5000 milliseconds\n    at Timeout.<anonymous> (/Users/emmagrier/EngineeringAcademy/Job-App/team3-job-app-frontend/node_modules/@cucumber/cucumber/lib/time.js:64:20)\n    at listOnTimeout (node:internal/timers:581:17)\n    at process.processTimers (node:internal/timers:519:7)"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": ["Job Title"]
+                  },
+                  {
+                    "cells": ["Location"]
+                  },
+                  {
+                    "cells": ["Salary Range"]
+                  },
+                  {
+                    "cells": ["Job Description"]
+                  },
+                  {
+                    "cells": ["Requirements"]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Then ",
+            "line": 21,
+            "name": "I should see detailed job information including:",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:87"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 19581915
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "job-portal-user-experience;apply-for-a-job-position",
+        "keyword": "Scenario",
+        "line": 28,
+        "name": "Apply for a job position",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 155548458
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "I am on the job portal home page",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:34"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 38588958
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 29,
+            "name": "I am logged into the job portal",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:96"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 5002373458,
+              "error_message": "Error: function timed out, ensure the promise resolves within 5000 milliseconds\n    at Timeout.<anonymous> (/Users/emmagrier/EngineeringAcademy/Job-App/team3-job-app-frontend/node_modules/@cucumber/cucumber/lib/time.js:64:20)\n    at listOnTimeout (node:internal/timers:581:17)\n    at process.processTimers (node:internal/timers:519:7)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 30,
+            "name": "I view a job listing",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:102"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 31,
+            "name": "I click the \"Apply Now\" button",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:107"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 32,
+            "name": "I should be able to submit my application",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:111"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 33,
+            "name": "I should receive confirmation of my application",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:119"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 49584459
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "job-portal-user-experience;user-registration-and-login",
+        "keyword": "Scenario",
+        "line": 35,
+        "name": "User registration and login",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 120511084
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "I am on the job portal home page",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:34"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 37803958
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 36,
+            "name": "I am a new user",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:123"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5977416
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 37,
+            "name": "I register for an account with valid details",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:128"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 5000908999,
+              "error_message": "Error: function timed out, ensure the promise resolves within 5000 milliseconds\n    at Timeout.<anonymous> (/Users/emmagrier/EngineeringAcademy/Job-App/team3-job-app-frontend/node_modules/@cucumber/cucumber/lib/time.js:64:20)\n    at listOnTimeout (node:internal/timers:581:17)\n    at process.processTimers (node:internal/timers:519:7)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 38,
+            "name": "I should be able to log in successfully",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:137"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "I should have access to my profile",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:141"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 29589625
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "job-portal-user-experience;view-application-history",
+        "keyword": "Scenario",
+        "line": 41,
+        "name": "View application history",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 162176791
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "I am on the job portal home page",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:34"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 36805917
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 42,
+            "name": "I am logged into the job portal",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:96"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 5001495499,
+              "error_message": "Error: function timed out, ensure the promise resolves within 5000 milliseconds\n    at Timeout.<anonymous> (/Users/emmagrier/EngineeringAcademy/Job-App/team3-job-app-frontend/node_modules/@cucumber/cucumber/lib/time.js:64:20)\n    at listOnTimeout (node:internal/timers:581:17)\n    at process.processTimers (node:internal/timers:519:7)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 43,
+            "name": "I have applied for jobs previously",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:146"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 44,
+            "name": "I navigate to my applications page",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:151"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 45,
+            "name": "I should see a list of my job applications",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:155"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 46,
+            "name": "the status of each application",
+            "match": {
+              "location": "tests/features/step-definitions/job-portal-steps.ts:160"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 40082042
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "job-portal-user-experience",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Job Portal User Experience",
+    "tags": [],
+    "uri": "tests/features/job-portal.feature"
+  }
+]
