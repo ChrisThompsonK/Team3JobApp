@@ -21,7 +21,7 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
         run: npm ci
 
       - name: Run Biome CI checks
@@ -33,5 +33,33 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Checkout backend code
+        uses: actions/checkout@v4
+        with:
+          path: backend
+          sparse-checkout: team3-job-app-backend
+
+      - name: Setup backend
+        working-directory: backend/team3-job-app-backend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Start backend server
+        working-directory: backend/team3-job-app-backend
+        run: |
+          npm run start &
+          echo "Backend process started"
+        env:
+          NODE_ENV: test
+
+      - name: Wait for backend to be ready
+        run: |
+          npx wait-on tcp:3001 --timeout 30000
+        env:
+          WAIT_ON_TIMEOUT: 30000
+
       - name: Run tests
         run: npm run test:run
+        env:
+          INTEGRATION_TEST_BACKEND_URL: http://localhost:3001
