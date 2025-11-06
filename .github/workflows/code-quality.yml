@@ -33,10 +33,11 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Checkout backend code (full repo)
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - name: Checkout backend repository
+        run: |
+          cd ..
+          git clone https://github.com/ChrisThompsonK/team3-job-app-backend.git
+          cd team3-job-app-backend
 
       - name: Setup backend
         working-directory: ../team3-job-app-backend
