@@ -33,29 +33,29 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Checkout backend code
+      - name: Checkout backend code (full repo)
         uses: actions/checkout@v4
         with:
-          path: backend
-          sparse-checkout: team3-job-app-backend
+          fetch-depth: 0
 
       - name: Setup backend
-        working-directory: backend/team3-job-app-backend
+        working-directory: ../team3-job-app-backend
         run: |
           npm ci
           npm run build
 
       - name: Start backend server
-        working-directory: backend/team3-job-app-backend
+        working-directory: ../team3-job-app-backend
         run: |
-          npm run start &
+          npm run start > /tmp/backend.log 2>&1 &
+          sleep 2
           echo "Backend process started"
         env:
           NODE_ENV: test
 
       - name: Wait for backend to be ready
         run: |
-          npx wait-on tcp:3001 --timeout 30000
+          npx wait-on tcp:3001 --timeout 30000 || (cat /tmp/backend.log && exit 1)
         env:
           WAIT_ON_TIMEOUT: 30000
 
