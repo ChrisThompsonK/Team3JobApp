@@ -1,8 +1,7 @@
-import type { Download } from '@playwright/test';
+import * as fs from 'node:fs';
+import * as os from 'node:os';
+import * as path from 'node:path';
 import { expect, test } from '@playwright/test';
-import * as fs from 'fs';
-import * as os from 'os';
-import * as path from 'path';
 
 /**
  * Get a safe temporary directory

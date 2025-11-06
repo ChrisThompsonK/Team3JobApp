@@ -1,13 +1,6 @@
-import {
-  type FullConfig,
-  FullProject,
-  type Reporter,
-  type Suite,
-  type TestCase,
-  type TestResult,
-} from '@playwright/test/reporter';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
+import type { FullConfig, Reporter, Suite, TestCase, TestResult } from '@playwright/test/reporter';
 
 interface ReporterTestData {
   name: string;
@@ -24,9 +17,8 @@ interface ReporterTestData {
 
 class CustomTestReporter implements Reporter {
   private testData: ReporterTestData[] = [];
-  private suites: Map<string, any> = new Map();
 
-  onBegin(config: FullConfig, suite: Suite): void {
+  onBegin(_config: FullConfig, suite: Suite): void {
     console.log(`Starting tests in ${suite.title}`);
   }
 

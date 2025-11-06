@@ -1,4 +1,4 @@
-import { After, Before, DataTable, Given, Then, When } from '@cucumber/cucumber';
+import { After, Before, Then, When } from '@cucumber/cucumber';
 import { type Browser, type BrowserContext, chromium, expect, type Page } from '@playwright/test';
 
 interface World {

@@ -6,11 +6,8 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import {
   assertArrayResponseShape,
-  assertResponseShape,
-  BACKEND_URL,
   createTestClient,
   setupIntegrationTest,
-  testDataFactories,
 } from './integration.setup.js';
 
 setupIntegrationTest();

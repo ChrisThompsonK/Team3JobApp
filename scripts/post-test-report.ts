@@ -5,9 +5,8 @@
  * Can be imported and used in test setup files or CI/CD scripts.
  */
 
-import { execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 interface ReportGeneratorOptions {
   outputDir?: string;
@@ -238,9 +237,11 @@ export async function generatePostTestReport(options: ReportGeneratorOptions = {
   console.log(summary);
 
   // Export to CSV
-  const csvPath = path.join(opts.outputDir!, 'test-results.csv');
-  console.log('💾 Exporting to CSV...');
-  exportResultsToCSV(artifacts, csvPath);
+  if (opts.outputDir) {
+    const csvPath = path.join(opts.outputDir, 'test-results.csv');
+    console.log('💾 Exporting to CSV...');
+    exportResultsToCSV(artifacts, csvPath);
+  }
 
   console.log(`\nReports available in: ${opts.outputDir}/`);
   console.log('   - test-report-*.html (Interactive HTML report)');

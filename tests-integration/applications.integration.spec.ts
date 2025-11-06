@@ -4,18 +4,13 @@
  */
 
 import { beforeAll, describe, expect, it } from 'vitest';
-import {
-  BACKEND_URL,
-  createTestClient,
-  setupIntegrationTest,
-  testDataFactories,
-} from './integration.setup.js';
+import { createTestClient, setupIntegrationTest, testDataFactories } from './integration.setup.js';
 
 setupIntegrationTest();
 
 describe('Application Routes Integration Tests', () => {
   let client = createTestClient();
-  let testApplicationId: number;
+  let _testApplicationId: number;
   let testApplicationEmail: string;
 
   beforeAll(() => {
@@ -41,7 +36,7 @@ describe('Application Routes Integration Tests', () => {
 
         if (response.data.success) {
           expect(response.data).toHaveProperty('applicationID');
-          testApplicationId = response.data.applicationID;
+          _testApplicationId = response.data.applicationID;
         }
       }
     });

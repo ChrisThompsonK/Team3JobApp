@@ -1,4 +1,4 @@
-import { expect, type Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 /**
@@ -6,10 +6,6 @@ import { BasePage } from './BasePage';
  * Encapsulates all interactions and validations for the My Applications feature
  */
 export class MyApplicationsPage extends BasePage {
-  constructor(page: Page) {
-    super(page);
-  }
-
   /**
    * Navigate to My Applications page via URL
    */

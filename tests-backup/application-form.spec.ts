@@ -1,5 +1,5 @@
+import * as path from 'node:path';
 import { expect, test } from '@playwright/test';
-import * as path from 'path';
 
 test.describe('Flow 16: Submit Job Application (Authenticated User)', () => {
   const baseURL = 'http://localhost:3000';
@@ -205,7 +205,7 @@ test.describe('Flow 16: Submit Job Application (Authenticated User)', () => {
     await page.check('input[name="acceptTerms"]');
 
     // Create a dummy PDF file for testing
-    const cvPath = path.join('/tmp', `test-cv-${timestamp}.pdf`);
+    const _cvPath = path.join('/tmp', `test-cv-${timestamp}.pdf`);
 
     // Upload file - Playwright will create an empty file
     await page.setInputFiles('input#cv', {
@@ -380,7 +380,7 @@ test.describe('Flow 16: Submit Job Application (Authenticated User)', () => {
     const newPage = await context.newPage();
 
     // Navigate directly to apply page
-    const response = await newPage.goto(`${baseURL}/jobs/${testJobId}/apply`);
+    const _response = await newPage.goto(`${baseURL}/jobs/${testJobId}/apply`);
 
     // Should redirect to login (check URL or status code)
     await newPage.waitForURL(/login|auth/, { timeout: 5000 });

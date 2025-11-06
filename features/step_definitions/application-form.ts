@@ -1,6 +1,5 @@
 import { After, Before, type DataTable, Given, Then, When } from '@cucumber/cucumber';
 import { type Browser, type BrowserContext, chromium, expect, type Page } from '@playwright/test';
-import * as path from 'path';
 
 interface World {
   browser: Browser | null;
@@ -320,7 +319,7 @@ When('I click the back button', async () => {
 When('I navigate directly to the apply page', async () => {
   if (!world.page) throw new Error('Page not initialized');
 
-  const response = await world.page.goto(`${world.baseURL}/jobs/${world.testJobId}/apply`, {
+  const _response = await world.page.goto(`${world.baseURL}/jobs/${world.testJobId}/apply`, {
     waitUntil: 'networkidle',
   });
 });

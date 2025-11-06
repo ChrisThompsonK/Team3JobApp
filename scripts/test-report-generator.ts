@@ -1,7 +1,7 @@
-import { execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 interface TestMetadata {
   suiteeName: string;
@@ -107,7 +107,7 @@ function parseVitestCoverage(): CoverageData | undefined {
     let coveredStatements = 0;
     let totalLines = 0;
     let coveredLines = 0;
-    let fileCount = 0;
+    let _fileCount = 0;
 
     Object.values(coverage as any).forEach((file: any) => {
       if (file.s) {
@@ -122,7 +122,7 @@ function parseVitestCoverage(): CoverageData | undefined {
           if (count > 0) coveredLines++;
         });
       }
-      fileCount++;
+      _fileCount++;
     });
 
     const percentage = totalLines > 0 ? Math.round((coveredLines / totalLines) * 100) : 0;
@@ -134,7 +134,7 @@ function parseVitestCoverage(): CoverageData | undefined {
       functions: 0,
       lines: percentage,
     };
-  } catch (error) {
+  } catch (_error) {
     return undefined;
   }
 }
@@ -148,7 +148,7 @@ function parseVitestReport(): {
 } {
   try {
     // Vitest doesn't output standard JSON by default, so we parse the HTML report
-    const htmlFile = path.join(projectRoot, 'coverage', 'index.html');
+    const _htmlFile = path.join(projectRoot, 'coverage', 'index.html');
 
     // For now, return defaults - we'll enhance this if Vitest JSON output is available
     return {
@@ -856,7 +856,7 @@ function generateHtmlReport(report: TestReport): void {
             <div class="failure-list">
                 ${report.failedTests
                   .map(
-                    (test, index) => `
+                    (test, _index) => `
                     <div class="failure-item collapsed">
                         <div class="failure-header" onclick="this.parentElement.classList.toggle('collapsed'); this.parentElement.querySelector('.failure-content').classList.toggle('expanded')">
                             <div>

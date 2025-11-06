@@ -1,4 +1,4 @@
-import { expect, type Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 /**
@@ -10,11 +10,6 @@ export class LoginPage extends BasePage {
   private readonly emailInput = 'input[name="email"]';
   private readonly passwordInput = 'input[name="password"]';
   private readonly submitButton = 'button[type="submit"]';
-  private readonly signInLink = '[role="link"]';
-
-  constructor(page: Page) {
-    super(page);
-  }
 
   /**
    * Navigate to the home page and click sign in link

@@ -4,12 +4,7 @@
  */
 
 import { beforeAll, describe, expect, it } from 'vitest';
-import {
-  BACKEND_URL,
-  createTestClient,
-  setupIntegrationTest,
-  testDataFactories,
-} from './integration.setup.js';
+import { createTestClient, setupIntegrationTest, testDataFactories } from './integration.setup.js';
 
 setupIntegrationTest();
 

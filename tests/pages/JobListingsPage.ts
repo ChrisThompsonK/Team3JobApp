@@ -1,4 +1,4 @@
-import { expect, type Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 /**
@@ -6,13 +6,6 @@ import { BasePage } from './BasePage';
  * Encapsulates all interactions with the job listings page
  */
 export class JobListingsPage extends BasePage {
-  // Selectors
-  private readonly reportButton = '[role="link"]';
-
-  constructor(page: Page) {
-    super(page);
-  }
-
   /**
    * Navigate to job listings page
    */
