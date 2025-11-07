@@ -1,6 +1,6 @@
-import { Before, After, setDefaultTimeout } from '@cucumber/cucumber';
+import { After, Before, setDefaultTimeout } from '@cucumber/cucumber';
 import { chromium } from '@playwright/test';
-import { CucumberWorld } from './world';
+import type { CucumberWorld } from './world';
 
 setDefaultTimeout(60 * 1000);
 

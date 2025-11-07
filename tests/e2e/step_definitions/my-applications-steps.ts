@@ -1,7 +1,7 @@
-import { When, Then } from '@cucumber/cucumber';
+import { Then, When } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
-import { CucumberWorld } from '../support/world';
 import { MyApplicationsPage } from '../pages/MyApplicationsPage';
+import type { CucumberWorld } from '../support/world';
 
 When('I click the My Applications button', async function (this: CucumberWorld) {
   if (!this.page) throw new Error('Page not initialized');

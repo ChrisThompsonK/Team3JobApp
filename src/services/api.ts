@@ -146,12 +146,12 @@ export const api = {
 
       const url = params.toString() ? `/jobs?${params.toString()}` : '/jobs';
       const response = await apiClient.get<BackendJobRole[]>(url);
-      
+
       if (!response.data || !Array.isArray(response.data)) {
         console.warn('Unexpected jobs response format:', response.data);
         return [];
       }
-      
+
       // Transform backend format to frontend format
       return response.data.map(transformJobRole);
     } catch (error) {

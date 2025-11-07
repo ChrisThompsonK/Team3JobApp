@@ -1,8 +1,8 @@
-import { When, Then } from '@cucumber/cucumber';
+import { Then, When } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
-import { CucumberWorld } from '../support/world';
 import { JobListingsPage } from '../pages/JobListingsPage';
 import { ReportPage } from '../pages/ReportPage';
+import type { CucumberWorld } from '../support/world';
 
 When('I navigate to job listings', async function (this: CucumberWorld) {
   if (!this.page) throw new Error('Page not initialized');

@@ -1,8 +1,8 @@
-import { World, setWorldConstructor, IWorldOptions } from '@cucumber/cucumber';
+import { IWorldOptions, setWorldConstructor, World } from '@cucumber/cucumber';
 import type { Browser, BrowserContext, Page } from '@playwright/test';
+import type { JobListingsPage } from '../pages/JobListingsPage';
 import type { LoginPage } from '../pages/LoginPage';
 import type { MyApplicationsPage } from '../pages/MyApplicationsPage';
-import type { JobListingsPage } from '../pages/JobListingsPage';
 import type { ReportPage } from '../pages/ReportPage';
 
 export class CucumberWorld extends World {
