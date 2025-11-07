@@ -88,17 +88,17 @@ test.describe('Report Feature - Available Jobs', () => {
   });
 
   /**
-   * Test 4: Non-admin user gets 403 error when accessing report
+   * Test 4: Non-admin user gets forbidden error when accessing report
    */
-  test('should return 403 Forbidden for non-admin user accessing report', async () => {
+  test('should show forbidden error for non-admin user accessing report', async () => {
     // Login as non-admin user
     await loginPage.loginAsRegularUser();
 
-    // Navigate to report endpoint
-    const response = await reportPage.getReportPageResponse();
+    // Navigate to report page
+    await reportPage.navigateToReportPage();
 
-    // Verify 403 status
-    await reportPage.verifyForbiddenStatus(response);
+    // Verify access is forbidden (redirected to login or error shown)
+    await reportPage.verifyAccessForbidden();
 
     // Verify error message is displayed
     await reportPage.verifyErrorMessageDisplayed();

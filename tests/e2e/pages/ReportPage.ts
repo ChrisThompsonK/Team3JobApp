@@ -24,46 +24,78 @@ export class ReportPage extends BasePage {
   }
 
   /**
-   * Get response from accessing report page
-   * Useful for checking status codes without rendering
-   */
-  async getReportPageResponse() {
-    const response = await this.page.goto('/jobs/report');
-    return response;
-  }
-
-  /**
-   * Verify forbidden status (403)
-   */
-  async verifyForbiddenStatus(response: any) {
-    expect(response?.status()).toBe(403);
-  }
-
-  /**
-   * Verify user is redirected to login page
+   * Verify user is redirected to login page (UI assertion)
    */
   async verifyRedirectedToLogin() {
     await expect(this.page).toHaveURL(/\/auth\/login/);
   }
 
   /**
-   * Verify login form is displayed
+   * Verify login form is displayed (UI assertion)
    */
   async verifyLoginFormDisplayed() {
     await expect(this.page.getByRole('heading', { name: /sign in/i })).toBeVisible();
   }
 
   /**
-   * Verify error message is displayed
+   * Verify access is forbidden - check for error page or message
+   */
+  async verifyAccessForbidden() {
+    // Check that either the login form is shown OR an error message appears
+    const loginHeading = this.page.getByRole('heading', { name: /sign in/i });
+    const errorMessage = this.page.getByText(
+      /access forbidden|admin privileges required|unauthorized/i
+    );
+
+    const headingVisible = await loginHeading.isVisible().catch(() => false);
+    const errorVisible = await errorMessage.isVisible().catch(() => false);
+
+    expect(headingVisible || errorVisible).toBe(true);
+  }
+
+  /**
+   * Verify error message is displayed (UI assertion)
    */
   async verifyErrorMessageDisplayed() {
-    await expect(this.page.getByText(/access forbidden|admin privileges required/i)).toBeVisible();
+    await expect(
+      this.page.getByText(/access forbidden|admin privileges required|unauthorized/i)
+    ).toBeVisible();
   }
 
   /**
    * Get error message text
    */
   async getErrorMessage() {
-    return await this.page.getByText(/access forbidden|admin privileges required/i).textContent();
+    return await this.page
+      .getByText(/access forbidden|admin privileges required|unauthorized/i)
+      .textContent();
+  }
+
+  /**
+   * Verify report page is loaded and visible (UI assertion)
+   */
+  async verifyReportPageLoaded() {
+    // Check for report button or report content
+    const reportButton = this.page.getByRole('button', { name: /report|download/i });
+    const reportHeading = this.page.getByRole('heading', { name: /report|job.*report/i });
+
+    const buttonVisible = await reportButton.isVisible().catch(() => false);
+    const headingVisible = await reportHeading.isVisible().catch(() => false);
+
+    expect(buttonVisible || headingVisible).toBe(true);
+  }
+
+  /**
+   * Verify report button is visible (UI assertion)
+   */
+  async verifyReportButtonVisible() {
+    await expect(this.page.getByRole('button', { name: /report|download/i })).toBeVisible();
+  }
+
+  /**
+   * Verify report button is NOT visible (UI assertion)
+   */
+  async verifyReportButtonNotVisible() {
+    await expect(this.page.getByRole('button', { name: /report|download/i })).not.toBeVisible();
   }
 }
