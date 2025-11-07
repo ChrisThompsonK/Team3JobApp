@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { LoginPage } from './pages/LoginPage';
 import { MyApplicationsPage } from './pages/MyApplicationsPage';
 
@@ -21,6 +21,9 @@ test.describe('My Applications - View Applications', () => {
 
     // Navigate to My Applications by clicking the button
     await myApplicationsPage.clickMyApplicationsButton();
+
+    // Verify applications page is displayed
+    await myApplicationsPage.waitForUrl(/\/my-applications/);
   });
 
   test('should return to main menu when clicking back to home button', async () => {
@@ -32,6 +35,9 @@ test.describe('My Applications - View Applications', () => {
 
     // Click back to home button
     await myApplicationsPage.clickBackToHomeButton();
+
+    // Verify we're back at the home page
+    await myApplicationsPage.waitForUrl(/\/$/);
   });
 
   test('should return to main menu when kainos logo clicked', async () => {
@@ -43,6 +49,9 @@ test.describe('My Applications - View Applications', () => {
 
     // Click Kainos logo to return to home
     await myApplicationsPage.clickKainosLogo();
+
+    // Verify we're back at the home page
+    await myApplicationsPage.waitForUrl(/\/$/);
   });
 
   test('should display the details of the correct job when view job button clicked', async () => {
