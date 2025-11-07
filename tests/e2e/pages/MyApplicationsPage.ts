@@ -7,10 +7,10 @@ import { BasePage } from './BasePage';
  */
 export class MyApplicationsPage extends BasePage {
   /**
-   * Navigate to My Applications page via URL
+   * Navigate to My Applications page by clicking the button
    */
   async navigateToMyApplicationsPage() {
-    await this.goto('/my-applications');
+    await this.clickMyApplicationsButton();
   }
 
   /**
