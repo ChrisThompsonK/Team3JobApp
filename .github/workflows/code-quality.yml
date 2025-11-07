@@ -21,7 +21,7 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
         run: npm ci
 
       - name: Run Biome CI checks
@@ -35,3 +35,4 @@ jobs:
 
       - name: Run tests
         run: npm run test:run
+      

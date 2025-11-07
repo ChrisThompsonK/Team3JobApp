@@ -98,6 +98,13 @@ jspm_packages/
 # Temporary folders
 tmp/
 temp/
+
+# Test results and reports
+test-results/
+test-reports/
+playwright-report/
+vitest-report.json
+playwright-test-output.txt
 # Database files
 *.db
 *.sqlite
@@ -106,3 +113,14 @@ temp/
 # User uploaded files
 public/uploads/*
 !public/uploads/.gitkeep
+
+# Test Reports
+test-reports/
+vitest-report.json
+vitest-reports/
+playwright-reports/
+cucumber-report.json
+cucumber-report.html
+
+# Test Results
+test-results/

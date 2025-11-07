@@ -1,3 +1,7 @@
+---
+applyTo: '**'
+---
+
 # Kainos Design Guidelines
 
 ## Overview

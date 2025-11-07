@@ -130,23 +130,37 @@ export const api = {
     limit?: number,
     offset?: number
   ): Promise<JobRole[]> => {
-    // Build query parameters for sorting and pagination
-    const params = new URLSearchParams();
-    if (sortBy && sortOrder) {
-      params.append('sortBy', sortBy);
-      params.append('sortOrder', sortOrder);
-    }
-    if (limit !== undefined) {
-      params.append('limit', limit.toString());
-    }
-    if (offset !== undefined) {
-      params.append('offset', offset.toString());
-    }
+    try {
+      // Build query parameters for sorting and pagination
+      const params = new URLSearchParams();
+      if (sortBy && sortOrder) {
+        params.append('sortBy', sortBy);
+        params.append('sortOrder', sortOrder);
+      }
+      if (limit !== undefined) {
+        params.append('limit', limit.toString());
+      }
+      if (offset !== undefined) {
+        params.append('offset', offset.toString());
+      }
 
-    const url = params.toString() ? `/jobs?${params.toString()}` : '/jobs';
-    const response = await apiClient.get<BackendJobRole[]>(url);
-    // Transform backend format to frontend format
-    return response.data.map(transformJobRole);
+      const url = params.toString() ? `/jobs?${params.toString()}` : '/jobs';
+      const response = await apiClient.get<BackendJobRole[]>(url);
+
+      if (!response.data || !Array.isArray(response.data)) {
+        console.warn('Unexpected jobs response format:', response.data);
+        return [];
+      }
+
+      // Transform backend format to frontend format
+      return response.data.map(transformJobRole);
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('API Error - Status:', error.response?.status, 'Data:', error.response?.data);
+      }
+      return [];
+    }
   },
 
   // Get single job role by ID with full details
@@ -236,20 +250,56 @@ export const api = {
 
   // Get all capabilities (for creating/editing job roles)
   getCapabilities: async (): Promise<Array<{ id: number; name: string }>> => {
-    const response = await apiClient.get<Array<{ id: number; name: string }>>('/capabilities');
-    return response.data;
+    try {
+      const response = await apiClient.get<Array<{ id: number; name: string }>>('/capabilities');
+      if (!response.data || !Array.isArray(response.data)) {
+        console.warn('Unexpected capabilities response format:', response.data);
+        return [];
+      }
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching capabilities:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('API Error - Status:', error.response?.status, 'Data:', error.response?.data);
+      }
+      return [];
+    }
   },
 
   // Get all bands (for creating/editing job roles)
   getBands: async (): Promise<Array<{ id: number; name: string }>> => {
-    const response = await apiClient.get<Array<{ id: number; name: string }>>('/bands');
-    return response.data;
+    try {
+      const response = await apiClient.get<Array<{ id: number; name: string }>>('/bands');
+      if (!response.data || !Array.isArray(response.data)) {
+        console.warn('Unexpected bands response format:', response.data);
+        return [];
+      }
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching bands:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('API Error - Status:', error.response?.status, 'Data:', error.response?.data);
+      }
+      return [];
+    }
   },
 
   // Get all statuses (for creating/editing job roles)
   getStatuses: async (): Promise<JobAvailabilityStatus[]> => {
-    const response = await apiClient.get<JobAvailabilityStatus[]>('/statuses');
-    return response.data;
+    try {
+      const response = await apiClient.get<JobAvailabilityStatus[]>('/statuses');
+      if (!response.data || !Array.isArray(response.data)) {
+        console.warn('Unexpected statuses response format:', response.data);
+        return [];
+      }
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching statuses:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('API Error - Status:', error.response?.status, 'Data:', error.response?.data);
+      }
+      return [];
+    }
   },
 
   // Submit a job application
@@ -288,10 +338,22 @@ export const api = {
       bandName?: string | null;
     }>
   > => {
-    const response = await apiClient.get('/applications/my-applications', {
-      params: { email },
-    });
-    return response.data;
+    try {
+      const response = await apiClient.get('/applications/my-applications', {
+        params: { email },
+      });
+      if (!response.data || !Array.isArray(response.data)) {
+        console.warn('Unexpected my-applications response format:', response.data);
+        return [];
+      }
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching my applications:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('API Error - Status:', error.response?.status, 'Data:', error.response?.data);
+      }
+      return [];
+    }
   },
 
   // Get applications for a specific job role (admin only)
