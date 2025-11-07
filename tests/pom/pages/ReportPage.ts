@@ -28,21 +28,6 @@ export class ReportPage extends BasePage {
   }
 
   /**
-   * Get response status when accessing report
-   */
-  async getReportPageResponse() {
-    const response = await this.page.goto('/jobs/report');
-    return response?.status();
-  }
-
-  /**
-   * Verify 403 Forbidden status
-   */
-  async verifyForbiddenStatus(response: number | undefined) {
-    expect(response).toBe(403);
-  }
-
-  /**
    * Verify error message is displayed
    */
   async verifyErrorMessageDisplayed() {
