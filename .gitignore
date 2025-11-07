@@ -113,3 +113,14 @@ playwright-test-output.txt
 # User uploaded files
 public/uploads/*
 !public/uploads/.gitkeep
+
+# Test Reports
+test-reports/
+vitest-report.json
+vitest-reports/
+playwright-reports/
+cucumber-report.json
+cucumber-report.html
+
+# Test Results
+test-results/
