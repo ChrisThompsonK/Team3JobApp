@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 /**
@@ -7,10 +7,36 @@ import { BasePage } from './BasePage';
  */
 export class ReportPage extends BasePage {
   /**
-   * Navigate to report page
+   * Navigate to report page by clicking the Report link
+   * Used when the link is visible (logged in as admin)
+   */
+  async navigateToReportPageViaLink() {
+    await this.page.getByRole('link', { name: /report/i }).click();
+    await this.page.waitForURL(/\/jobs\/report/);
+  }
+
+  /**
+   * Navigate directly to report page using URL
+   * Used for unauthenticated users or when testing redirects
    */
   async navigateToReportPage() {
-    await this.goto('/jobs/report');
+    await this.page.goto('/jobs/report');
+  }
+
+  /**
+   * Get response from accessing report page
+   * Useful for checking status codes without rendering
+   */
+  async getReportPageResponse() {
+    const response = await this.page.goto('/jobs/report');
+    return response;
+  }
+
+  /**
+   * Verify forbidden status (403)
+   */
+  async verifyForbiddenStatus(response: any) {
+    expect(response?.status()).toBe(403);
   }
 
   /**

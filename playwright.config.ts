@@ -14,15 +14,16 @@ const _isCI = process.env.CI === 'true';
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './tests/pom',
+  testDir: './tests/e2e',
+  testMatch: '**/*-pom.spec.ts',
   /* Run tests in files in parallel, but not within the same file to avoid stack overflow */
   fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Reduce workers to prevent memory exhaustion and stack overflow during concurrent downloads */
-  workers: process.env.CI ? 1 : 1,
+  /* Use more workers locally, but keep CI limited to prevent memory exhaustion during concurrent downloads */
+  workers: process.env.CI ? 1 : 4,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [['html'], ['json', { outputFile: 'playwright-report/results.json' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */

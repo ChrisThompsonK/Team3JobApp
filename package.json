@@ -24,7 +24,7 @@
     "test:integration": "vitest run tests/integration",
     "test:integration:watch": "vitest watch tests/integration",
     "test:integration:ui": "vitest --ui tests/integration",
-    "test:e2e": "cucumber-js tests/e2e",
+    "test:e2e": "NODE_OPTIONS='--import=tsx' cucumber-js tests/e2e --require 'tests/e2e/support/**/*.ts' --require 'tests/e2e/step_definitions/**/*.ts'",
     "test:e2e:headed": "cucumber-js tests/e2e --format progress-bar",
     "test:e2e:report": "cucumber-js tests/e2e --format html:cucumber-report.html",
     "test:pom:run": "playwright test",
