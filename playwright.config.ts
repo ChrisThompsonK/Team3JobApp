@@ -14,7 +14,7 @@ const _isCI = process.env.CI === 'true';
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './tests',
+  testDir: './tests/pom',
   /* Run tests in files in parallel, but not within the same file to avoid stack overflow */
   fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

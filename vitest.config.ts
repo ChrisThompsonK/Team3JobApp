@@ -6,10 +6,9 @@ export default defineConfig({
     environment: 'node',
     include: [
       'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
-      'tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
-      'tests-integration/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      'tests/integration/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
     ],
-    exclude: ['node_modules', 'dist', '.git', '.cache', 'tests/**/*-pom.spec.ts'],
+    exclude: ['node_modules', 'dist', '.git', '.cache', 'tests/pom/**/*-pom.spec.ts', 'tests/e2e/**'],
     setupFiles: ['./vitest.setup.ts'],
     reporters: ['default', 'json'],
     outputFile: {
