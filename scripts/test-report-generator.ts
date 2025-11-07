@@ -147,21 +147,66 @@ function parseVitestReport(): {
   failed: FailedTest[];
 } {
   try {
-    // Vitest doesn't output standard JSON by default, so we parse the HTML report
-    const _htmlFile = path.join(projectRoot, 'coverage', 'index.html');
+    const reportFile = path.join(projectRoot, 'vitest-report.json');
 
-    // For now, return defaults - we'll enhance this if Vitest JSON output is available
+    if (!fs.existsSync(reportFile)) {
+      return {
+        summary: {
+          total: 0,
+          passed: 0,
+          failed: 0,
+          skipped: 0,
+          duration: '0s',
+        },
+        failed: [],
+      };
+    }
+
+    const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
+
+    const total = report.numTotalTests || 0;
+    const passed = report.numPassedTests || 0;
+    const failed = report.numFailedTests || 0;
+    const skipped = report.numPendingTests || 0;
+    let totalDuration = 0;
+
+    const failedTests: FailedTest[] = [];
+
+    // Process test results to collect failed tests and calculate duration
+    if (report.testResults && Array.isArray(report.testResults)) {
+      report.testResults.forEach((testFile: any) => {
+        if (testFile.assertionResults) {
+          testFile.assertionResults.forEach((assertion: any) => {
+            totalDuration += assertion.duration || 0;
+
+            if (assertion.status === 'failed') {
+              failedTests.push({
+                name: assertion.fullName || assertion.title || 'Unknown',
+                error: assertion.failureMessages?.[0] || 'Unknown error',
+                file: testFile.name,
+                stackTrace: assertion.failureMessages?.join('\n'),
+              });
+            }
+          });
+        }
+
+        if (testFile.endTime && testFile.startTime) {
+          totalDuration += testFile.endTime - testFile.startTime;
+        }
+      });
+    }
+
+    const durationSeconds = Math.round(totalDuration / 1000);
+    const minutes = Math.floor(durationSeconds / 60);
+    const seconds = durationSeconds % 60;
+    const durationStr = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+
     return {
-      summary: {
-        total: 0,
-        passed: 0,
-        failed: 0,
-        skipped: 0,
-        duration: '0s',
-      },
-      failed: [],
+      summary: { total, passed, failed, skipped, duration: durationStr },
+      failed: failedTests,
     };
-  } catch {
+  } catch (error) {
+    console.error('Error parsing Vitest report:', error);
     return {
       summary: {
         total: 0,
