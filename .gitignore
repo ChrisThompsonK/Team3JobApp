@@ -98,6 +98,13 @@ jspm_packages/
 # Temporary folders
 tmp/
 temp/
+
+# Test results and reports
+test-results/
+test-reports/
+playwright-report/
+vitest-report.json
+playwright-test-output.txt
 # Database files
 *.db
 *.sqlite

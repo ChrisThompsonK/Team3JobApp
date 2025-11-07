@@ -36,13 +36,6 @@ export class BasePage {
   }
 
   /**
-   * Wait for a specific timeout
-   */
-  async wait(ms: number) {
-    await this.page.waitForTimeout(ms);
-  }
-
-  /**
    * Check if element is visible
    */
   async isElementVisible(selector: string) {
