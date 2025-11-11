@@ -1,0 +1,59 @@
+# Node modules
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build output
+dist
+coverage
+.next
+out
+
+# Testing
+test-results
+playwright-report
+reports
+cucumber-report.html
+.vitest
+
+# Development files
+*.md
+!README.md
+.git
+.gitignore
+.env.local
+.env.development
+.env.test
+.DS_Store
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Logs
+logs
+*.log
+
+# OS files
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+
+# Temporary files
+tmp
+temp
+.cache
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# Documentation
+docs
+
+# Scripts that aren't needed in production
+scripts
