@@ -1,14 +1,18 @@
-import bcrypt from 'bcrypt';
 import { config } from '../config/index.js';
-import type { AuthUser, CreateUserData, LoginCredentials, RegisterData } from '../models/user.js';
-import { userRepository } from '../repositories/user-repository.js';
+import type { AuthUser, LoginCredentials, RegisterData } from '../models/user.js';
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from './token-service.js';
 
 export class AuthService {
+  private backendUrl: string;
+
+  constructor() {
+    this.backendUrl = config.api.baseUrl;
+  }
+
   async register(registerData: RegisterData): Promise<AuthUser> {
     const { email, password, confirmPassword } = registerData;
 
-    // Sanitize input - trim whitespace and validate basic format
+    // Sanitize input
     const sanitizedEmail = email?.trim().toLowerCase();
 
     // Basic input validation
@@ -33,30 +37,33 @@ export class AuthService {
       throw new Error(passwordValidation.errors.join('. '));
     }
 
-    // Check if email already exists
-    const existingUser = await userRepository.findByEmail(sanitizedEmail);
-    if (existingUser) {
-      throw new Error('Email already registered');
+    try {
+      const response = await fetch(`${this.backendUrl}/api/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: sanitizedEmail,
+          password,
+          confirmPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
+
+      return {
+        id: data.user.id,
+        email: data.user.email,
+        role: data.user.role,
+      };
+    } catch (error) {
+      throw error instanceof Error ? error : new Error('Registration failed');
     }
-
-    // Hash password
-    const passwordHash = await bcrypt.hash(password, config.auth.password.saltRounds);
-
-    // Create user
-    const userData: CreateUserData = {
-      email: sanitizedEmail,
-      passwordHash,
-      role: 'user', // Default role
-      isActive: true,
-    };
-
-    const newUser = await userRepository.create(userData);
-
-    return {
-      id: newUser.id,
-      email: newUser.email,
-      role: newUser.role,
-    };
   }
 
   async login(
@@ -64,44 +71,49 @@ export class AuthService {
   ): Promise<{ user: AuthUser; tokens: { accessToken: string; refreshToken: string } }> {
     const { email, password } = credentials;
 
-    // Find user by email
-    const user = await userRepository.findByEmail(email);
-    if (!user) {
-      throw new Error('Invalid email or password');
+    try {
+      const response = await fetch(`${this.backendUrl}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email.toLowerCase(),
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+
+      // Check if user is active
+      if (!data.user.isActive) {
+        throw new Error('Account is disabled');
+      }
+
+      const authUser: AuthUser = {
+        id: data.user.id,
+        email: data.user.email,
+        role: data.user.role,
+      };
+
+      // Generate tokens locally (frontend still manages tokens)
+      const accessToken = signAccessToken(authUser);
+      const refreshToken = signRefreshToken(authUser);
+
+      return {
+        user: authUser,
+        tokens: {
+          accessToken,
+          refreshToken,
+        },
+      };
+    } catch (error) {
+      throw error instanceof Error ? error : new Error('Login failed');
     }
-
-    // Check if user is active
-    if (!user.isActive) {
-      throw new Error('Account is disabled');
-    }
-
-    // Verify password
-    const isValidPassword = await bcrypt.compare(password, user.passwordHash);
-    if (!isValidPassword) {
-      throw new Error('Invalid email or password');
-    }
-
-    // Update last login
-    await userRepository.updateLastLogin(user.id);
-
-    // Create auth user object
-    const authUser: AuthUser = {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-    };
-
-    // Generate tokens
-    const accessToken = signAccessToken(authUser);
-    const refreshToken = signRefreshToken(authUser);
-
-    return {
-      user: authUser,
-      tokens: {
-        accessToken,
-        refreshToken,
-      },
-    };
   }
 
   async refresh(refreshToken: string): Promise<{ accessToken: string; refreshToken?: string }> {
@@ -109,22 +121,37 @@ export class AuthService {
       // Verify refresh token
       const payload = verifyRefreshToken(refreshToken);
 
-      // Find user to ensure they still exist and are active
-      const user = await userRepository.findById(payload.sub);
-      if (!user || !user.isActive) {
+      // Verify user still exists on backend
+      try {
+        const response = await fetch(`${this.backendUrl}/api/auth/user/${payload.sub}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('User not found');
+        }
+
+        const data = await response.json();
+        if (!data.user.isActive) {
+          throw new Error('User not found or inactive');
+        }
+      } catch (_error) {
         throw new Error('User not found or inactive');
       }
 
       const authUser: AuthUser = {
-        id: user.id,
-        email: user.email,
-        role: user.role,
+        id: payload.sub,
+        email: payload.sub.split(':')[1] || 'unknown@example.com',
+        role: 'user',
       };
 
       // Generate new access token
       const newAccessToken = signAccessToken(authUser);
 
-      // Optionally rotate refresh token (recommended for security)
+      // Optionally rotate refresh token
       const newRefreshToken = signRefreshToken(authUser);
 
       return {
@@ -171,36 +198,11 @@ export class AuthService {
   }
 
   async changePassword(
-    userId: string,
-    currentPassword: string,
-    newPassword: string
+    _userId: string,
+    _currentPassword: string,
+    _newPassword: string
   ): Promise<void> {
-    // Find user
-    const user = await userRepository.findById(userId);
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    // Verify current password
-    const isValidPassword = await bcrypt.compare(currentPassword, user.passwordHash);
-    if (!isValidPassword) {
-      throw new Error('Current password is incorrect');
-    }
-
-    // Validate new password
-    const validation = await this.validatePassword(newPassword);
-    if (!validation.isValid) {
-      throw new Error(`Password validation failed: ${validation.errors.join(', ')}`);
-    }
-
-    // Hash new password
-    // const passwordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
-
-    // Update password in database
-    // Note: You'll need to add this method to UserRepository
-    // await userRepository.updatePassword(userId, passwordHash);
-
-    // TODO: Implement password update functionality
+    // TODO: Implement backend endpoint for password change
     throw new Error('Password change not yet implemented');
   }
 }

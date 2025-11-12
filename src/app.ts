@@ -3,11 +3,9 @@ import express from 'express';
 import methodOverride from 'method-override';
 import nunjucks from 'nunjucks';
 import { config } from './config/index.js';
-import { runMigrations } from './db/index.js';
 import { authMiddleware } from './middleware/auth-middleware.js';
 import { errorHandler, notFoundHandler, requestLogger } from './middleware/index.js';
 import routes from './routes/index.js';
-import { adminSeedService } from './services/admin-seed-service.js';
 import { icon } from './utils/lucide-helper.js';
 
 /**
@@ -69,22 +67,10 @@ export const startServer = async (app: express.Application): Promise<void> => {
   try {
     console.log(`🚀 ${config.app.name} is starting...`);
 
-    // Initialize database
-    console.log('📀 Initializing database...');
-    try {
-      runMigrations();
-    } catch (error) {
-      console.error('Failed to initialize database:', error);
-      throw error;
-    }
-
-    // Ensure admin user exists
-    console.log('👤 Checking admin user...');
-    await adminSeedService.ensureAdminExists();
-
     const server = app.listen(config.server.port, () => {
       console.log(`✅ Server running on http://${config.server.host}:${config.server.port}`);
       console.log(`🏗️  Environment: ${config.env.nodeEnv}`);
+      console.log(`🔗 Backend API: ${config.api.baseUrl}`);
     });
 
     // Graceful shutdown

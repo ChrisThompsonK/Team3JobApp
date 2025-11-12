@@ -13,5 +13,5 @@ When('I log in as an admin user', async function (this: CucumberWorld) {
 });
 
 Then('I should be redirected away from the login page', async function (this: CucumberWorld) {
-  await this.loginPage!.isNotOnLoginPage();
+  await this.loginPage?.isNotOnLoginPage();
 });
