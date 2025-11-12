@@ -1,6 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
 import type { AuthUser } from '../models/user.js';
-import { userRepository } from '../repositories/user-repository.js';
 import { verifyAccessToken } from '../services/token-service.js';
 
 // Extend Request interface to include user and token
@@ -30,21 +29,12 @@ export async function authMiddleware(
     // Verify and decode the token
     const payload = verifyAccessToken(token);
 
-    // Try to fetch full user from DB so we have email and latest role
-    const dbUser = await userRepository.findById(payload.sub);
-
-    // Create user object
-    const user: AuthUser = dbUser
-      ? {
-          id: dbUser.id,
-          email: dbUser.email,
-          role: dbUser.role,
-        }
-      : {
-          id: payload.sub,
-          email: '',
-          role: payload.role as 'admin' | 'user',
-        };
+    // Create user object from token payload
+    const user: AuthUser = {
+      id: payload.sub,
+      email: payload.email,
+      role: payload.role as 'admin' | 'user',
+    };
 
     // Attach user and token to request object
     req.user = user;

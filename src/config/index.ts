@@ -58,9 +58,9 @@ export const config = {
     description: 'Team 3 Job Application Frontend',
   },
 
-  // Database Configuration
-  database: {
-    url: process.env['DATABASE_URL'] || './app.db',
+  // Backend API Configuration
+  api: {
+    baseUrl: process.env['BACKEND_URL'] || 'http://localhost:3001',
   },
 
   // Authentication Configuration - ALL REQUIRED
