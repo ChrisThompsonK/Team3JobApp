@@ -67,9 +67,6 @@ export const startServer = async (app: express.Application): Promise<void> => {
   try {
     console.log(`🚀 ${config.app.name} is starting...`);
 
-    // Note: Database operations are now handled by the backend
-    // Frontend communicates with backend API endpoints
-
     const server = app.listen(config.server.port, () => {
       console.log(`✅ Server running on http://${config.server.host}:${config.server.port}`);
       console.log(`🏗️  Environment: ${config.env.nodeEnv}`);
