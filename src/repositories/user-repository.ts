@@ -1,64 +1,39 @@
-import { eq } from 'drizzle-orm';
-import { db } from '../db/index.js';
-import { type InsertUser, type User, users } from '../db/schema.js';
-import type { CreateUserData } from '../models/user.js';
+// NOTE: User repository has been moved to the backend
+// Frontend no longer manages user data directly
+// All user operations go through backend API at /api/auth
 
 export class UserRepository {
-  async findByEmail(email: string): Promise<User | undefined> {
-    return db.select().from(users).where(eq(users.email, email.toLowerCase())).get();
+  // Deprecated - all user operations are now on the backend
+  async findByEmail(_email: string) {
+    throw new Error('User repository is deprecated. Use backend API instead.');
   }
 
-  async findById(id: string): Promise<User | undefined> {
-    return db.select().from(users).where(eq(users.id, id)).get();
+  async findById(_id: string) {
+    throw new Error('User repository is deprecated. Use backend API instead.');
   }
 
-  async create(userData: CreateUserData): Promise<User> {
-    const newUser: InsertUser = {
-      ...userData,
-      email: userData.email.toLowerCase(),
-    };
-
-    return db.insert(users).values(newUser).returning().get();
+  async create(_userData: any) {
+    throw new Error('User repository is deprecated. Use backend API instead.');
   }
 
-  async updateLastLogin(id: string): Promise<void> {
-    await db
-      .update(users)
-      .set({
-        lastLoginAt: new Date(),
-        updatedAt: new Date(),
-      })
-      .where(eq(users.id, id));
+  async updateLastLogin(_id: string) {
+    throw new Error('User repository is deprecated. Use backend API instead.');
   }
 
-  async updateRole(id: string, role: 'admin' | 'user'): Promise<void> {
-    await db
-      .update(users)
-      .set({
-        role,
-        updatedAt: new Date(),
-      })
-      .where(eq(users.id, id));
+  async updateRole(_id: string, _role: string) {
+    throw new Error('User repository is deprecated. Use backend API instead.');
   }
 
-  async setActive(id: string, isActive: boolean): Promise<void> {
-    await db
-      .update(users)
-      .set({
-        isActive,
-        updatedAt: new Date(),
-      })
-      .where(eq(users.id, id));
+  async setActive(_id: string, _isActive: boolean) {
+    throw new Error('User repository is deprecated. Use backend API instead.');
   }
 
-  async emailExists(email: string): Promise<boolean> {
-    const user = await this.findByEmail(email);
-    return !!user;
+  async emailExists(_email: string) {
+    throw new Error('User repository is deprecated. Use backend API instead.');
   }
 
-  async count(): Promise<number> {
-    const result = await db.select({ count: users.id }).from(users);
-    return result.length;
+  async count() {
+    throw new Error('User repository is deprecated. Use backend API instead.');
   }
 }
 

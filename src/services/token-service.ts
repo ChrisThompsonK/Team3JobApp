@@ -5,6 +5,7 @@ import type { AuthUser } from '../models/user.js';
 
 export interface AccessTokenPayload {
   sub: string;
+  email: string;
   role: string;
   iat: number;
   exp: number;
@@ -22,6 +23,7 @@ export interface RefreshTokenPayload {
 export function signAccessToken(user: AuthUser): string {
   const payload = {
     sub: user.id,
+    email: user.email,
     role: user.role,
     ver: 1, // Version for future invalidation strategy
   };

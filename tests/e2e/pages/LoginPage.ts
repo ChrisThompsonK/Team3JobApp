@@ -66,7 +66,7 @@ export class LoginPage extends BasePage {
    * Login as regular user
    */
   async loginAsRegularUser() {
-    await this.login('example@example.com', 'qqqqqqqq');
+    await this.login('user@kainos.com', 'UserPass123!');
   }
 
   /**

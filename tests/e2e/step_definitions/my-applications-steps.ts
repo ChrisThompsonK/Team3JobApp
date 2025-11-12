@@ -13,11 +13,11 @@ Then('I should see the applications page', async function (this: CucumberWorld) 
 });
 
 When('I click the back to home button', async function (this: CucumberWorld) {
-  await this.myApplicationsPage!.clickBackToHomeButton();
+  await this.myApplicationsPage?.clickBackToHomeButton();
 });
 
 When('I click the Kainos logo', async function (this: CucumberWorld) {
-  await this.myApplicationsPage!.clickKainosLogo();
+  await this.myApplicationsPage?.clickKainosLogo();
 });
 
 Then('I should be on the home page', async function (this: CucumberWorld) {
