@@ -5,7 +5,6 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-  workflow_call:
 
 jobs:
   code-quality:
@@ -36,3 +35,24 @@ jobs:
 
       - name: Run tests
         run: npm run test:run
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: |
+            team3-job-app-frontend:${{ github.sha }}
+            team3-job-app-frontend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Verify Docker image
+        run: |
+          docker images | grep team3-job-app-frontend
+          docker image inspect team3-job-app-frontend:${{ github.sha }} > /dev/null && echo "Image verified successfully"
+
