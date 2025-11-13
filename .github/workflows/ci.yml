@@ -1,4 +1,4 @@
-name: Docker Build
+name: CI
 
 on:
   push:
@@ -7,9 +7,39 @@ on:
     branches: [main]
 
 jobs:
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Run Biome CI checks
+        run: npm run ci
+
+      - name: Type check
+        run: npm run type-check
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run tests
+        run: npm run test:run
+
   docker-build:
     name: Build Docker Image
     runs-on: ubuntu-latest
+    needs: code-quality
 
     steps:
       - name: Checkout code
