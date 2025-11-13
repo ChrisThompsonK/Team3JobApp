@@ -1,0 +1,43 @@
+name: Terraform Deploy
+
+on:
+  push:
+    branches: [main]
+    paths: ['my-infrastructure/**']
+  pull_request:
+    branches: [main]
+    paths: ['my-infrastructure/**']
+
+env:
+  WORKING_DIR: ./my-infrastructure
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: hashicorp/setup-terraform@v2
+      
+      - run: terraform init
+        working-directory: ${{ env.WORKING_DIR }}
+        env:
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      
+      - run: terraform validate
+        working-directory: ${{ env.WORKING_DIR }}
+      
+      - run: terraform plan -out=tfplan
+        working-directory: ${{ env.WORKING_DIR }}
+      
+      - run: terraform apply tfplan
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        working-directory: ${{ env.WORKING_DIR }}
+        env:
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
