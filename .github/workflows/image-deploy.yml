@@ -1,0 +1,56 @@
+name: Terraform Deploy
+
+on:
+  push:
+    branches: [main, docker]
+    paths: ['my-infrastructure/**']
+  pull_request:
+    branches: [main]
+    paths: ['my-infrastructure/**']
+
+env:
+  WORKING_DIR: ./my-infrastructure
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Generate Docker image tags
+        id: meta
+        run: |
+          # Short SHA for image tag
+          SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+          echo "short_sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "timestamp=$(date -u +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
+          echo "branch=$(echo $GITHUB_REF_NAME | sed 's/[^a-zA-Z0-9_.-]/-/g')" >> $GITHUB_OUTPUT
+      
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.short_sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.branch }}-${{ steps.meta.outputs.timestamp }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-${{ steps.meta.outputs.branch }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      
+      - name: Verify Docker image
+        run: |
+          docker images | grep "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+      
+      - name: Test Docker image
+        run: |
+          docker run --rm ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.short_sha }} node --version
