@@ -59,7 +59,6 @@
     "@slidev/cli": "^52.7.0",
     "@slidev/theme-default": "^0.25.0",
     "@types/bcrypt": "^6.0.0",
-    "@types/better-sqlite3": "^7.6.13",
     "@types/cookie-parser": "^1.4.9",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
