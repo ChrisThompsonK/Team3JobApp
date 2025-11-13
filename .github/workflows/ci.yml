@@ -100,13 +100,11 @@ jobs:
           docker images | grep team3-job-app-frontend
           docker image inspect team3-job-app-frontend:${{ github.sha }} > /dev/null && echo "Image verified successfully"
 
-      - name: Log in to Azure Container Registry
+      - name: Azure Login
         if: github.ref == 'refs/heads/main'
-        uses: docker/login-action@v3
+        uses: azure/login@v2
         with:
-          registry: ${{ secrets.AZURE_REGISTRY_URL }}
-          username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
-          password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Build and push Docker image to ACR (Main Branch)
         if: github.ref == 'refs/heads/main'
@@ -115,15 +113,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.AZURE_REGISTRY_URL }}/team3-job-app-frontend:${{ github.sha }}
-            ${{ secrets.AZURE_REGISTRY_URL }}/team3-job-app-frontend:latest
+            team3-job-app-frontend.azurecr.io/team3-job-app-frontend:${{ github.sha }}
+            team3-job-app-frontend.azurecr.io/team3-job-app-frontend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-      - name: Verify push to Azure Container Registry
-        if: github.ref == 'refs/heads/main'
-        run: |
-          echo "✅ Docker image successfully pushed to Azure Container Registry"
-          echo "Registry: ${{ secrets.AZURE_REGISTRY_URL }}"
-          echo "Image SHA tag: team3-job-app-frontend:${{ github.sha }}"
-          echo "Image latest tag: team3-job-app-frontend:latest"
