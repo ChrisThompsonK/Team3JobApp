@@ -101,3 +101,30 @@ jobs:
           echo "Docker image pushed successfully to ACR"
           echo "Image: ${{ secrets.ACR_LOGIN_SERVER }}/team3-job-app-frontend:${{ github.sha }}"
           echo "Also available as: ${{ secrets.ACR_LOGIN_SERVER }}/team3-job-app-frontend:latest"
+
+  deploy-to-azure:
+    name: Deploy to Azure App Service
+    runs-on: ubuntu-latest
+    needs: docker-push
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: team3-job-app-frontend
+          images: ${{ secrets.ACR_LOGIN_SERVER }}/team3-job-app-frontend:${{ github.sha }}
+
+      - name: Verify deployment
+        run: |
+          echo "Application deployed successfully to Azure App Service"
+          echo "App Service: team3-job-app-frontend"
+          echo "Access at: https://team3-job-app-frontend.azurewebsites.net"
