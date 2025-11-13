@@ -32,7 +32,14 @@
     "test:pom:ui": "playwright test --ui",
     "test:all": "npm run test:run && npm run test:e2e && npm run test:pom:run",
     "test:all:with-report": "npm run test:all && npm run test:report && npm run test:ui",
-    "test:report": "tsx scripts/test-report-generator.ts"
+    "test:report": "tsx scripts/test-report-generator.ts",
+    "slides": "slidev slides.md",
+    "slides:build": "slidev build slides.md",
+    "slides:export": "slidev export slides.md",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "docker:run": "bash docker-run.sh"
   },
   "keywords": [
     "kainos",
@@ -49,6 +56,9 @@
     "@biomejs/biome": "2.2.4",
     "@cucumber/cucumber": "^9.5.1",
     "@playwright/test": "^1.56.1",
+    "@slidev/cli": "^52.7.0",
+    "@slidev/theme-default": "^0.25.0",
+    "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.9",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
