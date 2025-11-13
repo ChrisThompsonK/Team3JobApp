@@ -270,7 +270,7 @@
           {{ icon('clock', 'stroke-kainos-green shrink-0 w-6 h-6') | safe }}
           <div>
             <h3 class="font-bold text-kainos-primary">Closing Date</h3>
-            <div class="text-sm text-kainos-primary">{{ jobRole.closingDate.toLocaleDateString() if jobRole.closingDate else 'Not specified' }}</div>
+            <div class="text-sm text-kainos-primary">{{ jobRole.closingDate.toLocaleDateString('en-GB') if jobRole.closingDate else 'Not specified' }}</div>
           </div>
         </div>
       </div>

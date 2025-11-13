@@ -832,7 +832,7 @@ function generateHtmlReport(report: TestReport): void {
             </div>
             <div class="metadata-item">
                 <div class="metadata-label">Date & Time</div>
-                <div class="metadata-value">${new Date(report.metadata.timestamp).toLocaleString()}</div>
+                <div class="metadata-value">${new Date(report.metadata.timestamp).toLocaleString('en-GB')}</div>
             </div>
             <div class="metadata-item">
                 <div class="metadata-label">Commit</div>
@@ -943,7 +943,7 @@ function generateHtmlReport(report: TestReport): void {
         </div>
 
         <footer>
-            Report generated on ${new Date(report.generatedAt).toLocaleString()} | Test Automation Suite v1.0
+            Report generated on ${new Date(report.generatedAt).toLocaleString('en-GB')} | Test Automation Suite v1.0
         </footer>
     </div>
 
