@@ -128,3 +128,8 @@ test-results/
 # Generated CSS
 public/css/output.css
 
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+.tfvars
