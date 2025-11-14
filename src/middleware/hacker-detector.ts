@@ -43,7 +43,7 @@ export const hackerDetector = (req: Request, res: Response, next: NextFunction):
     /\$\(.*\)/, // Command substitution
     /\balert\b.*\(/i, // JavaScript alert XSS
     /javascript:/i, // JavaScript protocol
-    /on\w+\s*=/i, // Event handler attributes
+    /\bon(click|load|error|mouse|key|focus|blur|change|submit|drag|drop|scroll|touch)\w*\s*=/i, // Event handler attributes
     /\beval\b.*\(/i, // Eval injection attempts
     /__proto__|prototype/i, // Prototype pollution attempts
   ];
