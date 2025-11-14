@@ -71,7 +71,26 @@ function parseUKDate(dateStr: string): Date {
   if (Number.isNaN(day) || Number.isNaN(month) || Number.isNaN(year)) {
     throw new Error(`Invalid date format: ${dateStr}`);
   }
-  return new Date(year, month - 1, day);
+  // Validate ranges
+  if (day < 1 || day > 31) {
+    throw new Error(`Invalid day in date: ${dateStr}`);
+  }
+  if (month < 1 || month > 12) {
+    throw new Error(`Invalid month in date: ${dateStr}`);
+  }
+  if (year < 1900 || year > 2100) {
+    throw new Error(`Invalid year in date: ${dateStr}`);
+  }
+  // Construct date and check validity
+  const date = new Date(year, month - 1, day);
+  if (
+    date.getFullYear() !== year ||
+    date.getMonth() !== month - 1 ||
+    date.getDate() !== day
+  ) {
+    throw new Error(`Invalid date value: ${dateStr}`);
+  }
+  return date;
 }
 
 // Transform backend response to frontend format
