@@ -105,6 +105,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     env:
       ACR_REGISTRY_NAME: aiacademy25
+      ACR_LOGIN_SERVER: aiacademy25-bbaue6bgenhkd0dj.azurecr.io
       ACR_IMAGE_NAME: team3-job-app-frontend
 
     steps:
@@ -128,7 +129,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/${{ env.ACR_IMAGE_NAME }}:${{ github.sha }}
-            ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/${{ env.ACR_IMAGE_NAME }}:latest
+            ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_IMAGE_NAME }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
