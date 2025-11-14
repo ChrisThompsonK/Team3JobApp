@@ -10,6 +10,10 @@ import type {
 
 const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001/api';
 
+// Date validation constants
+const MIN_VALID_YEAR = 1900;
+const MAX_VALID_YEAR = 2100;
+
 // Create axios instance with default config
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -65,9 +69,10 @@ function parseUKDate(dateStr: string): Date {
   if (parts.length !== 3) {
     throw new Error(`Invalid date format: ${dateStr}`);
   }
-  const day = parseInt(parts[0], 10);
-  const month = parseInt(parts[1], 10);
-  const year = parseInt(parts[2], 10);
+  const [dayStr, monthStr, yearStr] = parts as [string, string, string];
+  const day = parseInt(dayStr, 10);
+  const month = parseInt(monthStr, 10);
+  const year = parseInt(yearStr, 10);
   if (Number.isNaN(day) || Number.isNaN(month) || Number.isNaN(year)) {
     throw new Error(`Invalid date format: ${dateStr}`);
   }
@@ -76,7 +81,7 @@ function parseUKDate(dateStr: string): Date {
   if (month < 1 || month > 12) {
     throw new Error(`Invalid month in date: ${dateStr}`);
   }
-  if (year < 1900 || year > 2100) {
+  if (year < MIN_VALID_YEAR || year > MAX_VALID_YEAR) {
     throw new Error(`Invalid year in date: ${dateStr}`);
   }
 
