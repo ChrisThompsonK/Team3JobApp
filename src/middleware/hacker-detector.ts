@@ -93,7 +93,11 @@ export const hackerDetector = (req: Request, res: Response, next: NextFunction):
  */
 function renderHackerPage(res: Response, req: Request): void {
   // Log the attempt (for fun, not serious security logging)
-  console.log(`🚨 Suspicious activity detected: ${req.method} ${req.originalUrl}`);
+  // Redact query string from logged URL to avoid leaking sensitive data
+  const redactedUrl = req.originalUrl.includes('?')
+    ? req.originalUrl.split('?')[0] + '?REDACTED'
+    : req.originalUrl;
+  console.log(`🚨 Suspicious activity detected: ${req.method} ${redactedUrl}`);
   console.log(`   User Agent: ${req.get('user-agent')}`);
   console.log(`   IP: ${req.ip}`);
 
