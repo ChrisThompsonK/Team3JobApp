@@ -3,8 +3,6 @@
 .terraform.lock.hcl
 *.tfstate
 *.tfstate.*
-*.tfvars
-terraform.tfvars
 terraform.tfvars.json
 override.tf
 override.tf.json
