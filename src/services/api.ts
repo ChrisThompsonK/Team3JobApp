@@ -8,7 +8,7 @@ import type {
   UpdateJobRoleRequest,
 } from '../models/job-roles.js';
 
-const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001';
+const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001/api';
 
 // Create axios instance with default config
 const apiClient = axios.create({
@@ -59,6 +59,21 @@ interface BackendJobRoleDetails extends BackendJobRole {
   openPositions?: number;
 }
 
+// Helper function to parse DD/MM/YYYY date format from backend
+function parseUKDate(dateStr: string): Date {
+  const parts = dateStr.split('/');
+  if (parts.length !== 3) {
+    throw new Error(`Invalid date format: ${dateStr}`);
+  }
+  const day = parseInt(parts[0] || '', 10);
+  const month = parseInt(parts[1] || '', 10);
+  const year = parseInt(parts[2] || '', 10);
+  if (Number.isNaN(day) || Number.isNaN(month) || Number.isNaN(year)) {
+    throw new Error(`Invalid date format: ${dateStr}`);
+  }
+  return new Date(year, month - 1, day);
+}
+
 // Transform backend response to frontend format
 function transformJobRole(backendJob: BackendJobRole): JobRole {
   const id = backendJob.id || backendJob.jobRoleId;
@@ -75,7 +90,7 @@ function transformJobRole(backendJob: BackendJobRole): JobRole {
     capability: backendJob.capabilityName,
     band: backendJob.bandName,
     status: backendJob.statusName || 'Open', // Use statusName from backend
-    closingDate: new Date(backendJob.closingDate),
+    closingDate: parseUKDate(backendJob.closingDate),
   };
 }
 
@@ -96,7 +111,7 @@ function transformJobRoleDetails(backendJob: BackendJobRoleDetails): JobRoleDeta
     capability: backendJob.capabilityName || 'Unknown Capability',
     band: backendJob.bandName || 'Unknown Band',
     status: backendJob.statusName || 'Open', // Use statusName from backend
-    closingDate: backendJob.closingDate ? new Date(backendJob.closingDate) : new Date(),
+    closingDate: backendJob.closingDate ? parseUKDate(backendJob.closingDate) : new Date(),
   };
 
   const details: JobRoleDetails = { ...baseJob };
