@@ -185,32 +185,32 @@
     <!-- Pagination Controls -->
     {% if pagination.totalPages > 1 %}
     <div class="flex justify-center items-center gap-4 mt-6">
-      <div class="join">
+      <div class="flex items-center gap-4">
         {% if pagination.hasPrevPage %}
         <a href="?page={{ pagination.currentPage - 1 }}&limit={{ pagination.limit }}{% if currentFilters.name %}&name={{ currentFilters.name }}{% endif %}{% for loc in currentFilters.location %}&location={{ loc }}{% endfor %}{% for cap in currentFilters.capability %}&capability={{ cap }}{% endfor %}{% for b in currentFilters.band %}&band={{ b }}{% endfor %}{% if currentSort.sortBy %}&sortBy={{ currentSort.sortBy }}&sortOrder={{ currentSort.sortOrder }}{% endif %}" 
-           class="join-item btn btn-outline">
+           class="btn btn-outline">
           {{ icon('chevron-left', 'h-5 w-5') | safe }}
           Previous
         </a>
         {% else %}
-        <button class="join-item btn btn-outline btn-disabled" disabled>
+        <button class="btn btn-outline btn-disabled" disabled>
           {{ icon('chevron-left', 'h-5 w-5') | safe }}
           Previous
         </button>
         {% endif %}
 
-        <button class="join-item btn btn-outline no-animation">
+        <button class="btn btn-outline no-animation">
           Page {{ pagination.currentPage }} of {{ pagination.totalPages }}
         </button>
 
         {% if pagination.hasNextPage %}
         <a href="?page={{ pagination.currentPage + 1 }}&limit={{ pagination.limit }}{% if currentFilters.name %}&name={{ currentFilters.name }}{% endif %}{% for loc in currentFilters.location %}&location={{ loc }}{% endfor %}{% for cap in currentFilters.capability %}&capability={{ cap }}{% endfor %}{% for b in currentFilters.band %}&band={{ b }}{% endfor %}{% if currentSort.sortBy %}&sortBy={{ currentSort.sortBy }}&sortOrder={{ currentSort.sortOrder }}{% endif %}" 
-           class="join-item btn btn-outline">
+           class="btn btn-outline">
           Next
           {{ icon('chevron-right', 'h-5 w-5') | safe }}
         </a>
         {% else %}
-        <button class="join-item btn btn-outline btn-disabled" disabled>
+        <button class="btn btn-outline btn-disabled" disabled>
           Next
           {{ icon('chevron-right', 'h-5 w-5') | safe }}
         </button>
