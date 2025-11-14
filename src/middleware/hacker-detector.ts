@@ -74,12 +74,17 @@ export const hackerDetector = (req: Request, res: Response, next: NextFunction):
   const pathOnly = decodedPath.split('?')[0] || decodedPath;
   const isLegitimateRoute = legitimateRoutes.some((pattern) => pattern.test(pathOnly));
 
-  // Trigger hacker page if suspicious pattern found OR if route is not legitimate
-  if (hasSuspiciousPattern || !isLegitimateRoute) {
+  // Trigger hacker page if suspicious pattern found
+  if (hasSuspiciousPattern) {
     renderHackerPage(res, req);
     return;
   }
 
+  // If not a legitimate route, let downstream middleware handle 404
+  if (!isLegitimateRoute) {
+    next(); // downstream 404 handler
+    return;
+  }
   next();
 };
 
