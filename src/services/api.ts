@@ -83,11 +83,7 @@ function parseUKDate(dateStr: string): Date {
   }
   // Construct date and check validity
   const date = new Date(year, month - 1, day);
-  if (
-    date.getFullYear() !== year ||
-    date.getMonth() !== month - 1 ||
-    date.getDate() !== day
-  ) {
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
     throw new Error(`Invalid date value: ${dateStr}`);
   }
   return date;
