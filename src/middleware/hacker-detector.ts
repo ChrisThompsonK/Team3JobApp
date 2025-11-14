@@ -63,11 +63,13 @@ export const hackerDetector = (req: Request, res: Response, next: NextFunction):
     return;
   }
 
-  const params = JSON.stringify(req.query);
 
   // Check if the URL matches any suspicious patterns
   const hasSuspiciousPattern = suspiciousPatterns.some(
-    (pattern) => pattern.test(decodedUrl) || pattern.test(decodedPath) || pattern.test(params)
+    (pattern) =>
+      pattern.test(decodedUrl) ||
+      pattern.test(decodedPath) ||
+      pattern.test(JSON.stringify(req.query))
   );
 
   // Check if the path matches any legitimate route (excluding query strings)
