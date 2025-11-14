@@ -96,6 +96,19 @@
           "enabled": false
         }
       }
+    },
+    {
+      "includes": ["scripts/**/*", "tests/**/*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off"
+          },
+          "style": {
+            "noNonNullAssertion": "off"
+          }
+        }
+      }
     }
   ]
 }

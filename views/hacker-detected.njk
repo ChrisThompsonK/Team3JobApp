@@ -1,0 +1,62 @@
+{% extends "layout.njk" %}
+
+{% block title %}Hacker Detected! 🚨 - Kainos{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-4xl mx-auto text-center">
+  <!-- Alert Header -->
+  <div class="alert alert-error shadow-lg mb-8">
+    <div class="flex flex-col items-center gap-2 w-full">
+      <div class="flex items-center gap-3">
+        {{ icon('shield-alert', 'h-8 w-8') | safe }}
+        <h1 class="text-4xl font-bold">HACKER DETECTED! 🚨</h1>
+      </div>
+      <p class="text-lg">Nice try, but we caught you red-handed! 🕵️</p>
+    </div>
+  </div>
+
+  <!-- Funny GIF Card -->
+  <div class="card bg-base-100 shadow-xl mb-8">
+    <div class="card-body">
+      <h2 class="card-title text-2xl justify-center mb-4">You've Been Caught!</h2>
+      <div class="flex justify-center">
+        <img 
+          src="https://media.giphy.com/media/RyXVu4ZW454IM/giphy.gif" 
+          alt="Hacker detected!" 
+          class="rounded-lg shadow-lg max-w-full h-auto"
+          style="max-height: 400px;"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Fun Tips -->
+  <div class="alert alert-info shadow-lg mb-8">
+    <div class="flex flex-col items-start w-full">
+      {{ icon('lightbulb', 'h-6 w-6') | safe }}
+      <div>
+        <h3 class="font-bold text-lg">Pro Tip:</h3>
+        <p class="text-left">Instead of trying to hack us, why not just use the app normally? It's actually pretty cool! 😎</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back Button -->
+  <div class="flex justify-center gap-4">
+    <a href="/" class="btn btn-primary btn-lg gap-2">
+      {{ icon('home', 'h-5 w-5') | safe }}
+      Go Back Home (Like a Normal Person)
+    </a>
+    <a href="/jobs" class="btn btn-outline btn-lg gap-2">
+      {{ icon('briefcase', 'h-5 w-5') | safe }}
+      Browse Jobs Instead
+    </a>
+  </div>
+
+  <!-- Footer Message -->
+  <div class="mt-8 text-sm opacity-70">
+    <p>P.S. We're just having fun with you! No harm done. 😊</p>
+    <p>But seriously, please don't try to break our app. We worked hard on it 💙</p>
+  </div>
+</div>
+{% endblock %}

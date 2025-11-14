@@ -4,7 +4,12 @@ import methodOverride from 'method-override';
 import nunjucks from 'nunjucks';
 import { config } from './config/index.js';
 import { authMiddleware } from './middleware/auth-middleware.js';
-import { errorHandler, notFoundHandler, requestLogger } from './middleware/index.js';
+import {
+  errorHandler,
+  hackerDetector,
+  notFoundHandler,
+  requestLogger,
+} from './middleware/index.js';
 import routes from './routes/index.js';
 import { icon } from './utils/lucide-helper.js';
 
@@ -39,6 +44,7 @@ export const createApp = (): express.Application => {
 
   // Middleware setup
   app.use(requestLogger);
+  app.use(hackerDetector); // Detect suspicious URL patterns
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser()); // Parse cookies for authentication
