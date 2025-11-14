@@ -63,7 +63,6 @@ export const hackerDetector = (req: Request, res: Response, next: NextFunction):
     return;
   }
 
-
   // Check if the URL matches any suspicious patterns
   const hasSuspiciousPattern = suspiciousPatterns.some(
     (pattern) =>
