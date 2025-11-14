@@ -91,12 +91,8 @@ function parseUKDate(dateStr: string): Date {
     throw new Error(`Invalid day in date: ${dateStr}`);
   }
 
-  // Construct date and verify it matches input (additional safety check)
-  const date = new Date(year, month - 1, day);
-  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
-    throw new Error(`Invalid date value: ${dateStr}`);
-  }
-  return date;
+  // Construct date
+  return new Date(year, month - 1, day);
 }
 
 // Transform backend response to frontend format
