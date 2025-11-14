@@ -107,6 +107,5 @@ function renderHackerPage(res: Response, req: Request): void {
   res.status(403).render('hacker-detected', {
     title: 'Hacker Detected!',
     method: req.method,
-    Math: Math, // Pass Math object for random number generation in template
   });
 }
