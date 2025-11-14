@@ -462,8 +462,6 @@ export const api = {
   }> => {
     try {
       const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
-      console.log('Sending withdraw request for application:', applicationId);
-      console.log('Using authenticated client:', !!accessToken);
       const response = await client.post(`/applications/${applicationId}/withdraw`, {});
       return response.data;
     } catch (error) {

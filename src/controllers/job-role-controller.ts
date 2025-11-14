@@ -57,7 +57,6 @@ export class JobRoleController {
 
       // Get all job roles for filtering on frontend
       const allJobRoles: JobRole[] = await api.getJobs(sortByParam, sortOrderParam);
-      console.log(`[JobController] Fetched ${allJobRoles.length} jobs from API`);
 
       // Apply filters on the frontend side to the full dataset
       let filteredJobs = allJobRoles;
@@ -1000,8 +999,6 @@ export class JobRoleController {
         res.status(401).send('Authentication token not found. Please log in again.');
         return;
       }
-
-      console.log('Withdrawing application:', applicationId, 'for user:', req.user.email);
 
       const result = await api.withdrawApplication(applicationId, accessToken);
 
