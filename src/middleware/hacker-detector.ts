@@ -32,7 +32,6 @@ export const hackerDetector = (req: Request, res: Response, next: NextFunction):
     /--/, // SQL injection attempts (double dash comments)
     /\.\.\/|\.\.\\/, // Path traversal attempts
     /<script>/i, // XSS attempts
-    /;/, // Command injection attempts (but allow in query strings)
     /\${/, // Template injection attempts
     /%00|%0d|%0a/i, // Null byte / newline injection
     /\bunion\b.*\bselect\b/i, // SQL union-based injection
