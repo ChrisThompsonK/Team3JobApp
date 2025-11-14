@@ -71,7 +71,7 @@ export const hackerDetector = (req: Request, res: Response, next: NextFunction):
   );
 
   // Check if the path matches any legitimate route (excluding query strings)
-  const pathOnly = decodedPath.split('?')[0] || decodedPath;
+  const pathOnly = decodedPath.split('?')[0];
   const isLegitimateRoute = legitimateRoutes.some((pattern) => pattern.test(pathOnly));
 
   // Trigger hacker page only if suspicious pattern found
