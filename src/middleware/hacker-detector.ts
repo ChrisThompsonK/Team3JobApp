@@ -95,7 +95,7 @@ function renderHackerPage(res: Response, req: Request): void {
   // Log the attempt (for fun, not serious security logging)
   // Redact query string from logged URL to avoid leaking sensitive data
   const redactedUrl = req.originalUrl.includes('?')
-    ? req.originalUrl.split('?')[0] + '?REDACTED'
+    ? `${req.originalUrl.split('?')[0]}?REDACTED`
     : req.originalUrl;
   console.log(`🚨 Suspicious activity detected: ${req.method} ${redactedUrl}`);
   console.log(`   User Agent: ${req.get('user-agent')}`);
@@ -104,7 +104,6 @@ function renderHackerPage(res: Response, req: Request): void {
   // Render the fun hacker-detected page
   res.status(403).render('hacker-detected', {
     title: 'Hacker Detected!',
-    url: req.originalUrl,
     method: req.method,
     Math: Math, // Pass Math object for random number generation in template
   });
