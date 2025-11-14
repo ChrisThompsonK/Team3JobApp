@@ -30,7 +30,7 @@
           <span class="text-gray-700">{{ jobRole.band }}</span>
           <span class="mx-8 text-gray-400">|</span>
           <span class="font-semibold text-blue-800">Closing Date:</span>
-          <span class="text-gray-700">{{ jobRole.closingDate.toLocaleDateString() if jobRole.closingDate else 'Open' }}</span>
+          <span class="text-gray-700">{{ jobRole.closingDate.toLocaleDateString('en-GB') if jobRole.closingDate else 'Open' }}</span>
         </div>
       </div>
     </div>
