@@ -7,25 +7,25 @@ import type { NextFunction, Request, Response } from 'express';
 export const hackerDetector = (req: Request, res: Response, next: NextFunction): void => {
   // List of legitimate route patterns - anything not matching these is suspicious
   const legitimateRoutes = [
-    /^\/$/,                                    // Home page
-    /^\/daisyui-test$/,                       // Test page
-    /^\/auth\/(login|register|logout|profile)$/,  // Auth routes
-    /^\/analytics$/,                          // Analytics dashboard
-    /^\/my-applications$/,                    // User applications
-    /^\/jobs$/,                               // Job list
-    /^\/jobs\/new$/,                          // New job form
-    /^\/jobs\/report$/,                       // Jobs report
-    /^\/jobs\/\d+$/,                          // Job by ID (numeric only)
-    /^\/jobs\/\d+\/(details|edit|apply)$/,    // Job sub-routes
-    /^\/jobs\/\d+\/hire\/\d+$/,              // Hire applicant
-    /^\/jobs\/\d+\/reject\/\d+$/,            // Reject applicant
-    /^\/jobs\/\d+\/delete$/,                  // Delete job
-    /^\/applications\/\d+\/withdraw$/,        // Withdraw application
-    /^\/css\/.*\.css$/,                       // CSS files
+    /^\/$/, // Home page
+    /^\/daisyui-test$/, // Test page
+    /^\/auth\/(login|register|logout|profile)$/, // Auth routes
+    /^\/analytics$/, // Analytics dashboard
+    /^\/my-applications$/, // User applications
+    /^\/jobs$/, // Job list
+    /^\/jobs\/new$/, // New job form
+    /^\/jobs\/report$/, // Jobs report
+    /^\/jobs\/\d+$/, // Job by ID (numeric only)
+    /^\/jobs\/\d+\/(details|edit|apply)$/, // Job sub-routes
+    /^\/jobs\/\d+\/hire\/\d+$/, // Hire applicant
+    /^\/jobs\/\d+\/reject\/\d+$/, // Reject applicant
+    /^\/jobs\/\d+\/delete$/, // Delete job
+    /^\/applications\/\d+\/withdraw$/, // Withdraw application
+    /^\/css\/.*\.css$/, // CSS files
     /^\/images\/.*\.(png|jpg|jpeg|gif|svg|ico)$/i, // Image files
-    /^\/js\/.*\.js$/,                         // JS files
-    /^\/uploads\//,                           // Upload files
-    /^\/favicon\.ico$/,                       // Favicon
+    /^\/js\/.*\.js$/, // JS files
+    /^\/uploads\//, // Upload files
+    /^\/favicon\.ico$/, // Favicon
   ];
 
   const suspiciousPatterns = [
@@ -51,7 +51,7 @@ export const hackerDetector = (req: Request, res: Response, next: NextFunction):
 
   const url = req.originalUrl;
   const path = req.path;
-  
+
   // Decode for pattern matching but keep original for display
   let decodedUrl = url;
   let decodedPath = path;
