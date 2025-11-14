@@ -8,7 +8,11 @@ import type {
   UpdateJobRoleRequest,
 } from '../models/job-roles.js';
 
-const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001';
+const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:3001/api';
+
+// Date validation constants
+const MIN_VALID_YEAR = 1900;
+const MAX_VALID_YEAR = 2100;
 
 // Create axios instance with default config
 const apiClient = axios.create({
@@ -59,6 +63,38 @@ interface BackendJobRoleDetails extends BackendJobRole {
   openPositions?: number;
 }
 
+// Helper function to parse DD/MM/YYYY date format from backend
+function parseUKDate(dateStr: string): Date {
+  const parts = dateStr.split('/');
+  if (parts.length !== 3) {
+    throw new Error(`Invalid date format: ${dateStr}`);
+  }
+  const [dayStr, monthStr, yearStr] = parts as [string, string, string];
+  const day = parseInt(dayStr, 10);
+  const month = parseInt(monthStr, 10);
+  const year = parseInt(yearStr, 10);
+  if (Number.isNaN(day) || Number.isNaN(month) || Number.isNaN(year)) {
+    throw new Error(`Invalid date format: ${dateStr}`);
+  }
+
+  // Validate ranges
+  if (month < 1 || month > 12) {
+    throw new Error(`Invalid month in date: ${dateStr}`);
+  }
+  if (year < MIN_VALID_YEAR || year > MAX_VALID_YEAR) {
+    throw new Error(`Invalid year in date: ${dateStr}`);
+  }
+
+  // Month-specific day validation
+  const daysInMonth = new Date(year, month, 0).getDate();
+  if (day < 1 || day > daysInMonth) {
+    throw new Error(`Invalid day in date: ${dateStr}`);
+  }
+
+  // Construct date
+  return new Date(year, month - 1, day);
+}
+
 // Transform backend response to frontend format
 function transformJobRole(backendJob: BackendJobRole): JobRole {
   const id = backendJob.id || backendJob.jobRoleId;
@@ -75,7 +111,7 @@ function transformJobRole(backendJob: BackendJobRole): JobRole {
     capability: backendJob.capabilityName,
     band: backendJob.bandName,
     status: backendJob.statusName || 'Open', // Use statusName from backend
-    closingDate: new Date(backendJob.closingDate),
+    closingDate: parseUKDate(backendJob.closingDate),
   };
 }
 
@@ -96,7 +132,7 @@ function transformJobRoleDetails(backendJob: BackendJobRoleDetails): JobRoleDeta
     capability: backendJob.capabilityName || 'Unknown Capability',
     band: backendJob.bandName || 'Unknown Band',
     status: backendJob.statusName || 'Open', // Use statusName from backend
-    closingDate: backendJob.closingDate ? new Date(backendJob.closingDate) : new Date(),
+    closingDate: backendJob.closingDate ? parseUKDate(backendJob.closingDate) : new Date(),
   };
 
   const details: JobRoleDetails = { ...baseJob };
@@ -428,8 +464,6 @@ export const api = {
   }> => {
     try {
       const client = accessToken ? createAuthenticatedApiClient(accessToken) : apiClient;
-      console.log('Sending withdraw request for application:', applicationId);
-      console.log('Using authenticated client:', !!accessToken);
       const response = await client.post(`/applications/${applicationId}/withdraw`, {});
       return response.data;
     } catch (error) {
