@@ -74,12 +74,17 @@ export const hackerDetector = (req: Request, res: Response, next: NextFunction):
   const pathOnly = decodedPath.split('?')[0] || decodedPath;
   const isLegitimateRoute = legitimateRoutes.some((pattern) => pattern.test(pathOnly));
 
-  // Trigger hacker page if suspicious pattern found OR if route is not legitimate
-  if (hasSuspiciousPattern || !isLegitimateRoute) {
+  // Trigger hacker page only if suspicious pattern found
+  if (hasSuspiciousPattern) {
     renderHackerPage(res, req);
     return;
   }
 
+  // If not a legitimate route, let downstream middleware handle 404
+  if (!isLegitimateRoute) {
+    next(); // downstream 404 handler
+    return;
+  }
   next();
 };
 
@@ -88,7 +93,11 @@ export const hackerDetector = (req: Request, res: Response, next: NextFunction):
  */
 function renderHackerPage(res: Response, req: Request): void {
   // Log the attempt (for fun, not serious security logging)
-  console.log(`🚨 Suspicious activity detected: ${req.method} ${req.originalUrl}`);
+  // Redact query string from logged URL to avoid leaking sensitive data
+  const redactedUrl = req.originalUrl.includes('?')
+    ? req.originalUrl.split('?')[0] + '?REDACTED'
+    : req.originalUrl;
+  console.log(`🚨 Suspicious activity detected: ${req.method} ${redactedUrl}`);
   console.log(`   User Agent: ${req.get('user-agent')}`);
   console.log(`   IP: ${req.ip}`);
 
