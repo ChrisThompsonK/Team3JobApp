@@ -65,9 +65,9 @@ function parseUKDate(dateStr: string): Date {
   if (parts.length !== 3) {
     throw new Error(`Invalid date format: ${dateStr}`);
   }
-  const day = parseInt(parts[0] || '', 10);
-  const month = parseInt(parts[1] || '', 10);
-  const year = parseInt(parts[2] || '', 10);
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10);
+  const year = parseInt(parts[2], 10);
   if (Number.isNaN(day) || Number.isNaN(month) || Number.isNaN(year)) {
     throw new Error(`Invalid date format: ${dateStr}`);
   }
