@@ -42,10 +42,9 @@ export async function authMiddleware(
 
     // Also make user available to templates via res.locals
     res.locals['user'] = user;
-  } catch (error) {
+  } catch {
     // Token is invalid or expired, continue as anonymous user
-    // Don't throw error, just log and continue
-    console.log('Invalid access token:', error instanceof Error ? error.message : 'Unknown error');
+    // Don't throw error, just continue
   }
 
   next();

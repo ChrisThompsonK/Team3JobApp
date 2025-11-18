@@ -1000,8 +1000,6 @@ export class JobRoleController {
         return;
       }
 
-      console.log('Withdrawing application:', applicationId, 'for user:', req.user.email);
-
       const result = await api.withdrawApplication(applicationId, accessToken);
 
       if (result.success) {
