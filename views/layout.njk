@@ -86,7 +86,12 @@
                                 {{ user.role }}
                             </div>
                         </li>
-                        <li><a href="/auth/profile">Profile</a></li>
+                        <li>
+                            <a href="/auth/profile">
+                                {{ icon('user', 'h-4 w-4') | safe }}
+                                Profile
+                            </a>
+                        </li>
                         {% if user.role !== 'admin' %}
                         <li>
                             <a href="/my-applications">
