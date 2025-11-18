@@ -1,5 +1,6 @@
 // frontend/src/services/api.ts
 import axios from 'axios';
+import moment from 'moment';
 import type {
   CreateJobRoleRequest,
   JobAvailabilityStatus,
@@ -65,34 +66,18 @@ interface BackendJobRoleDetails extends BackendJobRole {
 
 // Helper function to parse DD/MM/YYYY date format from backend
 function parseUKDate(dateStr: string): Date {
-  const parts = dateStr.split('/');
-  if (parts.length !== 3) {
-    throw new Error(`Invalid date format: ${dateStr}`);
-  }
-  const [dayStr, monthStr, yearStr] = parts as [string, string, string];
-  const day = parseInt(dayStr, 10);
-  const month = parseInt(monthStr, 10);
-  const year = parseInt(yearStr, 10);
-  if (Number.isNaN(day) || Number.isNaN(month) || Number.isNaN(year)) {
+  const m = moment(dateStr, 'DD/MM/YYYY', true); // strict parsing
+  if (!m.isValid()) {
     throw new Error(`Invalid date format: ${dateStr}`);
   }
 
-  // Validate ranges
-  if (month < 1 || month > 12) {
-    throw new Error(`Invalid month in date: ${dateStr}`);
-  }
+  // Additional validation for year range
+  const year = m.year();
   if (year < MIN_VALID_YEAR || year > MAX_VALID_YEAR) {
     throw new Error(`Invalid year in date: ${dateStr}`);
   }
 
-  // Month-specific day validation
-  const daysInMonth = new Date(year, month, 0).getDate();
-  if (day < 1 || day > daysInMonth) {
-    throw new Error(`Invalid day in date: ${dateStr}`);
-  }
-
-  // Construct date
-  return new Date(year, month - 1, day);
+  return m.toDate();
 }
 
 // Transform backend response to frontend format
