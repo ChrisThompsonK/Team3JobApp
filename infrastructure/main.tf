@@ -14,7 +14,7 @@ data "azurerm_container_registry" "acr" {
 }
 
 data "azurerm_key_vault" "main" {
-  name                = "kv-${var.app_name}-${var.environment}"
+  name                = "kv-team3-jobapp-${var.environment}"
   resource_group_name = azurerm_resource_group.main.name
 }
 
@@ -56,19 +56,19 @@ resource "azurerm_container_app" "frontend" {
 
     min_replicas = 1
     max_replicas = 3
+  }
 
-    # Define the Key Vault references as secrets
-    secret {
-      name                = "session-secret-ref"
-      key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/SessionSecret"
-      identity            = azurerm_user_assigned_identity.frontend.id
-    }
+  # Define the Key Vault references as secrets
+  secret {
+    name                = "session-secret-ref"
+    key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/SessionSecret"
+    identity            = azurerm_user_assigned_identity.frontend.id
+  }
 
-    secret {
-      name                = "api-base-url-ref"
-      key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/ApiBaseUrl"
-      identity            = azurerm_user_assigned_identity.frontend.id
-    }
+  secret {
+    name                = "api-base-url-ref"
+    key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/ApiBaseUrl"
+    identity            = azurerm_user_assigned_identity.frontend.id
   }
 
   ingress {
