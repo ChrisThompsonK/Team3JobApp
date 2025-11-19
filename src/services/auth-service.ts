@@ -38,7 +38,7 @@ export class AuthService {
     }
 
     try {
-      const response = await fetch(`${this.backendUrl}/api/auth/register`, {
+      const response = await fetch(`${this.backendUrl}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export class AuthService {
     const { email, password } = credentials;
 
     try {
-      const response = await fetch(`${this.backendUrl}/api/auth/login`, {
+      const response = await fetch(`${this.backendUrl}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ export class AuthService {
 
       // Verify user still exists on backend
       try {
-        const response = await fetch(`${this.backendUrl}/api/auth/user/${payload.sub}`, {
+        const response = await fetch(`${this.backendUrl}/auth/user/${payload.sub}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

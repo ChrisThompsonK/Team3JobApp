@@ -174,7 +174,21 @@ export const api = {
       }
 
       // Transform backend format to frontend format
-      return response.data.map(transformJobRole);
+      // Handle transformation errors for individual jobs instead of failing all
+      const transformedJobs: JobRole[] = [];
+      for (const backendJob of response.data) {
+        try {
+          transformedJobs.push(transformJobRole(backendJob));
+        } catch (transformError) {
+          console.error(
+            `Error transforming job (id: ${backendJob.id ?? 'unknown'}, name: ${backendJob.name ?? 'unknown'}):`,
+            transformError,
+            backendJob
+          );
+          // Skip this job and continue with others
+        }
+      }
+      return transformedJobs;
     } catch (error) {
       console.error('Error fetching jobs:', error);
       if (axios.isAxiosError(error)) {

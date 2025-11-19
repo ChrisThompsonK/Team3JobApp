@@ -18,26 +18,6 @@ data "azurerm_key_vault" "main" {
   resource_group_name = azurerm_resource_group.main.name
 }
 
-resource "azurerm_user_assigned_identity" "frontend" {
-  name                = "mi-${var.app_name}-frontend-${var.environment}"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
-}
-
-# Role assignment for Key Vault Secret User
-resource "azurerm_role_assignment" "frontend_keyvault_secret_user" {
-  scope              = data.azurerm_key_vault.main.id
-  role_definition_name = "Key Vault Secrets User"
-  principal_id       = azurerm_user_assigned_identity.frontend.principal_id
-}
-
-# Role assignment for Container Registry Pull
-resource "azurerm_role_assignment" "frontend_acr_pull" {
-  scope              = data.azurerm_container_registry.acr.id
-  role_definition_name = "AcrPull"
-  principal_id       = azurerm_user_assigned_identity.frontend.principal_id
-}
-
 resource "azurerm_container_app" "frontend" {
   name                         = "ca-${var.app_name}-frontend-${var.environment}"
   container_app_environment_id = data.azurerm_container_app_environment.main.id
