@@ -18,6 +18,11 @@ data "azurerm_key_vault" "main" {
   resource_group_name = azurerm_resource_group.main.name
 }
 
+data "azurerm_user_assigned_identity" "frontend" {
+  name                = "mi-${var.app_name}-frontend-${var.environment}"
+  resource_group_name = azurerm_resource_group.main.name
+}
+
 resource "azurerm_container_app" "frontend" {
   name                         = "ca-${var.app_name}-frontend-${var.environment}"
   container_app_environment_id = data.azurerm_container_app_environment.main.id
@@ -26,7 +31,7 @@ resource "azurerm_container_app" "frontend" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [var.frontend_managed_identity_id]
+    identity_ids = [data.azurerm_user_assigned_identity.frontend.id]
   }
 
   template {
@@ -56,13 +61,13 @@ resource "azurerm_container_app" "frontend" {
   secret {
     name                = "session-secret-ref"
     key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/SessionSecret"
-    identity            = var.frontend_managed_identity_id
+    identity            = data.azurerm_user_assigned_identity.frontend.id
   }
 
   secret {
     name                = "api-base-url-ref"
     key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/ApiBaseUrl"
-    identity            = var.frontend_managed_identity_id
+    identity            = data.azurerm_user_assigned_identity.frontend.id
   }
 
   ingress {
@@ -79,7 +84,7 @@ resource "azurerm_container_app" "frontend" {
 
   registry {
     server   = "${var.acr_name}.azurecr.io"
-    identity = var.frontend_managed_identity_id
+    identity = data.azurerm_user_assigned_identity.frontend.id
   }
 }
 
