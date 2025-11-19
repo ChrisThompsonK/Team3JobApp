@@ -24,6 +24,7 @@ function isValidReturnUrl(url: string): boolean {
     try {
       const decoded = decodeURIComponent(trimmed);
       // Reject if it contains null bytes or other control characters
+      // biome-ignore lint/suspicious/noControlCharactersInRegex: Intentional check for control characters
       if (/[\x00-\x1F\x7F]/.test(decoded)) {
         return false;
       }
