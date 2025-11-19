@@ -45,3 +45,8 @@ variable "frontend_memory" {
   description = "Memory allocation for frontend"
   default     = "0.5Gi"
 }
+
+variable "frontend_managed_identity_id" {
+  type        = string
+  description = "Frontend Managed Identity ID from team3-job-app-tf"
+}

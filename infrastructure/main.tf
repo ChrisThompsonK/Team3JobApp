@@ -18,26 +18,6 @@ data "azurerm_key_vault" "main" {
   resource_group_name = azurerm_resource_group.main.name
 }
 
-resource "azurerm_user_assigned_identity" "frontend" {
-  name                = "mi-${var.app_name}-frontend-${var.environment}"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
-}
-
-# Role assignment for Key Vault Secret User
-resource "azurerm_role_assignment" "frontend_keyvault_secret_user" {
-  scope              = data.azurerm_key_vault.main.id
-  role_definition_name = "Key Vault Secrets User"
-  principal_id       = azurerm_user_assigned_identity.frontend.principal_id
-}
-
-# Role assignment for Container Registry Pull
-resource "azurerm_role_assignment" "frontend_acr_pull" {
-  scope              = data.azurerm_container_registry.acr.id
-  role_definition_name = "AcrPull"
-  principal_id       = azurerm_user_assigned_identity.frontend.principal_id
-}
-
 resource "azurerm_container_app" "frontend" {
   name                         = "ca-${var.app_name}-frontend-${var.environment}"
   container_app_environment_id = data.azurerm_container_app_environment.main.id
@@ -46,7 +26,7 @@ resource "azurerm_container_app" "frontend" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.frontend.id]
+    identity_ids = [var.frontend_managed_identity_id]
   }
 
   template {
@@ -76,13 +56,13 @@ resource "azurerm_container_app" "frontend" {
   secret {
     name                = "session-secret-ref"
     key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/SessionSecret"
-    identity            = azurerm_user_assigned_identity.frontend.id
+    identity            = var.frontend_managed_identity_id
   }
 
   secret {
     name                = "api-base-url-ref"
     key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/ApiBaseUrl"
-    identity            = azurerm_user_assigned_identity.frontend.id
+    identity            = var.frontend_managed_identity_id
   }
 
   ingress {
@@ -99,7 +79,7 @@ resource "azurerm_container_app" "frontend" {
 
   registry {
     server   = "${var.acr_name}.azurecr.io"
-    identity = azurerm_user_assigned_identity.frontend.id
+    identity = var.frontend_managed_identity_id
   }
 }
 
