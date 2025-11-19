@@ -168,7 +168,6 @@ export class AuthController {
 
       res.json({
         message: 'Token refreshed successfully',
-        accessToken: result.accessToken,
       });
     } catch (_error) {
       clearAuthCookies(res);
