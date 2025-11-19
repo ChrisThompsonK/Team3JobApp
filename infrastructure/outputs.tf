@@ -1,21 +1,11 @@
 output "resource_group_name" {
-  value       = azurerm_resource_group.main.name
+  value       = data.azurerm_resource_group.main.name
   description = "Resource group name"
 }
 
 output "resource_group_id" {
-  value       = azurerm_resource_group.main.id
+  value       = data.azurerm_resource_group.main.id
   description = "Resource group ID"
-}
-
-output "frontend_managed_identity_id" {
-  value       = azurerm_user_assigned_identity.frontend.id
-  description = "Frontend Managed Identity ID"
-}
-
-output "frontend_managed_identity_principal_id" {
-  value       = azurerm_user_assigned_identity.frontend.principal_id
-  description = "Frontend Managed Identity Principal ID"
 }
 
 output "frontend_container_app_id" {

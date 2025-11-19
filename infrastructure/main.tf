@@ -1,11 +1,10 @@
-resource "azurerm_resource_group" "main" {
-  name     = "${var.app_name}-${var.environment}-rg"
-  location = var.region
+data "azurerm_resource_group" "main" {
+  name = "team3-job-app-dev-rg"
 }
 
 data "azurerm_container_app_environment" "main" {
   name                = "cae-${var.app_name}-${var.environment}"
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = data.azurerm_resource_group.main.name
 }
 
 data "azurerm_container_registry" "acr" {
@@ -15,24 +14,23 @@ data "azurerm_container_registry" "acr" {
 
 data "azurerm_key_vault" "main" {
   name                = "kv-team3-jobapp-${var.environment}"
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = data.azurerm_resource_group.main.name
 }
 
-resource "azurerm_user_assigned_identity" "frontend" {
+data "azurerm_user_assigned_identity" "frontend" {
   name                = "mi-${var.app_name}-frontend-${var.environment}"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = data.azurerm_resource_group.main.name
 }
 
 resource "azurerm_container_app" "frontend" {
   name                         = "ca-${var.app_name}-frontend-${var.environment}"
   container_app_environment_id = data.azurerm_container_app_environment.main.id
-  resource_group_name          = azurerm_resource_group.main.name
+  resource_group_name          = data.azurerm_resource_group.main.name
   revision_mode                = "Single"
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.frontend.id]
+    identity_ids = [data.azurerm_user_assigned_identity.frontend.id]
   }
 
   template {
@@ -44,13 +42,53 @@ resource "azurerm_container_app" "frontend" {
 
       # Key Vault reference syntax for env vars
       env {
-        name        = "SESSION_SECRET"
-        secret_name = "session-secret-ref"
+        name        = "NODE_ENV"
+        value       = "production"
+      }
+
+      env {
+        name        = "PORT"
+        value       = "3000"
       }
 
       env {
         name        = "API_BASE_URL"
-        secret_name = "api-base-url-ref"
+        secret_name = "api-base-url"
+      }
+
+      env {
+        name        = "API_TIMEOUT"
+        value       = "5000"
+      }
+
+      env {
+        name        = "DATABASE_URL"
+        secret_name = "database-url"
+      }
+
+      env {
+        name        = "JWT_ACCESS_SECRET"
+        secret_name = "jwt-access-secret"
+      }
+
+      env {
+        name        = "JWT_REFRESH_SECRET"
+        secret_name = "jwt-refresh-secret"
+      }
+
+      env {
+        name        = "PASSWORD_HASH_ROUNDS"
+        value       = "12"
+      }
+
+      env {
+        name        = "LOG_LEVEL"
+        value       = "info"
+      }
+
+      env {
+        name        = "ENABLE_CORS"
+        value       = "true"
       }
     }
 
@@ -60,15 +98,27 @@ resource "azurerm_container_app" "frontend" {
 
   # Define the Key Vault references as secrets
   secret {
-    name                = "session-secret-ref"
-    key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/SessionSecret"
-    identity            = azurerm_user_assigned_identity.frontend.id
+    name                = "api-base-url"
+    key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/api-base-url"
+    identity            = data.azurerm_user_assigned_identity.frontend.id
   }
 
   secret {
-    name                = "api-base-url-ref"
-    key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/ApiBaseUrl"
-    identity            = azurerm_user_assigned_identity.frontend.id
+    name                = "database-url"
+    key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/database-url"
+    identity            = data.azurerm_user_assigned_identity.frontend.id
+  }
+
+  secret {
+    name                = "jwt-access-secret"
+    key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/jwt-access-secret"
+    identity            = data.azurerm_user_assigned_identity.frontend.id
+  }
+
+  secret {
+    name                = "jwt-refresh-secret"
+    key_vault_secret_id = "${data.azurerm_key_vault.main.vault_uri}secrets/jwt-refresh-secret"
+    identity            = data.azurerm_user_assigned_identity.frontend.id
   }
 
   ingress {
@@ -85,7 +135,7 @@ resource "azurerm_container_app" "frontend" {
 
   registry {
     server   = "${var.acr_name}.azurecr.io"
-    identity = azurerm_user_assigned_identity.frontend.id
+    identity = data.azurerm_user_assigned_identity.frontend.id
   }
 }
 
