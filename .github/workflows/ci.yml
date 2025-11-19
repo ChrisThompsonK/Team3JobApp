@@ -125,7 +125,7 @@ jobs:
 
       - name: Terraform Init
         working-directory: infrastructure
-        run: terraform init -reconfigure
+        run: terraform init
 
       - name: Terraform Plan
         working-directory: infrastructure
