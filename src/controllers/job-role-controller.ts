@@ -407,6 +407,7 @@ export class JobRoleController {
         `Years of Experience: ${applicationData.yearsOfExperience}`,
         applicationData.linkedinUrl ? `LinkedIn: ${applicationData.linkedinUrl}` : '',
         applicationData.additionalComments ? `Comments: ${applicationData.additionalComments}` : '',
+        req.file ? `CV: /uploads/${req.file.filename}` : '',
       ]
         .filter((line) => line)
         .join('\n');
