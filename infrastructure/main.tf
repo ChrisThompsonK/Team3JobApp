@@ -1,5 +1,5 @@
 data "azurerm_resource_group" "main" {
-  name = "team3-job-app-dev-rg"
+  name = "team3-job-app-dev-fe"
 }
 
 data "azurerm_container_app_environment" "main" {
