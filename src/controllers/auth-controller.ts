@@ -8,27 +8,25 @@ export class AuthController {
   showLogin = (req: Request, res: Response): void => {
     const returnUrl = (req.query['returnUrl'] as string) || '/';
     const error = req.query['error'] as string;
+    const email = (req.query['email'] as string) || '';
 
     res.render('auth/login', {
       returnUrl,
       error,
+      email,
       title: 'Login',
     });
   };
 
   // POST /auth/login - Process login
   processLogin = async (req: Request, res: Response): Promise<void> => {
+    const { email = '', password = '', returnUrl = '/' } = req.body as LoginCredentials & { returnUrl?: string };
+    
     try {
-      const {
-        email,
-        password,
-        returnUrl = '/',
-      } = req.body as LoginCredentials & { returnUrl?: string };
-
       // Validate input
       if (!email || !password) {
         res.redirect(
-          `/auth/login?error=${encodeURIComponent('Email and password are required')}&returnUrl=${encodeURIComponent(returnUrl)}`
+          `/auth/login?error=${encodeURIComponent('Email and password are required')}&returnUrl=${encodeURIComponent(returnUrl)}&email=${encodeURIComponent(email)}`
         );
         return;
       }
@@ -43,9 +41,8 @@ export class AuthController {
       res.redirect(returnUrl);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Login failed';
-      const returnUrl = req.body.returnUrl || '/';
       res.redirect(
-        `/auth/login?error=${encodeURIComponent(message)}&returnUrl=${encodeURIComponent(returnUrl)}`
+        `/auth/login?error=${encodeURIComponent(message)}&returnUrl=${encodeURIComponent(returnUrl)}&email=${encodeURIComponent(email)}`
       );
     }
   };
