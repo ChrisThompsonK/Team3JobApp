@@ -180,7 +180,11 @@ export const api = {
         try {
           transformedJobs.push(transformJobRole(backendJob));
         } catch (transformError) {
-          console.error('Error transforming job:', backendJob, transformError);
+          console.error(
+            `Error transforming job (id: ${backendJob.id ?? 'unknown'}, name: ${backendJob.name ?? 'unknown'}):`,
+            transformError,
+            backendJob
+          );
           // Skip this job and continue with others
         }
       }
