@@ -49,4 +49,5 @@ variable "frontend_memory" {
 variable "frontend_managed_identity_id" {
   type        = string
   description = "Frontend Managed Identity ID from team3-job-app-tf"
+  default     = ""
 }

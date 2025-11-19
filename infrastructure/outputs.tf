@@ -8,16 +8,6 @@ output "resource_group_id" {
   description = "Resource group ID"
 }
 
-output "frontend_managed_identity_id" {
-  value       = azurerm_user_assigned_identity.frontend.id
-  description = "Frontend Managed Identity ID"
-}
-
-output "frontend_managed_identity_principal_id" {
-  value       = azurerm_user_assigned_identity.frontend.principal_id
-  description = "Frontend Managed Identity Principal ID"
-}
-
 output "frontend_container_app_id" {
   value       = azurerm_container_app.frontend.id
   description = "Frontend Container App ID"
