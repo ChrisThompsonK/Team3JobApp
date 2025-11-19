@@ -20,8 +20,12 @@ export class AuthController {
 
   // POST /auth/login - Process login
   processLogin = async (req: Request, res: Response): Promise<void> => {
-    const { email = '', password = '', returnUrl = '/' } = req.body as LoginCredentials & { returnUrl?: string };
-    
+    const {
+      email = '',
+      password = '',
+      returnUrl = '/',
+    } = req.body as LoginCredentials & { returnUrl?: string };
+
     try {
       // Validate input
       if (!email || !password) {
