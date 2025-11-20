@@ -1,10 +1,11 @@
-data "azurerm_resource_group" "main" {
-  name = "team3-job-app-dev-fe"
+resource "azurerm_resource_group" "main" {
+  name     = "team3-job-app-dev-fe"
+  location = var.region
 }
 
 data "azurerm_container_app_environment" "main" {
   name                = "cae-${var.app_name}-${var.environment}"
-  resource_group_name = data.azurerm_resource_group.main.name
+  resource_group_name = "team3-job-app-dev-rg"
 }
 
 data "azurerm_container_registry" "acr" {
@@ -14,18 +15,18 @@ data "azurerm_container_registry" "acr" {
 
 data "azurerm_key_vault" "main" {
   name                = "kv-team3-jobapp-${var.environment}"
-  resource_group_name = data.azurerm_resource_group.main.name
+  resource_group_name = "team3-job-app-dev-rg"
 }
 
 data "azurerm_user_assigned_identity" "frontend" {
   name                = "mi-${var.app_name}-frontend-${var.environment}"
-  resource_group_name = data.azurerm_resource_group.main.name
+  resource_group_name = "team3-job-app-dev-rg"
 }
 
 resource "azurerm_container_app" "frontend" {
   name                         = "ca-${var.app_name}-frontend-${var.environment}"
   container_app_environment_id = data.azurerm_container_app_environment.main.id
-  resource_group_name          = data.azurerm_resource_group.main.name
+  resource_group_name          = azurerm_resource_group.main.name
   revision_mode                = "Single"
 
   identity {

@@ -1,10 +1,10 @@
 output "resource_group_name" {
-  value       = data.azurerm_resource_group.main.name
+  value       = azurerm_resource_group.main.name
   description = "Resource group name"
 }
 
 output "resource_group_id" {
-  value       = data.azurerm_resource_group.main.id
+  value       = azurerm_resource_group.main.id
   description = "Resource group ID"
 }
 
