@@ -28,12 +28,6 @@ variable "acr_resource_group_name" {
   default     = "container-registry"
 }
 
-variable "frontend_image" {
-  type        = string
-  description = "Frontend container image URL"
-  default     = "aiacademy25.azurecr.io/team3-job-app-frontend:latest"
-}
-
 variable "frontend_cpu" {
   type        = string
   description = "CPU allocation for frontend"
