@@ -52,13 +52,13 @@ resource "azurerm_container_app" "frontend" {
       }
 
       env {
-        name        = "API_BASE_URL"
-        secret_name = "api-base-url"
+        name        = "API_TIMEOUT"
+        value       = "5000"
       }
 
       env {
-        name        = "API_TIMEOUT"
-        value       = "5000"
+        name        = "BACKEND_URL"
+        secret_name = "api-base-url"
       }
 
       env {
