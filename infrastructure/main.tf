@@ -134,7 +134,7 @@ resource "azurerm_container_app" "frontend" {
   }
 
   registry {
-    server   = "${var.acr_name}.azurecr.io"
+    server   = data.azurerm_container_registry.acr.login_server
     identity = data.azurerm_user_assigned_identity.frontend.id
   }
 }
