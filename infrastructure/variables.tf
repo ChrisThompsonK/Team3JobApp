@@ -31,7 +31,7 @@ variable "acr_resource_group_name" {
 variable "frontend_image" {
   type        = string
   description = "Frontend container image URL"
-  default     = "aiacademy25.azurecr.io/team3-job-app-frontend:latest"
+  default     = "aiacademy25-bbaue6bgenhkd0dj.azurecr.io/team3-job-app-frontend:f24f9faf3651236bfdb7e642a77cfc2413ede38c"
 }
 
 variable "frontend_cpu" {
