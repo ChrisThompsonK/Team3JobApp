@@ -8,6 +8,11 @@ output "resource_group_id" {
   description = "Resource group ID"
 }
 
+output "shared_resource_group_name" {
+  value       = data.azurerm_resource_group.shared.name
+  description = "Shared resource group name"
+}
+
 output "frontend_container_app_id" {
   value       = azurerm_container_app.frontend.id
   description = "Frontend Container App ID"
