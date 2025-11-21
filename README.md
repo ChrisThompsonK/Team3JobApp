@@ -425,7 +425,7 @@ node -e "console.log('JWT_REFRESH_SECRET=base64:' + require('crypto').randomByte
 | `HOST` | Server host | `localhost` |
 | `NODE_ENV` | Environment mode (`development`, `production`, `test`) | `development` |
 | `DATABASE_URL` | Database file path | `./app.db` |
-| `API_BASE_URL` | Backend API URL | `http://localhost:3001` |
+| `BACKEND_URL` | Backend API URL (include `/api` suffix) | `http://localhost:3001/api` |
 | `ADMIN_SEED_EMAIL` | Admin user email for initial setup | - |
 | `ADMIN_SEED_PASSWORD` | Admin user password for initial setup | - |
 
