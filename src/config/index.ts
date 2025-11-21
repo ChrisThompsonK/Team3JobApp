@@ -60,7 +60,7 @@ export const config = {
 
   // Backend API Configuration
   api: {
-    baseUrl: process.env['BACKEND_URL'] || 'http://localhost:3001',
+    baseUrl: process.env['BACKEND_URL'] || 'http://localhost:3001/api',
   },
 
   // Authentication Configuration - ALL REQUIRED
